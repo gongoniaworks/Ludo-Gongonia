@@ -24,6 +24,43 @@
 }
 .center{color:transparent !important}
 
+
+/* Paso 4: alinear las casillas de casa con los cuatro círculos de cada reino */
+.board{position:relative}
+.cell.home-red,.cell.home-green,.cell.home-yellow,.cell.home-blue{
+  position:absolute;
+  width:9.5%;
+  height:9.5%;
+  padding:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:visible;
+}
+/* Rojo: dos círculos superiores izquierdos */
+.board > .cell:nth-child(1){left:11.25%;top:11.25%}
+.board > .cell:nth-child(2){left:23.25%;top:11.25%}
+.board > .cell:nth-child(12){left:11.25%;top:23.25%}
+.board > .cell:nth-child(13){left:23.25%;top:23.25%}
+/* Verde: dos círculos superiores derechos */
+.board > .cell:nth-child(10){left:67.25%;top:11.25%}
+.board > .cell:nth-child(11){left:79.25%;top:11.25%}
+.board > .cell:nth-child(21){left:67.25%;top:23.25%}
+.board > .cell:nth-child(22){left:79.25%;top:23.25%}
+/* Azul: dos círculos inferiores izquierdos */
+.board > .cell:nth-child(100){left:11.25%;top:67.25%}
+.board > .cell:nth-child(101){left:23.25%;top:67.25%}
+.board > .cell:nth-child(111){left:11.25%;top:79.25%}
+.board > .cell:nth-child(112){left:23.25%;top:79.25%}
+/* Amarillo: dos círculos inferiores derechos */
+.board > .cell:nth-child(109){left:67.25%;top:67.25%}
+.board > .cell:nth-child(110){left:79.25%;top:67.25%}
+.board > .cell:nth-child(120){left:67.25%;top:79.25%}
+.board > .cell:nth-child(121){left:79.25%;top:79.25%}
+.cell .pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}
+.cell .piece{width:42%;height:42%;max-width:28px;max-height:28px;min-width:12px;min-height:12px}
+
 </style></head><body><main class="app">
 <div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Prototipo jugable · v0.1</p>
 <section id="setup" class="panel"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Selecciona de dos a cuatro jugadores.</p>
