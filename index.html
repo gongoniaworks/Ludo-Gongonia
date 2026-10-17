@@ -106,17 +106,18 @@ function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length
 $('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});
 function position(team,p){
  if(p.progress<0)return HOME_POINTS[team][p.slot];
- if(p.progress<=51)return ROUTE[(T[team].start+p.progress)%52];
- if(p.progress<=56)return LANES[team][p.progress-52];
+ /* Al completar una vuelta se vuelve a pisar la salida antes de entrar al carril. */
+ if(p.progress<=52)return ROUTE[(T[team].start+p.progress)%52];
+ if(p.progress<=57)return LANES[team][p.progress-53];
  return GOAL;
 }
 function positionKey(team,p){
  if(p.progress<0)return 'base-'+team+'-'+p.slot;
- if(p.progress<=51)return 'route-'+((T[team].start+p.progress)%52);
- if(p.progress<=56)return 'lane-'+team+'-'+(p.progress-52);
+ if(p.progress<=52)return 'route-'+((T[team].start+p.progress)%52);
+ if(p.progress<=57)return 'lane-'+team+'-'+(p.progress-53);
  return 'goal';
 }
-function legal(p){return roll!==null&&(p.progress<0?roll===6:p.progress<57&&p.progress+roll<=57)}
+function legal(p){return roll!==null&&(p.progress<0?roll===6:p.progress<58&&p.progress+roll<=58)}
 function render(){
  const board=$('board');board.innerHTML='';
  const groups=new Map();
@@ -154,22 +155,25 @@ function move(pl,p){
  if(!waiting||pl!==players[current]||!legal(p))return;
  const n=roll;
  if(p.progress<0)p.progress=0;else p.progress+=n;
- if(p.progress<=51){
+ /* Las 52 casillas comunes incluyen la salida; al volver a ella (progreso 52), sigue el carril propio. */
+ if(p.progress<=52){
    const landing=(T[pl.team].start+p.progress)%52;
    if(!SAFE.has(landing)){
      let captured=0;
      players.filter(x=>x!==pl).forEach(op=>op.pieces.forEach(e=>{
-       if(e.progress>=0&&e.progress<=51&&(T[op.team].start+e.progress)%52===landing){e.progress=-1;captured++}
+       if(e.progress>=0&&e.progress<=52&&(T[op.team].start+e.progress)%52===landing){e.progress=-1;captured++}
      }));
      if(captured)msg('¡Captura! '+captured+' ficha(s) rival(es) regresan a la base.');
    }
  }
  waiting=false;
- if(pl.pieces.every(x=>x.progress===57)){pl.finished=true;msg('¡Reino '+T[pl.team].name+' completó sus fichas!')}
- else if(n===1||n===6){roll=null;render();msg('Reino '+T[pl.team].name+' obtiene otra tirada.');return}
- else{next();return}
- if(players.filter(x=>!x.finished).length<=1){over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!')}
- render();
+ if(pl.pieces.every(x=>x.progress===58)){
+   pl.finished=true;
+   if(players.filter(x=>!x.finished).length<=1){over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!');render();return}
+   next();msg('¡Reino '+T[pl.team].name+' completó sus fichas!');render();return;
+ }
+ if(n===1||n===6){roll=null;render();msg('Reino '+T[pl.team].name+' obtiene otra tirada.');return}
+ next();
 }
 })();
 </script></body></html>
