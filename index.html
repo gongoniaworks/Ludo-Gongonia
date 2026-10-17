@@ -25,29 +25,12 @@
 .center{color:transparent !important}
 
 
-/* Paso 4 corregido: posicionar las fichas dentro de los círculos reales del tablero */
+/* Paso 4: las casas se posicionan mediante coordenadas explícitas en JavaScript */
 .board{position:relative}
 .cell.home-red,.cell.home-green,.cell.home-yellow,.cell.home-blue{
   position:absolute;width:10.2%;height:10.2%;padding:0;z-index:2;
   display:flex;align-items:center;justify-content:center;overflow:visible;
 }
-/* Las posiciones se expresan en porcentaje del tablero completo. */
-.board > .cell:nth-child(1){left:11.4%;top:14.5%}
-.board > .cell:nth-child(2){left:26.3%;top:14.5%}
-.board > .cell:nth-child(12){left:11.4%;top:29.2%}
-.board > .cell:nth-child(13){left:26.3%;top:29.2%}
-.board > .cell:nth-child(10){left:64.0%;top:14.5%}
-.board > .cell:nth-child(11){left:78.9%;top:14.5%}
-.board > .cell:nth-child(21){left:64.0%;top:29.2%}
-.board > .cell:nth-child(22){left:78.9%;top:29.2%}
-.board > .cell:nth-child(100){left:11.4%;top:64.0%}
-.board > .cell:nth-child(101){left:26.3%;top:64.0%}
-.board > .cell:nth-child(111){left:11.4%;top:78.7%}
-.board > .cell:nth-child(112){left:26.3%;top:78.7%}
-.board > .cell:nth-child(109){left:64.0%;top:64.0%}
-.board > .cell:nth-child(110){left:78.9%;top:64.0%}
-.board > .cell:nth-child(120){left:64.0%;top:78.7%}
-.board > .cell:nth-child(121){left:78.9%;top:78.7%}
 .cell .pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}
 .cell .piece{width:42%;height:42%;max-width:28px;max-height:28px;min-width:12px;min-height:12px}
 </style></head><body><main class="app">
@@ -78,7 +61,17 @@ $('start').addEventListener('click',start);$('back').addEventListener('click',()
 function pos(team,p){if(p.progress<0)return T[team].home[p.slot];if(p.progress>=32){let lanes={red:[[4,5],[4,4],[4,3],[4,2]],green:[[5,6],[4,6],[3,6],[2,6]],yellow:[[6,5],[6,6],[6,7],[6,8]],blue:[[5,4],[6,4],[7,4],[8,4]]};return lanes[team][Math.min(3,p.progress-32)]}return route[(T[team].start+p.progress)%route.length]}
 function legal(p){return roll!==null&&(p.progress<0?roll===6:p.progress<36&&p.progress+roll<=36)}
 function render(){let board=$('board');board.innerHTML='';let cells={};for(let r=0;r<11;r++)for(let c=0;c<11;c++){let e=document.createElement('div');e.className='cell';e.style.gridRow=r+1;e.style.gridColumn=c+1;cells[r+','+c]=e;board.append(e)}
-Object.entries(T).forEach(([t,v])=>v.home.forEach(([r,c])=>cells[r+','+c].classList.add('home-'+t)));
+const homePositions={
+'0,0':[13,16],'0,1':[28,16],'1,0':[13,30],'1,1':[28,30],
+'0,9':[64,16],'0,10':[79,16],'1,9':[64,30],'1,10':[79,30],
+'9,0':[13,64],'9,1':[28,64],'10,0':[13,79],'10,1':[28,79],
+'9,9':[64,64],'9,10':[79,64],'10,9':[64,79],'10,10':[79,79]
+};
+Object.entries(T).forEach(([t,v])=>v.home.forEach(([r,c])=>{
+ const e=cells[r+','+c];e.classList.add('home-'+t);
+ const spot=homePositions[r+','+c];
+ if(spot){e.style.left=spot[0]+'%';e.style.top=spot[1]+'%';}
+}));
 route.forEach((p,i)=>{cells[p.join(',')].classList.add('path');if(SAFE.has(i))cells[p.join(',')].classList.add('safe')});
 let lanes={red:[[4,5],[4,4],[4,3],[4,2]],green:[[5,6],[4,6],[3,6],[2,6]],yellow:[[6,5],[6,6],[6,7],[6,8]],blue:[[5,4],[6,4],[7,4],[8,4]]};Object.entries(lanes).forEach(([t,a])=>a.forEach(([r,c])=>cells[r+','+c].classList.add('lane-'+t)));cells['5,5'].classList.add('center');cells['5,5'].textContent='✦';
 players.forEach(pl=>pl.pieces.forEach(p=>{let [r,c]=pos(pl.team,p),cell=cells[r+','+c],wrap=cell.querySelector('.pieces');if(!wrap){wrap=document.createElement('div');wrap.className='pieces';cell.append(wrap)}let b=document.createElement('button');b.className='piece '+pl.team+(waiting&&pl===players[current]&&legal(p)?' legal':'');b.style.setProperty('--team',T[pl.team].color);b.textContent=p.slot+1;b.setAttribute('aria-label','Reino '+T[pl.team].name+', ficha '+(p.slot+1));b.disabled=pl!==players[current]||!waiting||!legal(p);b.onclick=()=>move(pl,p);wrap.append(b)}));
