@@ -62,17 +62,17 @@ function pos(team,p){if(p.progress<0)return T[team].home[p.slot];if(p.progress>=
 function legal(p){return roll!==null&&(p.progress<0?roll===6:p.progress<36&&p.progress+roll<=36)}
 function render(){let board=$('board');board.innerHTML='';let cells={};for(let r=0;r<11;r++)for(let c=0;c<11;c++){let e=document.createElement('div');e.className='cell';e.style.gridRow=r+1;e.style.gridColumn=c+1;cells[r+','+c]=e;board.append(e)}
 const homePositions={
-/* Centro de cada círculo de la imagen original, medido en porcentajes (x,y). */
-'0,0':[15.6,15.5],'0,1':[27.6,15.5],'1,0':[15.6,26.2],'1,1':[27.6,26.2],
-'0,9':[72.4,15.5],'0,10':[84.1,15.5],'1,9':[72.4,26.2],'1,10':[84.1,26.2],
-'9,0':[15.4,68.7],'9,1':[27.6,68.7],'10,0':[15.4,79.5],'10,1':[27.6,79.5],
-'9,9':[72.2,68.7],'9,10':[84.1,68.7],'10,9':[72.2,79.5],'10,10':[84.1,79.5]
+/* Centros de los 16 puntos negros de la imagen marcada, normalizados al tablero. */
+'0,0':[15.71,15.31],'0,1':[27.83,15.23],'1,0':[15.55,26.40],'1,1':[27.91,26.16],
+'0,9':[72.41,15.23],'0,10':[84.45,15.31],'1,9':[72.49,26.32],'1,10':[84.61,26.32],
+'9,0':[15.39,68.18],'9,1':[27.99,68.26],'10,0':[15.39,80.22],'10,1':[27.67,79.90],
+'9,9':[72.65,68.26],'9,10':[84.69,68.18],'10,9':[72.41,79.90],'10,10':[84.69,79.83]
 };
 Object.entries(T).forEach(([t,v])=>v.home.forEach(([r,c])=>{
  const e=cells[r+','+c];e.classList.add('home-'+t);
  const spot=homePositions[r+','+c];
  if(spot){
-   /* Posiciones centradas en los puntos que marcaste, no esquinas de las celdas. */
+   /* Cada casa se centra exactamente sobre el punto de referencia. */
    e.style.gridRow='auto';
    e.style.gridColumn='auto';
    e.style.left=spot[0]+'%';
