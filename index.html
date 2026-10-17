@@ -33,6 +33,18 @@
 }
 .cell .pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}
 .cell .piece{width:42%;height:42%;max-width:28px;max-height:28px;min-width:12px;min-height:12px}
+
+/* Paso 5: el tablero usa coordenadas reales tomadas de los puntos del mapa. */
+.board{display:block;position:relative;width:100%;aspect-ratio:1;overflow:hidden;background-image:url("tablero-gongonia.PNG");background-size:100% 100%;background-repeat:no-repeat;background-position:center;border:0;border-radius:0}
+.token-stack{position:absolute;transform:translate(-50%,-50%);z-index:5;width:6.2%;height:6.2%;min-width:26px;min-height:26px;max-width:46px;max-height:46px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;align-content:center;justify-items:center;gap:1px;pointer-events:none}
+.token-stack button{pointer-events:auto}
+.token-stack.single{display:flex;align-items:center;justify-content:center}
+.token-stack.single .piece{width:82%;height:82%;max-width:none;max-height:none;min-width:0;min-height:0;font-size:clamp(10px,1.7vw,14px)}
+.token-stack.multi .piece{width:100%;height:100%;max-width:none;max-height:none;min-width:0;min-height:0;padding:0;border-width:1.5px;font-size:clamp(7px,1.25vw,11px);line-height:1;aspect-ratio:1}
+.token-stack.count-3 .piece:last-child{grid-column:1 / span 2;width:52%;justify-self:center}
+.token-stack.many{width:8%;height:8%;max-width:54px;max-height:54px}
+.token-stack.many .piece{font-size:clamp(6px,1vw,9px)}
+
 </style></head><body><main class="app">
 <div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Prototipo jugable · v0.1</p>
 <section id="setup" class="panel"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Selecciona de dos a cuatro jugadores.</p>
@@ -47,10 +59,43 @@
 <p class="credits">Gongonia Game · Versión experimental v0.1</p></main>
 <script>
 (()=>{
-const T={red:{name:'Rojo',color:'#c44b50',icon:'🦁',start:0,home:[[0,0],[0,1],[1,0],[1,1]]},green:{name:'Verde',color:'#32815c',icon:'🦌',start:10,home:[[0,9],[0,10],[1,9],[1,10]]},yellow:{name:'Amarillo',color:'#e0b83c',icon:'☀️',start:20,home:[[9,9],[9,10],[10,9],[10,10]]},blue:{name:'Azul',color:'#427cbd',icon:'🦅',start:30,home:[[9,0],[9,1],[10,0],[10,1]]}};
-const ORDER=['red','green','yellow','blue'], path=[];
-for(let c=1;c<=9;c++)path.push([1,c]);for(let r=2;r<=9;r++)path.push([r,9]);for(let c=8;c>=1;c--)path.push([9,c]);for(let r=8;r>=2;r--)path.push([r,1]);
-const route=path.filter((p,i,a)=>a.findIndex(q=>q[0]===p[0]&&q[1]===p[1])===i).slice(0,32),SAFE=new Set([0,8,16,24]),$=id=>document.getElementById(id);
+const T={
+ red:{name:'Rojo',color:'#c44b50',icon:'🦁',start:0,home:[[0,0],[0,1],[1,0],[1,1]]},
+ green:{name:'Verde',color:'#32815c',icon:'🦌',start:13,home:[[0,9],[0,10],[1,9],[1,10]]},
+ yellow:{name:'Amarillo',color:'#e0b83c',icon:'☀️',start:26,home:[[9,9],[9,10],[10,9],[10,10]]},
+ blue:{name:'Azul',color:'#427cbd',icon:'🦅',start:39,home:[[9,0],[9,1],[10,0],[10,1]]}
+};
+const ORDER=['red','green','yellow','blue'];
+const IMAGE_SIZE=1254;
+const pct=(x,y)=>[+(x/IMAGE_SIZE*100).toFixed(3),+(y/IMAGE_SIZE*100).toFixed(3)];
+/* 52 casillas comunes, en el orden del recorrido, tomadas de los puntos negros del tablero. */
+const ROUTE_PIXELS=[
+ [151,487],[225,487],[303,487],[382,487],[455,487],
+ [550,447],[550,372],[550,296],[550,221],[550,145],[550,75],[625,75],[700,75],
+ [700,145],[700,221],[700,296],[700,372],[700,447],
+ [785,487],[862,487],[940,487],[1018,487],[1096,487],[1174,487],
+ [1174,567],[1174,647],[1096,647],[1018,647],[940,647],[862,647],[785,647],
+ [700,735],[700,812],[700,890],[700,968],[700,1020],[700,1100],[625,1100],[550,1100],
+ [550,1020],[550,968],[550,890],[550,812],[550,735],
+ [455,647],[382,647],[303,647],[225,647],[151,647],[73,647],[73,567],[73,487]
+];
+const ROUTE=ROUTE_PIXELS.map(([x,y])=>pct(x,y));
+/* Las cuatro estrellas doradas de salida y las cuatro estrellas blancas son seguras. */
+const SAFE=new Set([0,8,13,21,26,34,39,47]);
+/* Cada carril tiene cinco casillas coloreadas; el paso siguiente es la meta central. */
+const LANES={
+ red:[[151,567],[225,567],[303,567],[382,567],[455,567]].map(([x,y])=>pct(x,y)),
+ green:[[625,145],[625,221],[625,296],[625,372],[625,447]].map(([x,y])=>pct(x,y)),
+ yellow:[[785,567],[862,567],[940,567],[1018,567],[1096,567]].map(([x,y])=>pct(x,y)),
+ blue:[[625,735],[625,812],[625,890],[625,968],[625,1020]].map(([x,y])=>pct(x,y))
+};
+const HOME_POINTS={
+ red:[[196,193],[347,193],[196,330],[347,330]].map(([x,y])=>pct(x,y)),
+ green:[[903,193],[1053,193],[903,330],[1053,330]].map(([x,y])=>pct(x,y)),
+ yellow:[[904,852],[1057,852],[904,1004],[1057,1004]].map(([x,y])=>pct(x,y)),
+ blue:[[193,852],[344,852],[193,1004],[344,1004]].map(([x,y])=>pct(x,y))
+};
+const GOAL=pct(627,570), $=id=>document.getElementById(id);
 let players=[],current=0,roll=null,waiting=false,over=false,idseq=0;
 function chosen(){return [...document.querySelectorAll('.choice input:checked')].map(x=>x.value)}
 function msg(s){$('status').textContent=s}
@@ -58,36 +103,72 @@ function count(){let n=chosen().length;$('count').textContent=n+' reinos selecci
 document.querySelectorAll('.choice input').forEach(x=>x.addEventListener('change',count));count();
 function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;$('setup').classList.add('hidden');$('game').classList.remove('hidden');msg('Lanza el dado. Necesitas un 6 para sacar una ficha.');render()}
 $('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});
-function pos(team,p){if(p.progress<0)return T[team].home[p.slot];if(p.progress>=32){let lanes={red:[[4,5],[4,4],[4,3],[4,2]],green:[[5,6],[4,6],[3,6],[2,6]],yellow:[[6,5],[6,6],[6,7],[6,8]],blue:[[5,4],[6,4],[7,4],[8,4]]};return lanes[team][Math.min(3,p.progress-32)]}return route[(T[team].start+p.progress)%route.length]}
-function legal(p){return roll!==null&&(p.progress<0?roll===6:p.progress<36&&p.progress+roll<=36)}
-function render(){let board=$('board');board.innerHTML='';let cells={};for(let r=0;r<11;r++)for(let c=0;c<11;c++){let e=document.createElement('div');e.className='cell';e.style.gridRow=r+1;e.style.gridColumn=c+1;cells[r+','+c]=e;board.append(e)}
-const homePositions={
-/* Centros de los 16 puntos negros de la imagen marcada, normalizados al tablero. */
-'0,0':[15.71,15.31],'0,1':[27.83,15.23],'1,0':[15.55,26.40],'1,1':[27.91,26.16],
-'0,9':[72.41,15.23],'0,10':[84.45,15.31],'1,9':[72.49,26.32],'1,10':[84.61,26.32],
-'9,0':[15.39,68.18],'9,1':[27.99,68.26],'10,0':[15.39,80.22],'10,1':[27.67,79.90],
-'9,9':[72.65,68.26],'9,10':[84.69,68.18],'10,9':[72.41,79.90],'10,10':[84.69,79.83]
-};
-Object.entries(T).forEach(([t,v])=>v.home.forEach(([r,c])=>{
- const e=cells[r+','+c];e.classList.add('home-'+t);
- const spot=homePositions[r+','+c];
- if(spot){
-   /* Cada casa se centra exactamente sobre el punto de referencia. */
-   e.style.gridRow='auto';
-   e.style.gridColumn='auto';
-   e.style.left=spot[0]+'%';
-   e.style.top=spot[1]+'%';
-   e.style.transform='translate(-50%, -50%)';
- }
-}));
-route.forEach((p,i)=>{cells[p.join(',')].classList.add('path');if(SAFE.has(i))cells[p.join(',')].classList.add('safe')});
-let lanes={red:[[4,5],[4,4],[4,3],[4,2]],green:[[5,6],[4,6],[3,6],[2,6]],yellow:[[6,5],[6,6],[6,7],[6,8]],blue:[[5,4],[6,4],[7,4],[8,4]]};Object.entries(lanes).forEach(([t,a])=>a.forEach(([r,c])=>cells[r+','+c].classList.add('lane-'+t)));cells['5,5'].classList.add('center');cells['5,5'].textContent='✦';
-players.forEach(pl=>pl.pieces.forEach(p=>{let [r,c]=pos(pl.team,p),cell=cells[r+','+c],wrap=cell.querySelector('.pieces');if(!wrap){wrap=document.createElement('div');wrap.className='pieces';cell.append(wrap)}let b=document.createElement('button');b.className='piece '+pl.team+(waiting&&pl===players[current]&&legal(p)?' legal':'');b.style.setProperty('--team',T[pl.team].color);b.textContent=p.slot+1;b.setAttribute('aria-label','Reino '+T[pl.team].name+', ficha '+(p.slot+1));b.disabled=pl!==players[current]||!waiting||!legal(p);b.onclick=()=>move(pl,p);wrap.append(b)}));
-$('turn').textContent=T[players[current].team].icon+' Reino '+T[players[current].team].name;$('roll').disabled=waiting||over;$('roll').textContent=waiting?'Elige ficha':'🎲 Lanzar dado';$('players').innerHTML=players.map((p,i)=>'<div class="player '+(i===current&&!over?'current':'')+'"><span class="dot" style="background:'+T[p.team].color+'"></span><b>Reino '+T[p.team].name+'</b><span class="right">'+p.pieces.filter(x=>x.progress===36).length+'/4 en meta</span></div>').join('')}
+function position(team,p){
+ if(p.progress<0)return HOME_POINTS[team][p.slot];
+ if(p.progress<=51)return ROUTE[(T[team].start+p.progress)%52];
+ if(p.progress<=56)return LANES[team][p.progress-52];
+ return GOAL;
+}
+function positionKey(team,p){
+ if(p.progress<0)return 'base-'+team+'-'+p.slot;
+ if(p.progress<=51)return 'route-'+((T[team].start+p.progress)%52);
+ if(p.progress<=56)return 'lane-'+team+'-'+(p.progress-52);
+ return 'goal';
+}
+function legal(p){return roll!==null&&(p.progress<0?roll===6:p.progress<57&&p.progress+roll<=57)}
+function render(){
+ const board=$('board');board.innerHTML='';
+ const groups=new Map();
+ players.forEach(pl=>pl.pieces.forEach(p=>{
+   const key=positionKey(pl.team,p);
+   if(!groups.has(key))groups.set(key,{point:position(pl.team,p),items:[]});
+   groups.get(key).items.push({pl,p});
+ }));
+ groups.forEach(({point,items})=>{
+   const stack=document.createElement('div');
+   const n=items.length;
+   stack.className='token-stack '+(n===1?'single':'multi')+' count-'+n+(n>=5?' many':'');
+   stack.style.left=point[0]+'%';stack.style.top=point[1]+'%';
+   stack.setAttribute('aria-label',n+' ficha(s) en esta casilla');
+   items.forEach(({pl,p})=>{
+     const b=document.createElement('button');
+     b.className='piece '+pl.team+(waiting&&pl===players[current]&&legal(p)?' legal':'');
+     b.style.setProperty('--team',T[pl.team].color);
+     b.textContent=p.slot+1;
+     b.setAttribute('aria-label','Reino '+T[pl.team].name+', ficha '+(p.slot+1));
+     b.disabled=pl!==players[current]||!waiting||!legal(p);
+     b.onclick=()=>move(pl,p);
+     stack.append(b);
+   });
+   board.append(stack);
+ });
+ $('turn').textContent=T[players[current].team].icon+' Reino '+T[players[current].team].name;
+ $('roll').disabled=waiting||over;
+ $('roll').textContent=waiting?'Elige ficha':'🎲 Lanzar dado';
+ $('players').innerHTML=players.map((p,i)=>'<div class="player '+(i===current&&!over?'current':'')+'"><span class="dot" style="background:'+T[p.team].color+'"></span><b>Reino '+T[p.team].name+'</b><span class="right">'+p.pieces.filter(x=>x.progress===57).length+'/4 en meta</span></div>').join('');
+}
 function next(){let old=current;do{current=(current+1)%players.length}while(players[current].finished&&current!==old);roll=null;waiting=false;render();msg('Turno de Reino '+T[players[current].team].name+'. Lanza el dado.')}
 $('roll').onclick=()=>{if(waiting||over)return;roll=1+Math.floor(Math.random()*6);$('die').textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][roll-1];if(!players[current].pieces.some(legal)){let extra=roll===1||roll===6;waiting=false;render();if(extra)msg('Salió '+roll+'. No puedes mover; tienes otra tirada.');else{msg('No hay movimiento posible. Termina el turno.');setTimeout(next,600)}return}waiting=true;render();msg('Salió '+roll+'. Toca una ficha resaltada para moverla.')};
-function move(pl,p){if(!waiting||pl!==players[current]||!legal(p))return;let n=roll;if(p.progress<0)p.progress=0;else p.progress+=n;
-if(p.progress<32){let landing=(T[pl.team].start+p.progress)%route.length;if(!SAFE.has(landing)){let captured=0;players.filter(x=>x!==pl).forEach(op=>op.pieces.forEach(e=>{if(e.progress>=0&&e.progress<32&&(T[op.team].start+e.progress)%route.length===landing){e.progress=-1;captured++}}));if(captured)msg('¡Captura! '+captured+' ficha(s) rival(es) regresan a la base.')}}
-waiting=false;if(pl.pieces.every(x=>x.progress===36)){pl.finished=true;msg('¡Reino '+T[pl.team].name+' completó sus fichas!')}else if(n===1||n===6){roll=null;render();msg('Reino '+T[pl.team].name+' obtiene otra tirada.');return}else{next();return}if(players.filter(x=>!x.finished).length<=1){over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!')}render()}
+function move(pl,p){
+ if(!waiting||pl!==players[current]||!legal(p))return;
+ const n=roll;
+ if(p.progress<0)p.progress=0;else p.progress+=n;
+ if(p.progress<=51){
+   const landing=(T[pl.team].start+p.progress)%52;
+   if(!SAFE.has(landing)){
+     let captured=0;
+     players.filter(x=>x!==pl).forEach(op=>op.pieces.forEach(e=>{
+       if(e.progress>=0&&e.progress<=51&&(T[op.team].start+e.progress)%52===landing){e.progress=-1;captured++}
+     }));
+     if(captured)msg('¡Captura! '+captured+' ficha(s) rival(es) regresan a la base.');
+   }
+ }
+ waiting=false;
+ if(pl.pieces.every(x=>x.progress===57)){pl.finished=true;msg('¡Reino '+T[pl.team].name+' completó sus fichas!')}
+ else if(n===1||n===6){roll=null;render();msg('Reino '+T[pl.team].name+' obtiene otra tirada.');return}
+ else{next();return}
+ if(players.filter(x=>!x.finished).length<=1){over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!')}
+ render();
+}
 })();
 </script></body></html>
