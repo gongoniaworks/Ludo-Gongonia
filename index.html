@@ -90,10 +90,11 @@ const LANES={
  blue:[[625,735],[625,812],[625,890],[625,968],[625,1020]].map(([x,y])=>pct(x,y))
 };
 const HOME_POINTS={
- red:[[196,193],[347,193],[196,330],[347,330]].map(([x,y])=>pct(x,y)),
- green:[[903,193],[1053,193],[903,330],[1053,330]].map(([x,y])=>pct(x,y)),
- yellow:[[904,852],[1057,852],[904,1004],[1057,1004]].map(([x,y])=>pct(x,y)),
- blue:[[193,852],[344,852],[193,1004],[344,1004]].map(([x,y])=>pct(x,y))
+ /* Se conservan las posiciones de las casas que ya aprobaste visualmente. */
+ red:[[15.71,15.31],[27.83,15.23],[15.55,26.40],[27.91,26.16]],
+ green:[[72.41,15.23],[84.45,15.31],[72.49,26.32],[84.61,26.32]],
+ yellow:[[72.65,68.26],[84.69,68.18],[72.41,79.90],[84.69,79.83]],
+ blue:[[15.39,68.18],[27.99,68.26],[15.39,80.22],[27.67,79.90]]
 };
 const GOAL=pct(627,570), $=id=>document.getElementById(id);
 let players=[],current=0,roll=null,waiting=false,over=false,idseq=0;
