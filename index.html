@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171b2a"><title>Ludo de Gongonia · v0.1</title>
+<meta name="theme-color" content="#171b2a"><title>Ludo de Gongonia · v0.3 (prueba)</title>
 <style>
 :root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px}.choice input{accent-color:var(--gold)}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:65px 1fr;align-items:center;gap:9px}.die{display:grid;place-items:center;aspect-ratio:1;background:#f7efdc;color:#272332;border:3px solid #c8a65e;border-radius:12px;font-size:2.6rem}.status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
@@ -34,19 +34,20 @@
 .cell .pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}
 .cell .piece{width:42%;height:42%;max-width:28px;max-height:28px;min-width:12px;min-height:12px}
 
-/* Paso 5: el tablero usa coordenadas reales tomadas de los puntos del mapa. */
+/* v0.3: fichas agrupadas siempre circulares y carriles alineados. */
 .board{display:block;position:relative;width:100%;aspect-ratio:1;overflow:hidden;background-image:url("tablero-gongonia.PNG");background-size:100% 100%;background-repeat:no-repeat;background-position:center;border:0;border-radius:0}
-.token-stack{position:absolute;transform:translate(-50%,-50%);z-index:5;width:6.2%;height:6.2%;min-width:26px;min-height:26px;max-width:46px;max-height:46px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;align-content:center;justify-items:center;gap:1px;pointer-events:none}
+.token-stack{position:absolute;transform:translate(-50%,-50%);z-index:5;width:6.2%;aspect-ratio:1/1;height:auto;min-width:26px;max-width:46px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));align-items:center;justify-items:center;gap:1px;pointer-events:none}
 .token-stack button{pointer-events:auto}
 .token-stack.single{display:flex;align-items:center;justify-content:center}
-.token-stack.single .piece{width:82%;height:82%;max-width:none;max-height:none;min-width:0;min-height:0;font-size:clamp(10px,1.7vw,14px)}
-.token-stack.multi .piece{width:100%;height:100%;max-width:none;max-height:none;min-width:0;min-height:0;padding:0;border-width:1.5px;font-size:clamp(7px,1.25vw,11px);line-height:1;aspect-ratio:1}
-.token-stack.count-3 .piece:last-child{grid-column:1 / span 2;width:52%;justify-self:center}
-.token-stack.many{width:8%;height:8%;max-width:54px;max-height:54px}
-.token-stack.many .piece{font-size:clamp(6px,1vw,9px)}
+.token-stack .piece{box-sizing:border-box;border-radius:50%;aspect-ratio:1/1;width:88%;height:auto;min-width:0;min-height:0;max-width:none;max-height:none;flex:none;justify-self:center;align-self:center;padding:0;line-height:1;display:grid;place-items:center}
+.token-stack.single .piece{width:82%;height:auto;font-size:clamp(10px,1.7vw,14px)}
+.token-stack.multi .piece{width:88%;height:auto;border-width:1.5px;font-size:clamp(7px,1.25vw,11px)}
+.token-stack.count-3 .piece:last-child{grid-column:1 / span 2;width:44%;justify-self:center}
+.token-stack.many{width:8%;max-width:54px}
+.token-stack.many .piece{width:82%;font-size:clamp(6px,1vw,9px)}
 
 </style></head><body><main class="app">
-<div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Prototipo jugable · v0.1</p>
+<div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Prototipo de pruebas · v0.3</p>
 <section id="setup" class="panel"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Selecciona de dos a cuatro jugadores.</p>
 <div class="choices"><label class="choice"><input type="checkbox" value="red" checked> 🦁 Reino Rojo</label><label class="choice"><input type="checkbox" value="green" checked> 🦌 Reino Verde</label><label class="choice"><input type="checkbox" value="yellow"> ☀️ Reino Amarillo</label><label class="choice"><input type="checkbox" value="blue"> 🦅 Reino Azul</label></div>
 <p><span id="count">2 reinos</span> <button id="start" class="primary" style="float:right">Iniciar partida</button></p></section>
@@ -55,7 +56,7 @@
 <div class="dice"><div id="die" class="die">⚀</div><button id="roll" class="primary">🎲 Lanzar dado</button></div>
 <div id="status" class="status wide">Lanza el dado para comenzar.</div><div class="wide"><div class="label">Jugadores</div><div id="players" class="players"></div></div>
 <div class="wide"><button id="back" class="secondary">Menú</button> <button id="restart" class="secondary">Reiniciar</button></div>
-</aside></div><p class="note">Prototipo experimental: recorrido simplificado. Necesitas un 6 para sacar ficha. Un 1 o un 6 concede otra tirada.</p></section>
+</aside></div><p class="note">Prueba v0.3: necesitas un 1 o un 6 para sacar ficha. Un 1 o un 6 concede otra tirada.</p></section>
 <p class="credits">Gongonia Game · Versión experimental v0.1</p></main>
 <script>
 (()=>{
@@ -70,24 +71,27 @@ const IMAGE_SIZE=1254;
 const pct=(x,y)=>[+(x/IMAGE_SIZE*100).toFixed(3),+(y/IMAGE_SIZE*100).toFixed(3)];
 /* 52 casillas comunes, en el orden del recorrido, tomadas de los puntos negros del tablero. */
 const ROUTE_PIXELS=[
- [151,487],[225,487],[303,487],[382,487],[455,487],
- [550,447],[550,372],[550,296],[550,221],[550,145],[550,75],[625,75],[700,75],
- [700,145],[700,221],[700,296],[700,372],[700,447],
- [785,487],[862,487],[940,487],[1018,487],[1096,487],[1174,487],
- [1174,567],[1174,647],[1096,647],[1018,647],[940,647],[862,647],[785,647],
- [700,735],[700,812],[700,890],[700,968],[700,1020],[700,1100],[625,1100],[550,1100],
- [550,1020],[550,968],[550,890],[550,812],[550,735],
- [455,647],[382,647],[303,647],[225,647],[151,647],[73,647],[73,567],[73,487]
+ /* Índice 0: salida roja; en sentido horario, 13 casillas hasta cada salida siguiente. */
+ [152,489],[226,489],[305,489],[385,489],[459,489],
+ [553,410],[553,342],[553,273],[553,205],[553,137],[553,75],[627,75],[700,75],
+ [700,137],[700,205],[700,273],[700,342],[700,410],
+ [789,489],[868,489],[945,489],[1023,489],[1102,489],[1179,489],
+ [1179,569],[1179,649],[1102,649],[1023,649],[945,649],[868,649],[789,649],
+ [700,742],[700,806],[700,881],[700,948],[700,1025],[700,1101],[627,1101],[553,1101],
+ [553,1025],[553,948],[553,881],[553,806],[553,742],
+ [459,649],[385,649],[305,649],[226,649],[152,649],[73,649],[73,569],[73,489]
 ];
 const ROUTE=ROUTE_PIXELS.map(([x,y])=>pct(x,y));
 /* Las cuatro estrellas doradas de salida y las cuatro estrellas blancas son seguras. */
 const SAFE=new Set([0,8,13,21,26,34,39,47]);
 /* Cada carril tiene cinco casillas coloreadas; el paso siguiente es la meta central. */
 const LANES={
- red:[[151,567],[225,567],[303,567],[382,567],[455,567]].map(([x,y])=>pct(x,y)),
- green:[[625,145],[625,221],[625,296],[625,372],[625,447]].map(([x,y])=>pct(x,y)),
- yellow:[[785,567],[862,567],[940,567],[1018,567],[1096,567]].map(([x,y])=>pct(x,y)),
- blue:[[625,735],[625,812],[625,890],[625,968],[625,1020]].map(([x,y])=>pct(x,y))
+ red:[[152,569],[226,569],[305,569],[385,569],[459,569]].map(([x,y])=>pct(x,y)),
+ green:[[627,137],[627,205],[627,273],[627,342],[627,410]].map(([x,y])=>pct(x,y)),
+ /* Amarillo entra desde su estrella hacia el centro: de derecha a izquierda. */
+ yellow:[[1102,569],[1023,569],[945,569],[868,569],[789,569]].map(([x,y])=>pct(x,y)),
+ /* Azul entra desde su estrella hacia el centro: de abajo hacia arriba. */
+ blue:[[627,1025],[627,948],[627,881],[627,806],[627,742]].map(([x,y])=>pct(x,y))
 };
 const HOME_POINTS={
  /* Se conservan las posiciones de las casas que ya aprobaste visualmente. */
@@ -106,18 +110,18 @@ function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length
 $('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});
 function position(team,p){
  if(p.progress<0)return HOME_POINTS[team][p.slot];
- /* Al completar una vuelta se vuelve a pisar la salida antes de entrar al carril. */
- if(p.progress<=52)return ROUTE[(T[team].start+p.progress)%52];
- if(p.progress<=57)return LANES[team][p.progress-53];
+ if(p.progress<=51)return ROUTE[(T[team].start+p.progress)%52];
+ if(p.progress<=56)return LANES[team][p.progress-52];
  return GOAL;
 }
 function positionKey(team,p){
  if(p.progress<0)return 'base-'+team+'-'+p.slot;
- if(p.progress<=52)return 'route-'+((T[team].start+p.progress)%52);
- if(p.progress<=57)return 'lane-'+team+'-'+(p.progress-53);
+ if(p.progress<=51)return 'route-'+((T[team].start+p.progress)%52);
+ if(p.progress<=56)return 'lane-'+team+'-'+(p.progress-52);
  return 'goal';
 }
-function legal(p){return roll!==null&&(p.progress<0?roll===6:p.progress<58&&p.progress+roll<=58)}
+/* En Gongonia se puede sacar ficha con 1 o 6; ambas tiradas dan turno adicional. */
+function legal(p){return roll!==null&&(p.progress<0?(roll===1||roll===6):(p.progress<57&&p.progress+roll<=57))}
 function render(){
  const board=$('board');board.innerHTML='';
  const groups=new Map();
@@ -156,18 +160,18 @@ function move(pl,p){
  const n=roll;
  if(p.progress<0)p.progress=0;else p.progress+=n;
  /* Las 52 casillas comunes incluyen la salida; al volver a ella (progreso 52), sigue el carril propio. */
- if(p.progress<=52){
+ if(p.progress<=51){
    const landing=(T[pl.team].start+p.progress)%52;
    if(!SAFE.has(landing)){
      let captured=0;
      players.filter(x=>x!==pl).forEach(op=>op.pieces.forEach(e=>{
-       if(e.progress>=0&&e.progress<=52&&(T[op.team].start+e.progress)%52===landing){e.progress=-1;captured++}
+       if(e.progress>=0&&e.progress<=51&&(T[op.team].start+e.progress)%52===landing){e.progress=-1;captured++}
      }));
      if(captured)msg('¡Captura! '+captured+' ficha(s) rival(es) regresan a la base.');
    }
  }
  waiting=false;
- if(pl.pieces.every(x=>x.progress===58)){
+ if(pl.pieces.every(x=>x.progress===57)){
    pl.finished=true;
    if(players.filter(x=>!x.finished).length<=1){over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!');render();return}
    next();msg('¡Reino '+T[pl.team].name+' completó sus fichas!');render();return;
