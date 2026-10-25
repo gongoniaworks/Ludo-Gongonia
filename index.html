@@ -232,7 +232,7 @@ function playPieceCheer(){
   vibrato.type='sine';vibrato.frequency.value=13;vibratoGain.gain.value=frequency*.018;
   vibrato.connect(vibratoGain);vibratoGain.connect(osc.frequency);
   gain.gain.setValueAtTime(.0001,now+delay);
-  gain.gain.exponentialRampToValueAtTime(.045,now+delay+.025);
+  gain.gain.exponentialRampToValueAtTime(.085,now+delay+.025);
   gain.gain.exponentialRampToValueAtTime(.0001,now+delay+duration);
   osc.connect(gain);gain.connect(ctx.destination);
   vibrato.start(now+delay);osc.start(now+delay);
@@ -241,7 +241,7 @@ function playPieceCheer(){
  const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
  source.buffer=noiseBuffer;filter.type='bandpass';filter.frequency.value=1050;filter.Q.value=.65;
  gain.gain.setValueAtTime(.0001,now);
- gain.gain.exponentialRampToValueAtTime(.09,now+.04);
+ gain.gain.exponentialRampToValueAtTime(.16,now+.035);
  gain.gain.exponentialRampToValueAtTime(.0001,now+.29);
  source.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
  source.start(now);source.stop(now+.31);
