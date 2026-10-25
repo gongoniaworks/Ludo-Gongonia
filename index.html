@@ -149,25 +149,73 @@ function enableMusic(){
 $('musicToggle').addEventListener('click',enableMusic);
 $('gameMusicToggle').addEventListener('click',enableMusic);
 updateMusicButtons();
-/* Sonido corto de fantasía al comenzar el turno de cada reino. */
-function playTurnSound(){
+/* Efectos sonoros generados por el propio navegador: no requieren archivos adicionales. */
+let noiseBuffer=null;
+function getAudioContext(){
  const AudioCtx=window.AudioContext||window.webkitAudioContext;
- if(!AudioCtx)return;
+ if(!AudioCtx)return null;
  try{
   if(!audioContext)audioContext=new AudioCtx();
   if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});
-  const now=audioContext.currentTime;
-  [[659.25,0],[783.99,.12],[987.77,.24]].forEach(([frequency,delay])=>{
-   const osc=audioContext.createOscillator(),gain=audioContext.createGain();
-   osc.type='sine';
-   osc.frequency.setValueAtTime(frequency,now+delay);
-   gain.gain.setValueAtTime(.0001,now+delay);
-   gain.gain.exponentialRampToValueAtTime(.10,now+delay+.025);
-   gain.gain.exponentialRampToValueAtTime(.0001,now+delay+.18);
-   osc.connect(gain);gain.connect(audioContext.destination);
-   osc.start(now+delay);osc.stop(now+delay+.19);
-  });
- }catch(e){}
+  if(!noiseBuffer&&audioContext){
+   const length=Math.ceil(audioContext.sampleRate*1.2);
+   noiseBuffer=audioContext.createBuffer(1,length,audioContext.sampleRate);
+   const data=noiseBuffer.getChannelData(0);
+   for(let i=0;i<length;i++)data[i]=Math.random()*2-1;
+  }
+  return audioContext;
+ }catch(e){return null;}
+}
+/* Sonido breve de fantasía al comenzar el turno de cada reino. */
+function playTurnSound(){
+ const ctx=getAudioContext();if(!ctx)return;
+ const now=ctx.currentTime;
+ [[659.25,0],[783.99,.12],[987.77,.24]].forEach(([frequency,delay])=>{
+  const osc=ctx.createOscillator(),gain=ctx.createGain();
+  osc.type='sine';osc.frequency.setValueAtTime(frequency,now+delay);
+  gain.gain.setValueAtTime(.0001,now+delay);
+  gain.gain.exponentialRampToValueAtTime(.10,now+delay+.025);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+delay+.18);
+  osc.connect(gain);gain.connect(ctx.destination);
+  osc.start(now+delay);osc.stop(now+delay+.19);
+ });
+}
+/* Dados rodando: pequeños golpecitos irregulares y un traqueteo corto. */
+function playDiceSound(){
+ const ctx=getAudioContext();if(!ctx||!noiseBuffer)return;
+ const now=ctx.currentTime;
+ const rattle=[0,.055,.125,.205,.27,.365,.435,.49];
+ rattle.forEach((delay,index)=>{
+  const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+  source.buffer=noiseBuffer;
+  filter.type='bandpass';filter.frequency.value=950+Math.random()*1500;filter.Q.value=.7+Math.random()*1.4;
+  const volume=(.13+Math.random()*.12)*(1-index*.055);
+  gain.gain.setValueAtTime(.0001,now+delay);
+  gain.gain.exponentialRampToValueAtTime(volume,now+delay+.004);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+delay+.045+Math.random()*.025);
+  source.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
+  source.start(now+delay);source.stop(now+delay+.085);
+ });
+}
+/* Pisada corta y suave cada vez que una ficha avanza una casilla. */
+function playFootstep(){
+ const ctx=getAudioContext();if(!ctx||!noiseBuffer)return;
+ const now=ctx.currentTime;
+ const thump=ctx.createOscillator(),thumpGain=ctx.createGain();
+ thump.type='sine';thump.frequency.setValueAtTime(115,now);
+ thump.frequency.exponentialRampToValueAtTime(62,now+.085);
+ thumpGain.gain.setValueAtTime(.0001,now);
+ thumpGain.gain.exponentialRampToValueAtTime(.19,now+.008);
+ thumpGain.gain.exponentialRampToValueAtTime(.0001,now+.105);
+ thump.connect(thumpGain);thumpGain.connect(ctx.destination);
+ thump.start(now);thump.stop(now+.11);
+ const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+ source.buffer=noiseBuffer;filter.type='lowpass';filter.frequency.value=620;
+ gain.gain.setValueAtTime(.0001,now);
+ gain.gain.exponentialRampToValueAtTime(.055,now+.006);
+ gain.gain.exponentialRampToValueAtTime(.0001,now+.055);
+ source.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
+ source.start(now);source.stop(now+.06);
 }
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function chosen(){return [...document.querySelectorAll('.choice input:checked')].map(x=>x.value)}
@@ -230,6 +278,7 @@ $('roll').onclick=async()=>{
  $('roll').disabled=true;
  const faces=['⚀','⚁','⚂','⚃','⚄','⚅'];
  const finalRoll=1+Math.floor(Math.random()*6);
+ playDiceSound();
  let faceIndex=0;
  $('die').classList.add('rolling');
  $('die').textContent=faces[0];
@@ -260,6 +309,7 @@ async function move(pl,p){
  else for(let step=oldProgress+1;step<=targetProgress;step++)steps.push(step);
  for(const step of steps){
   p.progress=step;
+  playFootstep();
   render();
   await pause(165);
  }
