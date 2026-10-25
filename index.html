@@ -49,6 +49,25 @@
 
 .musicbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0;padding:10px;border:1px solid #d8b76d55;border-radius:10px;background:#171b2a88;font-size:.85rem}
 .musicbar span{color:#f4d99b}
+
+/* v0.5: animaciones suaves para el dado y las fichas */
+@keyframes diceRollEffect{
+  0%{transform:rotate(0deg) scale(1)}
+  20%{transform:rotate(95deg) scale(1.12) translateY(-3px)}
+  45%{transform:rotate(190deg) scale(.94) translateY(1px)}
+  70%{transform:rotate(285deg) scale(1.1) translateY(-2px)}
+  100%{transform:rotate(360deg) scale(1)}
+}
+.die.rolling{animation:diceRollEffect .65s ease-in-out}
+@keyframes tokenHopEffect{
+  0%{transform:translate(-50%,-50%) scale(1)}
+  45%{transform:translate(-50%,-78%) scale(1.12)}
+  100%{transform:translate(-50%,-50%) scale(1)}
+}
+.token-stack.hopping{animation:tokenHopEffect .16s ease-out}
+@media(prefers-reduced-motion:reduce){
+  .die.rolling,.token-stack.hopping{animation-duration:.01ms}
+}
 </style></head><body><main class="app">
 <div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Versión 0.4 · música de Gongonia</p>
 <section id="setup" class="panel"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Selecciona de dos a cuatro jugadores.</p>
@@ -107,7 +126,7 @@ const HOME_POINTS={
  blue:[[15.39,68.18],[27.99,68.26],[15.39,80.22],[27.67,79.90]]
 };
 const GOAL=pct(627,570), $=id=>document.getElementById(id);
-let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false;
+let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false,animating=false,animatingPieceId=null,audioContext=null;
 const introMusic=$('introMusic'),gameMusic=$('gameMusic');
 function updateMusicButtons(){
  const label=musicEnabled?'🔊 Silenciar música':'🔇 Activar música';
@@ -130,11 +149,32 @@ function enableMusic(){
 $('musicToggle').addEventListener('click',enableMusic);
 $('gameMusicToggle').addEventListener('click',enableMusic);
 updateMusicButtons();
+/* Sonido corto de fantasía al comenzar el turno de cada reino. */
+function playTurnSound(){
+ const AudioCtx=window.AudioContext||window.webkitAudioContext;
+ if(!AudioCtx)return;
+ try{
+  if(!audioContext)audioContext=new AudioCtx();
+  if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});
+  const now=audioContext.currentTime;
+  [[659.25,0],[783.99,.12],[987.77,.24]].forEach(([frequency,delay])=>{
+   const osc=audioContext.createOscillator(),gain=audioContext.createGain();
+   osc.type='sine';
+   osc.frequency.setValueAtTime(frequency,now+delay);
+   gain.gain.setValueAtTime(.0001,now+delay);
+   gain.gain.exponentialRampToValueAtTime(.10,now+delay+.025);
+   gain.gain.exponentialRampToValueAtTime(.0001,now+delay+.18);
+   osc.connect(gain);gain.connect(audioContext.destination);
+   osc.start(now+delay);osc.stop(now+delay+.19);
+  });
+ }catch(e){}
+}
+const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function chosen(){return [...document.querySelectorAll('.choice input:checked')].map(x=>x.value)}
 function msg(s){$('status').textContent=s}
 function count(){let n=chosen().length;$('count').textContent=n+' reinos seleccionados';$('start').disabled=n<2||n>4}
 document.querySelectorAll('.choice input').forEach(x=>x.addEventListener('change',count));count();
-function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Lanza el dado. Necesitas un 6 para sacar una ficha.');render()}
+function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Lanza el dado. Necesitas un 6 para sacar una ficha.');render();playTurnSound()}
 $('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});
 function position(team,p){
  if(p.progress<0)return HOME_POINTS[team][p.slot];
@@ -163,6 +203,7 @@ function render(){
    const stack=document.createElement('div');
    const n=items.length;
    stack.className='token-stack '+(n===1?'single':'multi')+' count-'+n+(n>=5?' many':'');
+   if(items.some(item=>item.p.id===animatingPieceId))stack.classList.add('hopping');
    stack.style.left=point[0]+'%';stack.style.top=point[1]+'%';
    stack.setAttribute('aria-label',n+' ficha(s) en esta casilla');
    items.forEach(({pl,p})=>{
@@ -178,18 +219,53 @@ function render(){
    board.append(stack);
  });
  $('turn').textContent=T[players[current].team].icon+' Reino '+T[players[current].team].name;
- $('roll').disabled=waiting||over;
+ $('roll').disabled=waiting||over||animating;
  $('roll').textContent=waiting?'Elige ficha':'🎲 Lanzar dado';
  $('players').innerHTML=players.map((p,i)=>'<div class="player '+(i===current&&!over?'current':'')+'"><span class="dot" style="background:'+T[p.team].color+'"></span><b>Reino '+T[p.team].name+'</b><span class="right">'+p.pieces.filter(x=>x.progress===57).length+'/4 en meta</span></div>').join('');
 }
-function next(){let old=current;do{current=(current+1)%players.length}while(players[current].finished&&current!==old);roll=null;waiting=false;render();msg('Turno de Reino '+T[players[current].team].name+'. Lanza el dado.')}
-$('roll').onclick=()=>{if(waiting||over)return;roll=1+Math.floor(Math.random()*6);$('die').textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][roll-1];if(!players[current].pieces.some(legal)){let extra=roll===1||roll===6;waiting=false;render();if(extra)msg('Salió '+roll+'. No puedes mover; tienes otra tirada.');else{msg('No hay movimiento posible. Termina el turno.');setTimeout(next,600)}return}waiting=true;render();msg('Salió '+roll+'. Toca una ficha resaltada para moverla.')};
-function move(pl,p){
+function next(){let old=current;do{current=(current+1)%players.length}while(players[current].finished&&current!==old);roll=null;waiting=false;render();msg('Turno de Reino '+T[players[current].team].name+'. Lanza el dado.');if(current!==old)playTurnSound()}
+$('roll').onclick=async()=>{
+ if(waiting||over||animating)return;
+ animating=true;
+ $('roll').disabled=true;
+ const faces=['⚀','⚁','⚂','⚃','⚄','⚅'];
+ const finalRoll=1+Math.floor(Math.random()*6);
+ let faceIndex=0;
+ $('die').classList.add('rolling');
+ $('die').textContent=faces[0];
+ const faceTimer=setInterval(()=>{$('die').textContent=faces[faceIndex++%faces.length]},75);
+ await pause(650);
+ clearInterval(faceTimer);
+ roll=finalRoll;
+ $('die').classList.remove('rolling');
+ $('die').textContent=faces[roll-1];
+ animating=false;
+ if(!players[current].pieces.some(legal)){
+  let extra=roll===1||roll===6;
+  waiting=false;render();
+  if(extra)msg('Salió '+roll+'. No puedes mover; tienes otra tirada.');
+  else{msg('No hay movimiento posible. Termina el turno.');setTimeout(next,600)}
+  return;
+ }
+ waiting=true;render();msg('Salió '+roll+'. Toca una ficha resaltada para moverla.');
+};
+async function move(pl,p){
  if(!waiting||pl!==players[current]||!legal(p))return;
  const n=roll;
- if(p.progress<0)p.progress=0;else p.progress+=n;
+ const oldProgress=p.progress;
+ const targetProgress=oldProgress<0?0:oldProgress+n;
+ waiting=false;roll=null;animating=true;animatingPieceId=p.id;
+ const steps=[];
+ if(oldProgress<0)steps.push(0);
+ else for(let step=oldProgress+1;step<=targetProgress;step++)steps.push(step);
+ for(const step of steps){
+  p.progress=step;
+  render();
+  await pause(165);
+ }
+ animatingPieceId=null;animating=false;
  let capturedCount=0;
- /* Las 52 casillas comunes incluyen la salida al completar la vuelta. */
+ /* Las capturas se resuelven al terminar el movimiento animado. */
  if(p.progress<=52){
    const landing=(T[pl.team].start+p.progress)%52;
    if(!SAFE.has(landing)){
@@ -200,7 +276,7 @@ function move(pl,p){
      }));
    }
  }
- waiting=false;
+ render();
  if(pl.pieces.every(x=>x.progress===58)){
    pl.finished=true;
    if(players.filter(x=>!x.finished).length<=1){
