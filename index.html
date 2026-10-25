@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171b2a"><title>Ludo de Gongonia · v0.3.1 (prueba)</title>
+<meta name="theme-color" content="#171b2a"><title>Ludo de Gongonia · v0.4 (música)</title>
 <style>
 :root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px}.choice input{accent-color:var(--gold)}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:65px 1fr;align-items:center;gap:9px}.die{display:grid;place-items:center;aspect-ratio:1;background:#f7efdc;color:#272332;border:3px solid #c8a65e;border-radius:12px;font-size:2.6rem}.status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
@@ -46,18 +46,24 @@
 .token-stack.many{width:8%;max-width:54px}
 .token-stack.many .piece{width:100%;height:100%;font-size:clamp(6px,1vw,9px)}
 
+
+.musicbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0;padding:10px;border:1px solid #d8b76d55;border-radius:10px;background:#171b2a88;font-size:.85rem}
+.musicbar span{color:#f4d99b}
 </style></head><body><main class="app">
-<div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Prototipo de pruebas · v0.3.1</p>
+<div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Versión 0.4 · música de Gongonia</p>
 <section id="setup" class="panel"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Selecciona de dos a cuatro jugadores.</p>
+<div class="musicbar"><span id="musicLabel">♫ Música de inicio: The Kelta Mountains</span><button id="musicToggle" class="secondary" type="button">🔇 Activar música</button></div>
 <div class="choices"><label class="choice"><input type="checkbox" value="red" checked> 🦁 Reino Rojo</label><label class="choice"><input type="checkbox" value="green" checked> 🦌 Reino Verde</label><label class="choice"><input type="checkbox" value="yellow"> ☀️ Reino Amarillo</label><label class="choice"><input type="checkbox" value="blue"> 🦅 Reino Azul</label></div>
 <p><span id="count">2 reinos</span> <button id="start" class="primary" style="float:right">Iniciar partida</button></p></section>
 <section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"></div></div><aside class="panel side">
 <div class="wide"><div class="label">Turno actual</div><div id="turn" class="turn"></div></div>
 <div class="dice"><div id="die" class="die">⚀</div><button id="roll" class="primary">🎲 Lanzar dado</button></div>
 <div id="status" class="status wide">Lanza el dado para comenzar.</div><div class="wide"><div class="label">Jugadores</div><div id="players" class="players"></div></div>
-<div class="wide"><button id="back" class="secondary">Menú</button> <button id="restart" class="secondary">Reiniciar</button></div>
-</aside></div><p class="note">Prueba v0.3.1: puedes sacar ficha con 1 o 6; capturar también concede otra tirada.</p></section>
-<p class="credits">Gongonia Game · Versión experimental v0.1</p></main>
+<div class="wide"><button id="back" class="secondary">Menú</button> <button id="restart" class="secondary">Reiniciar</button> <button id="gameMusicToggle" class="secondary" type="button">🔇 Activar música</button></div>
+</aside></div><p class="note">v0.4: The Routa Plains durante la partida; The Kelta Mountains en la pantalla de inicio. Puedes silenciar la música cuando quieras.</p></section>
+<p class="credits">Gongonia Game · Versión 0.4</p></main>
+<audio id="introMusic" src="assets/the-kelta-mountains.mp3" preload="none" loop></audio>
+<audio id="gameMusic" src="assets/the-routa-plains.mp3" preload="none" loop></audio>
 <script>
 (()=>{
 const T={
@@ -101,13 +107,35 @@ const HOME_POINTS={
  blue:[[15.39,68.18],[27.99,68.26],[15.39,80.22],[27.67,79.90]]
 };
 const GOAL=pct(627,570), $=id=>document.getElementById(id);
-let players=[],current=0,roll=null,waiting=false,over=false,idseq=0;
+let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false;
+const introMusic=$('introMusic'),gameMusic=$('gameMusic');
+function updateMusicButtons(){
+ const label=musicEnabled?'🔊 Silenciar música':'🔇 Activar música';
+ $('musicToggle').textContent=label;
+ $('gameMusicToggle').textContent=label;
+}
+async function playMusicFor(screen){
+ if(!musicEnabled)return;
+ const target=screen==='game'?gameMusic:introMusic;
+ const other=screen==='game'?introMusic:gameMusic;
+ other.pause();other.currentTime=0;
+ try{await target.play();}catch(e){msg('Toca «Activar música» para permitir la reproducción en Safari.');}
+}
+function enableMusic(){
+ musicEnabled=!musicEnabled;
+ if(!musicEnabled){introMusic.pause();gameMusic.pause();}
+ else{playMusicFor($('game').classList.contains('hidden')?'setup':'game');}
+ updateMusicButtons();
+}
+$('musicToggle').addEventListener('click',enableMusic);
+$('gameMusicToggle').addEventListener('click',enableMusic);
+updateMusicButtons();
 function chosen(){return [...document.querySelectorAll('.choice input:checked')].map(x=>x.value)}
 function msg(s){$('status').textContent=s}
 function count(){let n=chosen().length;$('count').textContent=n+' reinos seleccionados';$('start').disabled=n<2||n>4}
 document.querySelectorAll('.choice input').forEach(x=>x.addEventListener('change',count));count();
-function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;$('setup').classList.add('hidden');$('game').classList.remove('hidden');msg('Lanza el dado. Necesitas un 6 para sacar una ficha.');render()}
-$('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});
+function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Lanza el dado. Necesitas un 6 para sacar una ficha.');render()}
+$('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});
 function position(team,p){
  if(p.progress<0)return HOME_POINTS[team][p.slot];
  /* La vuelta incluye regresar a la casilla de salida; el siguiente paso entra al carril final. */
