@@ -259,22 +259,33 @@ function playPieceCheer(){
 }
 /* Golpe mágico breve al capturar: caída tonal, impacto grave y destello. */
 function playCaptureSound(){
- const ctx=getAudioContext();if(!ctx)return;
+ const ctx=getAudioContext();if(!ctx||!noiseBuffer)return;
  const now=ctx.currentTime;
+ /* Impacto grave más fuerte, con un golpe de ruido para que destaque sobre la música. */
  const impact=ctx.createOscillator(),impactGain=ctx.createGain();
- impact.type='sine';impact.frequency.setValueAtTime(185,now);
- impact.frequency.exponentialRampToValueAtTime(58,now+.22);
+ impact.type='sine';
+ impact.frequency.setValueAtTime(210,now);
+ impact.frequency.exponentialRampToValueAtTime(48,now+.30);
  impactGain.gain.setValueAtTime(.0001,now);
- impactGain.gain.exponentialRampToValueAtTime(.34,now+.012);
- impactGain.gain.exponentialRampToValueAtTime(.0001,now+.27);
- impact.connect(impactGain);impactGain.connect(ctx.destination);impact.start(now);impact.stop(now+.28);
+ impactGain.gain.exponentialRampToValueAtTime(.72,now+.012);
+ impactGain.gain.exponentialRampToValueAtTime(.0001,now+.34);
+ impact.connect(impactGain);impactGain.connect(ctx.destination);
+ impact.start(now);impact.stop(now+.35);
+ const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),noiseGain=ctx.createGain();
+ source.buffer=noiseBuffer;filter.type='lowpass';filter.frequency.setValueAtTime(1250,now);filter.frequency.exponentialRampToValueAtTime(260,now+.22);
+ noiseGain.gain.setValueAtTime(.0001,now);
+ noiseGain.gain.exponentialRampToValueAtTime(.48,now+.008);
+ noiseGain.gain.exponentialRampToValueAtTime(.0001,now+.24);
+ source.connect(filter);filter.connect(noiseGain);noiseGain.connect(ctx.destination);
+ source.start(now);source.stop(now+.25);
  const chime=ctx.createOscillator(),chimeGain=ctx.createGain();
- chime.type='triangle';chime.frequency.setValueAtTime(880,now+.015);
- chime.frequency.exponentialRampToValueAtTime(260,now+.25);
- chimeGain.gain.setValueAtTime(.0001,now+.015);
- chimeGain.gain.exponentialRampToValueAtTime(.13,now+.035);
- chimeGain.gain.exponentialRampToValueAtTime(.0001,now+.29);
- chime.connect(chimeGain);chimeGain.connect(ctx.destination);chime.start(now+.015);chime.stop(now+.30);
+ chime.type='triangle';chime.frequency.setValueAtTime(740,now+.025);
+ chime.frequency.exponentialRampToValueAtTime(220,now+.28);
+ chimeGain.gain.setValueAtTime(.0001,now+.025);
+ chimeGain.gain.exponentialRampToValueAtTime(.24,now+.045);
+ chimeGain.gain.exponentialRampToValueAtTime(.0001,now+.32);
+ chime.connect(chimeGain);chimeGain.connect(ctx.destination);
+ chime.start(now+.025);chime.stop(now+.33);
 }
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function chosen(){return [...document.querySelectorAll('.choice input:checked')].map(x=>x.value)}
