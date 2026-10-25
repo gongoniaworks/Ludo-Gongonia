@@ -47,7 +47,7 @@
 .token-stack.many .piece{width:100%;height:100%;font-size:clamp(6px,1vw,9px)}
 
 
-.musicbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0;padding:10px;border:1px solid #d8b76d55;border-radius:10px;background:#171b2a88;font-size:.85rem}
+.stats-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.84rem}.stats-table th,.stats-table td{padding:9px 6px;border-bottom:1px solid #ffffff20;text-align:left;vertical-align:top}.stats-table th{color:#f4d99b}.stat-captures{line-height:1.55}.stat-chip{display:inline-block;border-radius:7px;padding:3px 6px;margin:2px 3px 2px 0;background:#ffffff12}.musicbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0;padding:10px;border:1px solid #d8b76d55;border-radius:10px;background:#171b2a88;font-size:.85rem}
 .musicbar span{color:#f4d99b}
 
 /* v0.5: animaciones suaves para el dado y las fichas */
@@ -91,7 +91,17 @@
 <div id="status" class="status wide">Lanza el dado para comenzar.</div><div class="wide"><div class="label">Jugadores</div><div id="players" class="players"></div></div>
 <div class="wide"><button id="back" class="secondary">Menú</button> <button id="restart" class="secondary">Reiniciar</button> <button id="gameMusicToggle" class="secondary" type="button">🔇 Activar música</button></div>
 </aside></div><p class="note">v0.4: The Routa Plains durante la partida; The Kelta Mountains en la pantalla de inicio. Puedes silenciar la música cuando quieras.</p></section>
-<p class="credits">Gongonia Game · Versión 0.4</p></main>
+<section id="results" class="panel hidden" aria-live="polite">
+ <h2 style="font:1.7rem Georgia,serif;color:#f4d99b;text-align:center;margin:4px 0 8px">🏆 Crónicas de la partida</h2>
+ <p id="resultWinner" style="text-align:center;font:1.25rem Georgia,serif;margin:8px 0"></p>
+ <p id="resultDuration" class="sub"></p>
+ <div id="resultStats"></div>
+ <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px">
+  <button id="newGame" class="primary">Nueva partida</button>
+  <button id="resultMenu" class="secondary">Volver al menú</button>
+ </div>
+</section>
+<p class="credits">Gongonia Game · Estadísticas de partida</p></main>
 <audio id="introMusic" src="The%20Kelta%20Mountains.mp3" preload="none" loop></audio>
 <audio id="gameMusic" src="The%20Routa%20Plains%20of%20A%CC%81nganor%20(Take%202).mp3" preload="none" loop></audio>
 <script>
@@ -137,7 +147,7 @@ const HOME_POINTS={
  blue:[[15.39,68.18],[27.99,68.26],[15.39,80.22],[27.67,79.90]]
 };
 const GOAL=pct(627,570), $=id=>document.getElementById(id);
-let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set();
+let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set(),gameStartedAt=0,gameStats={};
 const introMusic=$('introMusic'),gameMusic=$('gameMusic');
 /* Mezcla de audio: bajar música para dejar espacio a los efectos del juego. */
 introMusic.volume=0.56;gameMusic.volume=0.48;
@@ -292,8 +302,8 @@ function chosen(){return [...document.querySelectorAll('.choice input:checked')]
 function msg(s){$('status').textContent=s}
 function count(){let n=chosen().length;$('count').textContent=n+' reinos seleccionados';$('start').disabled=n<2||n>4}
 document.querySelectorAll('.choice input').forEach(x=>x.addEventListener('change',count));count();
-function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Lanza el dado. Necesitas un 6 para sacar una ficha.');render();playTurnSound()}
-$('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});
+function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;gameStartedAt=Date.now();gameStats={};teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});$('results').classList.add('hidden');$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Lanza el dado. Necesitas un 6 para sacar una ficha.');render();playTurnSound()}
+$('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});$('newGame').addEventListener('click',start);$('resultMenu').addEventListener('click',()=>{$('results').classList.add('hidden');$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});
 function position(team,p){
  if(p.progress<0)return HOME_POINTS[team][p.slot];
  /* La vuelta incluye regresar a la casilla de salida; el siguiente paso entra al carril final. */
@@ -342,12 +352,31 @@ function render(){
  $('roll').textContent=waiting?'Elige ficha':'🎲 Lanzar dado';
  $('players').innerHTML=players.map((p,i)=>'<div class="player '+(i===current&&!over?'current':'')+'"><span class="dot" style="background:'+T[p.team].color+'"></span><b>Reino '+T[p.team].name+'</b><span class="right">'+p.pieces.filter(x=>x.progress===57).length+'/4 en meta</span></div>').join('');
 }
+function showFinalStats(winnerTeam){
+ const seconds=Math.max(0,Math.floor((Date.now()-gameStartedAt)/1000));
+ const mm=String(Math.floor(seconds/60)).padStart(2,'0'),ss=String(seconds%60).padStart(2,'0');
+ $('resultWinner').textContent='¡Victoria del Reino '+T[winnerTeam].name+' '+T[winnerTeam].icon+'!';
+ $('resultDuration').textContent='Duración total: '+mm+':'+ss;
+ const teamNames={red:'Rojo',green:'Verde',yellow:'Amarillo',blue:'Azul'};
+ const rows=players.map(pl=>{
+  const s=gameStats[pl.team];
+  const total=Object.values(s.captures).reduce((a,b)=>a+b,0);
+  const details=players.filter(other=>other.team!==pl.team).map(other=>{
+   const n=s.captures[other.team];
+   return '<span class="stat-chip">'+T[other.team].icon+' A Reino '+teamNames[other.team]+': <b>'+n+'</b></span>';
+  }).join('');
+  return '<tr><td><b>'+T[pl.team].icon+' Reino '+teamNames[pl.team]+'</b>'+(pl.team===winnerTeam?' <span style="color:#f4d99b">🏆 Ganador</span>':'')+'</td><td>'+s.rolls+'</td><td>'+s.moves+'</td><td><b>'+total+'</b><div class="stat-captures">'+details+'</div></td></tr>';
+ }).join('');
+ $('resultStats').innerHTML='<table class="stats-table"><thead><tr><th>Jugador</th><th>Tiradas</th><th>Movimientos</th><th>Capturas realizadas y reino capturado</th></tr></thead><tbody>'+rows+'</tbody></table><p class="note">Las capturas se muestran por reino rival. Cada cifra indica cuántas fichas de ese reino fueron enviadas a su base.</p>';
+ $('game').classList.add('hidden');$('results').classList.remove('hidden');
+}
 function next(){let old=current;do{current=(current+1)%players.length}while(players[current].finished&&current!==old);roll=null;waiting=false;render();msg('Turno de Reino '+T[players[current].team].name+'. Lanza el dado.');if(current!==old)playTurnSound()}
 $('roll').onclick=async()=>{
  if(waiting||over||animating)return;
  animating=true;
  $('roll').disabled=true;
  const faces=['⚀','⚁','⚂','⚃','⚄','⚅'];
+ gameStats[players[current].team].rolls++;
  const finalRoll=1+Math.floor(Math.random()*6);
  playDiceSound();
  let faceIndex=0;
@@ -374,6 +403,7 @@ async function move(pl,p){
  const n=roll;
  const oldProgress=p.progress;
  const targetProgress=oldProgress<0?0:oldProgress+n;
+ gameStats[pl.team].moves++;
  if(oldProgress<0)playPieceCheer();
  waiting=false;roll=null;animating=true;animatingPieceId=p.id;
  const steps=[];
@@ -393,7 +423,7 @@ async function move(pl,p){
    if(!SAFE.has(landing)){
      players.filter(x=>x!==pl).forEach(op=>op.pieces.forEach(e=>{
        if(e.progress>=0&&e.progress<=52&&(T[op.team].start+e.progress)%52===landing){
-         e.progress=-1;capturedCount++;capturedPieceIds.add(e.id);
+         e.progress=-1;capturedCount++;capturedPieceIds.add(e.id);gameStats[pl.team].captures[op.team]++;
        }
      }));
    }
@@ -408,7 +438,7 @@ async function move(pl,p){
  if(pl.pieces.every(x=>x.progress===58)){
    pl.finished=true;
    if(players.filter(x=>!x.finished).length<=1){
-     over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!');render();return;
+     over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!');render();showFinalStats(pl.team);return;
    }
    next();msg('¡Reino '+T[pl.team].name+' completó sus fichas!');render();return;
  }
