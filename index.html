@@ -68,6 +68,17 @@
 @media(prefers-reduced-motion:reduce){
   .die.rolling,.token-stack.hopping{animation-duration:.01ms}
 }
+
+/* v0.5.4: breve efecto al regresar una ficha capturada a su base */
+@keyframes capturedReturnEffect{
+  0%{transform:translate(-50%,-50%) scale(1);filter:brightness(1)}
+  22%{transform:translate(-50%,-50%) scale(1.24) rotate(-8deg);filter:brightness(1.8)}
+  48%{transform:translate(-50%,-50%) scale(.72) rotate(7deg);filter:brightness(1.3)}
+  72%{transform:translate(-50%,-50%) scale(1.12);filter:brightness(1.5)}
+  100%{transform:translate(-50%,-50%) scale(1);filter:brightness(1)}
+}
+.token-stack.captured-return{animation:capturedReturnEffect .48s ease-out}
+@media(prefers-reduced-motion:reduce){.token-stack.captured-return{animation-duration:.01ms}}
 </style></head><body><main class="app">
 <div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Versión 0.4 · música de Gongonia</p>
 <section id="setup" class="panel"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Selecciona de dos a cuatro jugadores.</p>
@@ -126,7 +137,7 @@ const HOME_POINTS={
  blue:[[15.39,68.18],[27.99,68.26],[15.39,80.22],[27.67,79.90]]
 };
 const GOAL=pct(627,570), $=id=>document.getElementById(id);
-let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false,animating=false,animatingPieceId=null,audioContext=null;
+let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set();
 const introMusic=$('introMusic'),gameMusic=$('gameMusic');
 /* Mezcla de audio: bajar música para dejar espacio a los efectos del juego. */
 introMusic.volume=0.56;gameMusic.volume=0.48;
@@ -246,6 +257,25 @@ function playPieceCheer(){
  source.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
  source.start(now);source.stop(now+.31);
 }
+/* Golpe mágico breve al capturar: caída tonal, impacto grave y destello. */
+function playCaptureSound(){
+ const ctx=getAudioContext();if(!ctx)return;
+ const now=ctx.currentTime;
+ const impact=ctx.createOscillator(),impactGain=ctx.createGain();
+ impact.type='sine';impact.frequency.setValueAtTime(185,now);
+ impact.frequency.exponentialRampToValueAtTime(58,now+.22);
+ impactGain.gain.setValueAtTime(.0001,now);
+ impactGain.gain.exponentialRampToValueAtTime(.34,now+.012);
+ impactGain.gain.exponentialRampToValueAtTime(.0001,now+.27);
+ impact.connect(impactGain);impactGain.connect(ctx.destination);impact.start(now);impact.stop(now+.28);
+ const chime=ctx.createOscillator(),chimeGain=ctx.createGain();
+ chime.type='triangle';chime.frequency.setValueAtTime(880,now+.015);
+ chime.frequency.exponentialRampToValueAtTime(260,now+.25);
+ chimeGain.gain.setValueAtTime(.0001,now+.015);
+ chimeGain.gain.exponentialRampToValueAtTime(.13,now+.035);
+ chimeGain.gain.exponentialRampToValueAtTime(.0001,now+.29);
+ chime.connect(chimeGain);chimeGain.connect(ctx.destination);chime.start(now+.015);chime.stop(now+.30);
+}
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function chosen(){return [...document.querySelectorAll('.choice input:checked')].map(x=>x.value)}
 function msg(s){$('status').textContent=s}
@@ -281,6 +311,7 @@ function render(){
    const n=items.length;
    stack.className='token-stack '+(n===1?'single':'multi')+' count-'+n+(n>=5?' many':'');
    if(items.some(item=>item.p.id===animatingPieceId))stack.classList.add('hopping');
+   if(items.some(item=>capturedPieceIds.has(item.p.id)))stack.classList.add('captured-return');
    stack.style.left=point[0]+'%';stack.style.top=point[1]+'%';
    stack.setAttribute('aria-label',n+' ficha(s) en esta casilla');
    items.forEach(({pl,p})=>{
@@ -351,12 +382,18 @@ async function move(pl,p){
    if(!SAFE.has(landing)){
      players.filter(x=>x!==pl).forEach(op=>op.pieces.forEach(e=>{
        if(e.progress>=0&&e.progress<=52&&(T[op.team].start+e.progress)%52===landing){
-         e.progress=-1;capturedCount++;
+         e.progress=-1;capturedCount++;capturedPieceIds.add(e.id);
        }
      }));
    }
  }
+ if(capturedCount>0){playCaptureSound();}
  render();
+ if(capturedCount>0){
+   await pause(520);
+   capturedPieceIds.clear();
+   render();
+ }
  if(pl.pieces.every(x=>x.progress===58)){
    pl.finished=true;
    if(players.filter(x=>!x.finished).length<=1){
