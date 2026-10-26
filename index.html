@@ -313,19 +313,19 @@ function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length
 $('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});$('newGame').addEventListener('click',start);$('resultMenu').addEventListener('click',()=>{$('results').classList.add('hidden');$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});
 function position(team,p){
  if(p.progress<0)return HOME_POINTS[team][p.slot];
- /* La vuelta incluye regresar a la casilla de salida; el siguiente paso entra al carril final. */
- if(p.progress<=52)return ROUTE[(T[team].start+p.progress)%52];
- if(p.progress<=57)return LANES[team][p.progress-53];
+ /* Las 52 casillas comunes terminan justo antes del pasillo final propio. */
+ if(p.progress<=51)return ROUTE[(T[team].start+p.progress)%52];
+ if(p.progress<=56)return LANES[team][p.progress-52];
  return GOAL;
 }
 function positionKey(team,p){
  if(p.progress<0)return 'base-'+team+'-'+p.slot;
- if(p.progress<=52)return 'route-'+((T[team].start+p.progress)%52);
- if(p.progress<=57)return 'lane-'+team+'-'+(p.progress-53);
+ if(p.progress<=51)return 'route-'+((T[team].start+p.progress)%52);
+ if(p.progress<=56)return 'lane-'+team+'-'+(p.progress-52);
  return 'goal';
 }
 /* En Gongonia se puede sacar ficha con 1 o 6; ambas tiradas dan turno adicional. */
-function legal(p){return roll!==null&&(p.progress<0?(roll===1||roll===6):(p.progress<58&&p.progress+roll<=58))}
+function legal(p){return roll!==null&&(p.progress<0?(roll===1||roll===6):(p.progress<57&&p.progress+roll<=57))}
 function render(){
  const board=$('board');board.innerHTML='';
  const groups=new Map();
@@ -426,11 +426,11 @@ async function move(pl,p){
  let capturedCount=0;
  const capturedByTeam={};
  /* Las capturas se resuelven al terminar el movimiento animado. */
- if(p.progress<=52){
+ if(p.progress<=51){
    const landing=(T[pl.team].start+p.progress)%52;
    if(!SAFE.has(landing)){
      players.filter(x=>x!==pl).forEach(op=>op.pieces.forEach(e=>{
-       if(e.progress>=0&&e.progress<=52&&(T[op.team].start+e.progress)%52===landing){
+       if(e.progress>=0&&e.progress<=51&&(T[op.team].start+e.progress)%52===landing){
          e.progress=-1;capturedCount++;capturedPieceIds.add(e.id);gameStats[pl.team].captures[op.team]++;capturedByTeam[op.team]=(capturedByTeam[op.team]||0)+1;
        }
      }));
@@ -443,7 +443,7 @@ async function move(pl,p){
    capturedPieceIds.clear();
    render();
  }
- if(pl.pieces.every(x=>x.progress===58)){
+ if(pl.pieces.every(x=>x.progress===57)){
    pl.finished=true;
    if(players.filter(x=>!x.finished).length<=1){
      over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!');render();showFinalStats(pl.team);return;
