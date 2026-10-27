@@ -167,7 +167,7 @@ const HOME_POINTS={
  blue:[[15.39,68.18],[27.99,68.26],[15.39,80.22],[27.67,79.90]]
 };
 const GOAL=pct(627,570), $=id=>document.getElementById(id);
-let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set(),gameStartedAt=0,gameStats={};
+let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set(),gameStartedAt=0,gameStats={},finishOrder=[];
 updateDieFace(1);
 const introMusic=$('introMusic'),gameMusic=$('gameMusic');
 /* Mezcla de audio: bajar música para dejar espacio a los efectos del juego. */
@@ -339,7 +339,7 @@ function escapeHTML(value){return String(value).replace(/[&<>"']/g,ch=>({'&':'&a
 function msg(s){$('status').textContent=s}
 function count(){let n=chosen().length;$('count').textContent=n+' reinos seleccionados';$('start').disabled=n<2||n>4}
 document.querySelectorAll('.choice input[type="checkbox"]').forEach(x=>x.addEventListener('change',count));count();
-function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,playerName:getPlayerName(team),finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;gameStartedAt=Date.now();gameStats={};teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});$('results').classList.add('hidden');$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado; necesitas un 6 para sacar una ficha.');render();playTurnSound()}
+function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,playerName:getPlayerName(team),finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;gameStartedAt=Date.now();gameStats={};finishOrder=[];teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});$('results').classList.add('hidden');$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado; necesitas un 6 para sacar una ficha.');render();playTurnSound()}
 $('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});$('newGame').addEventListener('click',start);$('resultMenu').addEventListener('click',()=>{$('results').classList.add('hidden');$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});
 function position(team,p){
  if(p.progress<0)return HOME_POINTS[team][p.slot];
@@ -484,10 +484,11 @@ async function move(pl,p){
  }
  if(pl.pieces.every(x=>x.progress===56)){
    pl.finished=true;
+   if(!finishOrder.includes(pl.team))finishOrder.push(pl.team);
    if(players.filter(x=>!x.finished).length<=1){
-     over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!');render();showFinalStats(pl.team);return;
+     over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!');render();showFinalStats(finishOrder[0]||pl.team);return;
    }
-   next();msg('¡Reino '+T[pl.team].name+' completó sus fichas!');render();return;
+   next();msg('¡'+pl.playerName+' — Reino '+T[pl.team].name+' completó sus fichas! Puesto de llegada: '+finishOrder.length+'.');render();return;
  }
  /* Sacar con 1/6 o capturar concede una tirada adicional, nunca dos acumuladas. */
  if(n===1||n===6||capturedCount>0){
