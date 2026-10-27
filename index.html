@@ -411,9 +411,11 @@ function showFinalStats(winnerTeam){
    const n=s.captures[other.team];
    return '<span class="stat-chip">'+T[other.team].icon+' A '+escapeHTML(other.playerName)+' (Reino '+teamNames[other.team]+'): <b>'+n+'</b></span>';
   }).join('');
-  return '<tr><td><b>'+T[pl.team].icon+' '+escapeHTML(pl.playerName)+' — Reino '+teamNames[pl.team]+'</b>'+(pl.team===winnerTeam?' <span style="color:#f4d99b">🏆 Ganador</span>':'')+'</td><td>'+s.rolls+'</td><td>'+s.moves+'</td><td><b>'+total+'</b><div class="stat-captures">'+details+'</div></td></tr>';
+  const arrivalIndex=finishOrder.indexOf(pl.team);
+  const arrivalLabel=arrivalIndex===0?'1.º lugar':arrivalIndex===1?'2.º lugar':arrivalIndex===2?'3.º lugar':arrivalIndex===3?'4.º lugar':'No completó';
+  return '<tr><td><b>'+T[pl.team].icon+' '+escapeHTML(pl.playerName)+' — Reino '+teamNames[pl.team]+'</b>'+(pl.team===winnerTeam?' <span style="color:#f4d99b">🏆 Ganador</span>':'')+'</td><td>'+arrivalLabel+'</td><td>'+s.rolls+'</td><td>'+s.moves+'</td><td><b>'+total+'</b><div class="stat-captures">'+details+'</div></td></tr>';
  }).join('');
- $('resultStats').innerHTML='<table class="stats-table"><thead><tr><th>Jugador</th><th>Tiradas</th><th>Movimientos</th><th>Capturas realizadas y reino capturado</th></tr></thead><tbody>'+rows+'</tbody></table><p class="note">Las capturas se muestran por reino rival. Cada cifra indica cuántas fichas de ese reino fueron enviadas a su base.</p>';
+ $('resultStats').innerHTML='<table class="stats-table"><thead><tr><th>Jugador</th><th>Llegada</th><th>Tiradas</th><th>Movimientos</th><th>Capturas realizadas y reino capturado</th></tr></thead><tbody>'+rows+'</tbody></table><p class="note">El puesto depende del orden real en que cada reino completó sus cuatro fichas. “No completó” significa que la partida terminó antes de que ese reino llegara a la meta. Las capturas se muestran por reino rival.</p>';
  $('game').classList.add('hidden');$('results').classList.remove('hidden');
 }
 function next(){let old=current;do{current=(current+1)%players.length}while(players[current].finished&&current!==old);roll=null;waiting=false;render();msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado.');if(current!==old)playTurnSound()}
