@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171b2a"><title>Ludo de Gongonia · v0.7.7 (dado corregido)</title>
+<meta name="theme-color" content="#171b2a"><title>Ludo de Gongonia · v0.7.8 (dado corregido)</title>
 <style>
 :root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #0006)}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}.status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #0006)}.die-pips{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}.status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
 
 /* Paso 3: mostrar el tablero ilustrado definitivo como fondo */
 .board{
@@ -89,7 +89,7 @@
 @keyframes guardianLegalGlow{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.06)}}
 @media(prefers-reduced-motion:reduce){.token-stack .piece.legal .guardian-token{animation:none}}
 </style></head><body><main class="app">
-<div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Versión 0.7.7 · dado corregido</p>
+<div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Versión 0.7.8 · dado corregido</p>
 <section id="setup" class="panel"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Selecciona de dos a cuatro jugadores.</p>
 <div class="musicbar"><span id="musicLabel">♫ Música de inicio: The Kelta Mountains</span><button id="musicToggle" class="secondary" type="button">🔇 Activar música</button></div>
 <div class="choices">
@@ -101,7 +101,7 @@
 <p><span id="count">2 reinos</span> <button id="start" class="primary" style="float:right">Iniciar partida</button></p></section>
 <section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"></div></div><aside class="panel side">
 <div class="wide"><div class="label">Turno actual</div><div id="turn" class="turn"></div></div>
-<div class="dice"><div id="die" class="die" aria-label="Dado sin lanzar"><img class="die-art" src="dado-gongonia.webp" alt="Dado de marfil con bordes dorados y gemas rojas"><span id="die-result" class="die-result">—</span></div><button id="roll" class="primary">Lanzar dado</button></div>
+<div class="dice"><div id="die" class="die" aria-label="Dado sin lanzar"><img class="die-art" src="dado-gongonia.webp" alt="Dado de marfil con bordes dorados y gemas rojas"><svg id="die-pips" class="die-pips" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="die-top-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5e8c8"/><stop offset="1" stop-color="#d9c397"/></linearGradient><radialGradient id="die-gem-fill" cx="30%" cy="25%" r="75%"><stop offset="0" stop-color="#ff8b68"/><stop offset=".35" stop-color="#d52b26"/><stop offset="1" stop-color="#620a0b"/></radialGradient></defs><polygon points="50,7 81,20 50,37 19,20" fill="url(#die-top-fill)" stroke="#b99a60" stroke-width=".65"/><g id="die-pip-group"></g></svg><span id="die-result" class="die-result">—</span></div><button id="roll" class="primary">Lanzar dado</button></div>
 <div id="status" class="status wide">Lanza el dado para comenzar.</div><div class="wide"><div class="label">Jugadores</div><div id="players" class="players"></div></div>
 <div class="wide"><button id="back" class="secondary">Menú</button> <button id="restart" class="secondary">Reiniciar</button> <button id="gameMusicToggle" class="secondary" type="button">🔇 Activar música</button></div>
 </aside></div><p class="note">La música de Gongonia se mantiene durante la partida y en el menú puedes silenciarla cuando quieras.</p></section>
@@ -115,7 +115,7 @@
   <button id="resultMenu" class="secondary">Volver al menú</button>
  </div>
 </section>
-<p class="credits">Gongonia Game · v0.7.7 · dado corregido</p></main>
+<p class="credits">Gongonia Game · v0.7.8 · dado corregido</p></main>
 <audio id="introMusic" src="The%20Kelta%20Mountains.mp3" preload="none" loop></audio>
 <audio id="gameMusic" src="The%20Routa%20Plains%20of%20A%CC%81nganor%20(Take%202).mp3" preload="none" loop></audio>
 <script>
@@ -168,6 +168,7 @@ const HOME_POINTS={
 };
 const GOAL=pct(627,570), $=id=>document.getElementById(id);
 let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set(),gameStartedAt=0,gameStats={};
+updateDieFace(1);
 const introMusic=$('introMusic'),gameMusic=$('gameMusic');
 /* Mezcla de audio: bajar música para dejar espacio a los efectos del juego. */
 introMusic.volume=0.56;gameMusic.volume=0.48;
@@ -224,6 +225,20 @@ function playTurnSound(){
  });
 }
 /* Dados rodando: pequeños golpecitos irregulares y un traqueteo corto. */
+function updateDieFace(value){
+ const group=$('die-pip-group');
+ if(!group)return;
+ const patterns={
+  1:[[50,20]],
+  2:[[40,15],[60,25]],
+  3:[[40,15],[50,20],[60,25]],
+  4:[[40,15],[60,15],[40,25],[60,25]],
+  5:[[40,15],[60,15],[50,20],[40,25],[60,25]],
+  6:[[40,14],[60,14],[40,20],[60,20],[40,26],[60,26]]
+ };
+ const dots=patterns[Number(value)]||[];
+ group.innerHTML=dots.map(([x,y])=>'<g><circle cx="'+x+'" cy="'+y+'" r="4.1" fill="url(#die-gem-fill)" stroke="#74120d" stroke-width=".9"/><ellipse cx="'+(x-1.05)+'" cy="'+(y-1.35)+'" rx="1.25" ry=".8" fill="#ffd0a5" opacity=".82"/></g>').join('');
+}
 function playDiceSound(){
  const ctx=getAudioContext();if(!ctx||!noiseBuffer)return;
  const now=ctx.currentTime;
@@ -412,13 +427,13 @@ $('roll').onclick=async()=>{
  playDiceSound();
  let faceIndex=0;
  $('die').classList.add('rolling');
- $('die-result').textContent='1';
- const faceTimer=setInterval(()=>{$('die-result').textContent=faces[faceIndex++%faces.length]},75);
+ $('die-result').textContent='1';updateDieFace(1);
+ const faceTimer=setInterval(()=>{const face=faces[faceIndex++%faces.length];$('die-result').textContent=face;updateDieFace(face)},75);
  await pause(650);
  clearInterval(faceTimer);
  roll=finalRoll;
  $('die').classList.remove('rolling');
- $('die-result').textContent=roll; $('die').setAttribute('aria-label','Resultado del dado: '+roll);
+ $('die-result').textContent=roll;updateDieFace(roll); $('die').setAttribute('aria-label','Resultado del dado: '+roll);
  animating=false;
  if(!players[current].pieces.some(legal)){
   let extra=roll===1||roll===6;
