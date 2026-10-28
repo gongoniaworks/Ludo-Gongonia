@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171b2a"><title>Ludo de Gongonia · v0.8 (bot básico y audio independiente)</title>
+<meta name="theme-color" content="#171b2a"><title>Ludo de Gongonia · v0.9 (bot básico y estratégico)</title>
 <style>
 :root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #0006)}.die-pips{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}.status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
@@ -90,14 +90,14 @@
 @media(prefers-reduced-motion:reduce){.token-stack .piece.legal .guardian-token{animation:none}}
 .mode-label{justify-content:space-between;font-size:.78rem!important}.player-mode{width:auto;max-width:62%;min-width:0;padding:6px;border-radius:7px;background:#171b2a;color:var(--ink);border:1px solid #ffffff30;font:inherit}
 </style></head><body><main class="app">
-<div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Versión 0.8 · bot básico y controles de audio</p>
-<section id="setup" class="panel"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Elige de dos a cuatro reinos, escribe los nombres y decide si los controla una persona o el bot básico.</p>
+<div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Versión 0.9 · bots básico y estratégico</p>
+<section id="setup" class="panel"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Elige de dos a cuatro reinos, escribe los nombres y selecciona quién controla cada uno: Persona, Bot básico o Bot estratégico.</p>
 <div class="musicbar"><span id="musicLabel">♫ Música de inicio: The Kelta Mountains</span><button id="musicToggle" class="secondary" type="button">🔇 Activar música</button><button id="effectsToggle" class="secondary" type="button">🔊 Efectos activados</button></div>
 <div class="choices">
-<div class="choice"><label><input type="checkbox" value="red" checked> 🦁 Reino Rojo</label><input class="player-name" data-team="red" type="text" maxlength="24" placeholder="Nombre (ej. Sabrina)" aria-label="Nombre del jugador del Reino Rojo"><label class="mode-label">Control<select class="player-mode" data-team="red"><option value="human">Persona</option><option value="bot">Bot básico</option></select></label></div>
-<div class="choice"><label><input type="checkbox" value="green" checked> 🦌 Reino Verde</label><input class="player-name" data-team="green" type="text" maxlength="24" placeholder="Nombre (ej. Nicole)" aria-label="Nombre del jugador del Reino Verde"><label class="mode-label">Control<select class="player-mode" data-team="green"><option value="human">Persona</option><option value="bot">Bot básico</option></select></label></div>
-<div class="choice"><label><input type="checkbox" value="yellow"> ☀️ Reino Amarillo</label><input class="player-name" data-team="yellow" type="text" maxlength="24" placeholder="Nombre del jugador" aria-label="Nombre del jugador del Reino Amarillo"><label class="mode-label">Control<select class="player-mode" data-team="yellow"><option value="human">Persona</option><option value="bot">Bot básico</option></select></label></div>
-<div class="choice"><label><input type="checkbox" value="blue"> 🦅 Reino Azul</label><input class="player-name" data-team="blue" type="text" maxlength="24" placeholder="Nombre del jugador" aria-label="Nombre del jugador del Reino Azul"><label class="mode-label">Control<select class="player-mode" data-team="blue"><option value="human">Persona</option><option value="bot">Bot básico</option></select></label></div>
+<div class="choice"><label><input type="checkbox" value="red" checked> 🦁 Reino Rojo</label><input class="player-name" data-team="red" type="text" maxlength="24" placeholder="Nombre (ej. Sabrina)" aria-label="Nombre del jugador del Reino Rojo"><label class="mode-label">Control<select class="player-mode" data-team="red"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
+<div class="choice"><label><input type="checkbox" value="green" checked> 🦌 Reino Verde</label><input class="player-name" data-team="green" type="text" maxlength="24" placeholder="Nombre (ej. Nicole)" aria-label="Nombre del jugador del Reino Verde"><label class="mode-label">Control<select class="player-mode" data-team="green"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
+<div class="choice"><label><input type="checkbox" value="yellow"> ☀️ Reino Amarillo</label><input class="player-name" data-team="yellow" type="text" maxlength="24" placeholder="Nombre del jugador" aria-label="Nombre del jugador del Reino Amarillo"><label class="mode-label">Control<select class="player-mode" data-team="yellow"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
+<div class="choice"><label><input type="checkbox" value="blue"> 🦅 Reino Azul</label><input class="player-name" data-team="blue" type="text" maxlength="24" placeholder="Nombre del jugador" aria-label="Nombre del jugador del Reino Azul"><label class="mode-label">Control<select class="player-mode" data-team="blue"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
 </div>
 <p><span id="count">2 reinos</span> <button id="start" class="primary" style="float:right">Iniciar partida</button></p></section>
 <section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"></div></div><aside class="panel side">
@@ -345,10 +345,47 @@ function playCaptureSound(){
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function chosen(){return [...document.querySelectorAll('.choice input[type="checkbox"]:checked')].map(x=>x.value)}
 function getPlayerMode(team){const select=document.querySelector('.player-mode[data-team="'+team+'"]');return select?select.value:'human'}
-function getPlayerName(team){const input=document.querySelector('.player-name[data-team="'+team+'"]');return input&&input.value.trim()?input.value.trim():(getPlayerMode(team)==='bot'?'Bot '+T[team].name:'Jugador '+T[team].name)}
+function getPlayerName(team){const input=document.querySelector('.player-name[data-team="'+team+'"]');const mode=getPlayerMode(team);return input&&input.value.trim()?input.value.trim():(mode==='strategic'?'Bot estratégico '+T[team].name:mode==='bot'?'Bot '+T[team].name:'Jugador '+T[team].name)}
 function escapeHTML(value){return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 function msg(s){$('status').textContent=s}
 function count(){let n=chosen().length;$('count').textContent=n+' reinos seleccionados';$('start').disabled=n<2||n>4}
+function botModeLabel(pl){return pl.botMode==='strategic'?'Bot estratégico':'Bot básico'}
+function chooseStrategicBotMove(pl,options){
+ const ranked=options.map(p=>{
+  let score=Math.random()*0.4;
+  if(p.progress<0){
+   /* Sacar una ficha nueva suele ser mejor que dejarla esperando en la base. */
+   score+=380;
+   if(!pl.pieces.some(other=>other.progress>=0))score+=35;
+  }else{
+   const target=p.progress+roll;
+   if(target===56){
+    /* Completar una ficha es la prioridad más alta. */
+    score+=2000;
+   }else{
+    /* Si no puede terminar, prefiere avanzar, especialmente cerca de la meta. */
+    score+=target*1.5;
+    if(target>=51&&target<=55)score+=20;
+    if(target<=50){
+     const landing=(T[pl.team].start+target)%52;
+     if(SAFE.has(landing)){
+      score+=25;
+     }else{
+      let captures=0;
+      players.filter(other=>other!==pl).forEach(op=>op.pieces.forEach(e=>{
+       if(e.progress>=0&&e.progress<=50&&(T[op.team].start+e.progress)%52===landing)captures++;
+      }));
+      if(captures>0)score+=1000+captures*30;
+     }
+    }
+   }
+  }
+  return {piece:p,score};
+ });
+ const bestScore=Math.max(...ranked.map(item=>item.score));
+ const best=ranked.filter(item=>bestScore-item.score<0.75);
+ return best[Math.floor(Math.random()*best.length)].piece;
+}
 function scheduleBotTurn(delay=650){
  if(botTimer!==null){clearTimeout(botTimer);botTimer=null;}
  if(over||!players[current]||!players[current].isBot)return;
@@ -356,13 +393,17 @@ function scheduleBotTurn(delay=650){
   botTimer=null;
   if(over||!players[current]||!players[current].isBot||animating)return;
   if(waiting&&roll!==null){
-   const options=players[current].pieces.filter(p=>legal(p));
-   if(options.length){const pick=options[Math.floor(Math.random()*options.length)];move(players[current],pick);}
+   const pl=players[current];
+   const options=pl.pieces.filter(p=>legal(p));
+   if(options.length){
+    const pick=pl.botMode==='strategic'?chooseStrategicBotMove(pl,options):options[Math.floor(Math.random()*options.length)];
+    move(pl,pick);
+   }
   }else if(!waiting){$('roll').click();}
  },delay);
 }
 document.querySelectorAll('.choice input[type="checkbox"]').forEach(x=>x.addEventListener('change',count));count();
-function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,playerName:getPlayerName(team),isBot:getPlayerMode(team)==='bot',finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;gameStartedAt=Date.now();gameStats={};finishOrder=[];teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});$('results').classList.add('hidden');$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado; necesitas un 6 para sacar una ficha.');render();playTurnSound();scheduleBotTurn()}
+function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,playerName:getPlayerName(team),botMode:getPlayerMode(team),isBot:getPlayerMode(team)!=='human',finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;gameStartedAt=Date.now();gameStats={};finishOrder=[];teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});$('results').classList.add('hidden');$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado; necesitas un 6 para sacar una ficha.');render();playTurnSound();scheduleBotTurn()}
 $('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});$('newGame').addEventListener('click',start);$('resultMenu').addEventListener('click',()=>{$('results').classList.add('hidden');$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});
 function position(team,p){
  if(p.progress<0)return HOME_POINTS[team][p.slot];
@@ -416,10 +457,10 @@ function render(){
    });
    board.append(stack);
  });
- $('turn').textContent=T[players[current].team].icon+' Reino '+T[players[current].team].name+' de '+players[current].playerName+(players[current].isBot?' · Bot básico':'');
+ $('turn').textContent=T[players[current].team].icon+' Reino '+T[players[current].team].name+' de '+players[current].playerName+(players[current].isBot?' · '+botModeLabel(players[current]):'');
  $('roll').disabled=waiting||over||animating;
  $('roll').textContent=waiting?'Elige ficha':'🎲 Lanzar dado';
- $('players').innerHTML=players.map((p,i)=>'<div class="player '+(i===current&&!over?'current':'')+'"><span class="dot" style="background:'+T[p.team].color+'"></span><b>'+escapeHTML(p.playerName)+(p.isBot?' · Bot':'')+' — Reino '+T[p.team].name+'</b><span class="right">'+p.pieces.filter(x=>x.progress===56).length+'/4 en meta</span></div>').join('');
+ $('players').innerHTML=players.map((p,i)=>'<div class="player '+(i===current&&!over?'current':'')+'"><span class="dot" style="background:'+T[p.team].color+'"></span><b>'+escapeHTML(p.playerName)+(p.isBot?' · '+botModeLabel(p):'')+' — Reino '+T[p.team].name+'</b><span class="right">'+p.pieces.filter(x=>x.progress===56).length+'/4 en meta</span></div>').join('');
 }
 function showFinalStats(winnerTeam){
  const seconds=Math.max(0,Math.floor((Date.now()-gameStartedAt)/1000));
@@ -442,7 +483,7 @@ function showFinalStats(winnerTeam){
  $('resultStats').innerHTML='<table class="stats-table"><thead><tr><th>Jugador</th><th>Llegada</th><th>Tiradas</th><th>Movimientos</th><th>Capturas realizadas y reino capturado</th></tr></thead><tbody>'+rows+'</tbody></table><p class="note">El puesto depende del orden real en que cada reino completó sus cuatro fichas. “No completó” significa que la partida terminó antes de que ese reino llegara a la meta. Las capturas se muestran por reino rival.</p>';
  $('game').classList.add('hidden');$('results').classList.remove('hidden');
 }
-function next(){let old=current;do{current=(current+1)%players.length}while(players[current].finished&&current!==old);roll=null;waiting=false;render();msg('Turno de '+players[current].playerName+(players[current].isBot?' · Bot básico':'')+' — Reino '+T[players[current].team].name+'. Lanza el dado.');if(current!==old)playTurnSound();scheduleBotTurn()}
+function next(){let old=current;do{current=(current+1)%players.length}while(players[current].finished&&current!==old);roll=null;waiting=false;render();msg('Turno de '+players[current].playerName+(players[current].isBot?' · '+botModeLabel(players[current]):'')+' — Reino '+T[players[current].team].name+'. Lanza el dado.');if(current!==old)playTurnSound();scheduleBotTurn()}
 $('roll').onclick=async()=>{
  if(waiting||over||animating)return;
  animating=true;
