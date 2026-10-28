@@ -358,7 +358,7 @@ function scheduleBotTurn(delay=650){
   if(waiting&&roll!==null){
    const options=players[current].pieces.filter(p=>legal(p));
    if(options.length){const pick=options[Math.floor(Math.random()*options.length)];move(players[current],pick);}
-  }else if(!waiting&&roll===null){$('roll').click();}
+  }else if(!waiting){$('roll').click();}
  },delay);
 }
 document.querySelectorAll('.choice input[type="checkbox"]').forEach(x=>x.addEventListener('change',count));count();
