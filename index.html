@@ -177,6 +177,42 @@
 .home-language-option:active,.home-language-option:focus-visible{background:#d4a64b44;outline:1px solid #f7d578}
 @media(max-width:420px){.home-image-language-label{font-size:clamp(8px,2.1vw,11px)}.home-language-option{min-height:25px;gap:3px;padding:3px;font-size:clamp(8px,2vw,11px)}}
 
+
+/* Pantalla de historia: pergamino azul noche y oro, adaptada a lectura móvil. */
+.story-screen{width:min(100%,900px);min-height:calc(100dvh - 16px);margin:0 auto 18px;overflow:hidden;border:2px solid #b88938;border-radius:12px;background:linear-gradient(180deg,#07162a,#101c2c 42%,#16131a);color:#f8ecd1;box-shadow:0 8px 28px #0009}
+.story-screen.hidden{display:none!important}
+.story-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px clamp(12px,3vw,24px);background:linear-gradient(90deg,#061329,#10345a,#061329);border-bottom:1px solid #c39843}
+.story-back{display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:7px 13px;border:1px solid #d4a74c;border-radius:6px;color:#ffe7a1;background:linear-gradient(180deg,#102f50,#07162b);font:600 .9rem Georgia,serif}
+.story-back span{font-size:25px;line-height:.8;color:#f6d072}
+.story-brand{color:#d6b368;font:700 .7rem Georgia,serif;letter-spacing:.17em;text-align:right}
+.story-cover{position:relative;isolation:isolate;overflow:hidden;min-height:190px;aspect-ratio:3/1;background:linear-gradient(135deg,#142a3a,#7d623a,#0d263c)}
+.story-cover img{position:absolute;z-index:-2;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 56%}
+.story-cover-shade{position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,#04101aa8,#04101a40 45%,#04101a88),linear-gradient(0deg,#05111bf0,transparent 80%)}
+.story-cover-title{position:absolute;left:clamp(16px,5vw,52px);right:clamp(16px,5vw,52px);bottom:clamp(14px,3vw,28px);text-align:left;text-shadow:0 2px 8px #000}
+.story-cover-title>span{color:#f1d18a;font:700 clamp(.65rem,1.9vw,.85rem) Georgia,serif;letter-spacing:.17em}
+.story-cover-title h1{max-width:720px;margin:6px 0 4px;text-align:left;color:#ffdf8e;font:700 clamp(1.8rem,5.5vw,3.25rem)/1.05 Georgia,serif}
+.story-gold-rule{color:#e4bc64;letter-spacing:.25em}
+.story-article{max-width:780px;margin:0 auto;padding:clamp(19px,4vw,42px) clamp(18px,5vw,48px) 28px;font:1.04rem/1.78 Georgia,'Times New Roman',serif;color:#eee2c9}
+.story-article p{margin:0 0 1.05em}
+.story-article .story-opening:first-letter{float:left;padding:.02em .13em 0 0;color:#e8bc62;font:700 3.1em/.8 Georgia,serif}
+.story-quote{margin:1.6em 0;padding:12px 0 12px 18px;border-left:3px solid #c99b44;color:#ffdf96;font:italic 1.12rem/1.65 Georgia,serif}
+.story-ending{margin-top:1.35em!important;text-align:center;color:#ffda78;font:700 1.35rem/1.5 Georgia,serif}
+.story-bottom{display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 18px 20px}
+.story-back-bottom{justify-content:center;min-width:180px;min-height:46px;background:linear-gradient(#ffe59a,#bd8228);color:#291908;border:2px solid #f6d279;box-shadow:inset 0 0 0 1px #fff4ba}
+.story-footer{color:#c8b78f;font:.8rem Georgia,serif}
+#storyArtwork[hidden]{display:none}
+@media(max-width:520px){
+ .story-screen{border-radius:8px;margin-bottom:10px}
+ .story-topbar{padding:9px 10px}
+ .story-back{min-height:39px;padding:6px 9px;font-size:.82rem}
+ .story-brand{font-size:.58rem;letter-spacing:.1em}
+ .story-cover{min-height:190px;aspect-ratio:1.25/1}
+ .story-cover img{object-position:58% center}
+ .story-cover-title h1{font-size:clamp(1.75rem,8vw,2.5rem)}
+ .story-article{font-size:1rem;line-height:1.75;padding:22px 18px 20px}
+ .story-article .story-opening:first-letter{font-size:2.8em}
+}
+
 </style></head><body><main class="app">
 
 <section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
@@ -262,6 +298,38 @@
     </div>
   </div>
 </section>
+
+<section id="storyScreen" class="story-screen hidden" aria-label="Los Juegos de Gongonia: El camino de la concordia">
+  <div class="story-topbar">
+    <button id="storyBackTop" class="story-back" type="button"><span aria-hidden="true">‹</span> Volver al menú</button>
+    <span class="story-brand">GONGONIA WORKS</span>
+  </div>
+  <div class="story-cover">
+    <img id="storyArtwork" src="IMG_0912.jpeg" alt="Un viajero contempla un camino hacia un gran castillo entre montañas al atardecer" />
+    <div class="story-cover-shade"></div>
+    <div class="story-cover-title">
+      <span>LOS JUEGOS DE GONGONIA</span>
+      <h1>El camino de la concordia</h1>
+      <div class="story-gold-rule" aria-hidden="true">✦ ◆ ✦</div>
+    </div>
+  </div>
+  <article class="story-article">
+    <p class="story-opening">Cuenta la tradición que, hace muchos siglos, los reinos de Gongonia, Kelta, Brunia y Routa atravesaron una época de rivalidades y desconfianza. Cada reino defendía sus propios intereses, y las disputas amenazaban con quebrar los lazos que unían a sus pueblos.</p>
+    <p>Para preservar la paz y fortalecer la unión entre sus tierras, los antiguos sabios propusieron una prueba diferente a cualquier batalla: una competición en la que los representantes de los cuatro reinos recorrerían un mismo camino, guiados por el azar, la paciencia y la estrategia.</p>
+    <p>Así nacieron los Juegos de Gongonia.</p>
+    <p>Desde entonces, cada reino envía a sus campeones para participar en esta antigua tradición. Las fichas parten de sus respectivos hogares y recorren el gran circuito hasta alcanzar la meta. En el camino pueden adelantarse, encontrarse con sus rivales o verse obligadas a regresar al punto de partida. Ninguna ventaja es eterna, pues el destino puede cambiar con cada lanzamiento del dado.</p>
+    <p>Los Juegos no se celebran para conquistar territorios ni humillar a los vencidos. Su verdadero propósito es recordar que la fortuna favorece hoy a unos y mañana a otros, que la astucia debe acompañarse de paciencia y que, a pesar de sus diferencias, los cuatro reinos comparten un mismo destino.</p>
+    <p>Al final, solo un reino alcanza la victoria. Pero, mientras Gongonia, Kelta, Brunia y Routa regresen dispuestos a competir de nuevo, la tradición habrá cumplido su propósito.</p>
+    <blockquote class="story-quote">Porque en Gongonia, la verdadera concordia no consiste en que todos recorran el camino al mismo ritmo, sino en que todos tengan la oportunidad de llegar a la meta.</blockquote>
+    <p class="story-ending">¡Que comiencen los Juegos de Gongonia!</p>
+  </article>
+  <div class="story-bottom">
+    <span class="story-gold-rule" aria-hidden="true">✦ ◆ ✦</span>
+    <button id="storyBackBottom" class="story-back story-back-bottom" type="button">Volver al menú</button>
+    <span class="story-footer">Gongonia Works · v0.10.1</span>
+  </div>
+</section>
+
 <section id="setup" class="panel hidden"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Elige de dos a cuatro reinos, escribe los nombres y selecciona quién controla cada uno: Persona, Bot básico o Bot estratégico.</p>
 <div class="musicbar"><span id="musicLabel">♫ Música de inicio: The Kelta Mountains</span><button id="musicToggle" class="secondary" type="button">🔇 Activar música</button><button id="effectsToggle" class="secondary" type="button">🔊 Efectos activados</button></div>
 <div class="choices">
@@ -405,7 +473,7 @@ $('homeExactPlay').addEventListener('click',()=>{$('homeScreen').classList.add('
 $('homeExactPurchases').addEventListener('click',()=>showHomeInfo('Compras','El acceso queda preparado visualmente. La tienda se implementará en una versión posterior.'));
 $('homeExactStats').addEventListener('click',()=>showHomeInfo('Estadísticas','Este acceso queda reservado para consultar las estadísticas de tus partidas en una etapa posterior.'));
 $('homeExactSettings').addEventListener('click',()=>showHomeInfo('Ajustes','El selector de idioma permite elegir entre cinco opciones, pero v0.10.1 todavía no traduce los textos. Los demás ajustes se incorporarán por etapas.'));
-$('homeExactStory').addEventListener('click',()=>showHomeInfo('El origen de los Juegos','Aquí incorporaremos la historia corta que escribiste sobre el origen de los Juegos de Gongonia.'));
+
 function enableHomeMusic(){
  musicEnabled=!musicEnabled;
  if(!musicEnabled){introMusic.pause();gameMusic.pause();}
@@ -421,7 +489,13 @@ $('homeGngPlus').addEventListener('click',()=>showHomeInfo('Saldo GNG','En v0.10
 $('homePurchases').addEventListener('click',()=>showHomeInfo('Compras','El acceso queda preparado visualmente. La tienda se implementará en una versión posterior.'));
 $('homeStats').addEventListener('click',()=>showHomeInfo('Estadísticas','Este acceso queda reservado para consultar las estadísticas de tus partidas en una etapa posterior.'));
 $('homeSettings').addEventListener('click',()=>showHomeInfo('Ajustes','El selector de idioma ya permite elegir entre cinco idiomas, pero v0.10.1 todavía no traduce los textos. Los demás ajustes se incorporarán por etapas.'));
-$('homeStory').addEventListener('click',()=>showHomeInfo('El origen de los Juegos','Aquí incorporaremos la historia corta que escribiste sobre el origen de los Juegos de Gongonia.'));
+function openStoryScreen(){ $('homeInfoModal').classList.add('hidden'); $('homeScreen').classList.add('hidden'); $('setup').classList.add('hidden'); $('game').classList.add('hidden'); $('results').classList.add('hidden'); $('storyScreen').classList.remove('hidden'); window.scrollTo(0,0); }
+function closeStoryScreen(){ $('storyScreen').classList.add('hidden'); $('homeScreen').classList.remove('hidden'); window.scrollTo(0,0); }
+$('homeStory').addEventListener('click',openStoryScreen);
+$('homeExactStory').addEventListener('click',openStoryScreen);
+$('storyBackTop').addEventListener('click',closeStoryScreen);
+$('storyBackBottom').addEventListener('click',closeStoryScreen);
+$('storyArtwork').addEventListener('error',()=>{$('storyArtwork').hidden=true;});
 $('homeModalClose').addEventListener('click',closeHomeInfo);
 $('homeModalOk').addEventListener('click',closeHomeInfo);
 $('homeInfoModal').addEventListener('click',e=>{if(e.target===$('homeInfoModal'))closeHomeInfo();});
