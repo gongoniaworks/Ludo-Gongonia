@@ -156,10 +156,43 @@
 @media(min-width:650px){.home-screen{padding:16px 24px 13px}.home-board-frame{max-width:560px}.home-brand{margin-bottom:13px}.home-actions{gap:12px}.home-action{min-height:88px}.home-music-row{padding:9px 15px}.home-ad-space{min-height:86px}}
 @media(max-width:360px){.home-screen{padding:8px 7px}.home-topbar{gap:5px;margin-left:0;margin-right:0}.home-balance,.home-language{min-height:50px;padding:5px 6px;gap:5px}.home-coin{width:34px;height:34px;font-size:21px}.home-balance{padding-right:32px}.home-plus{width:27px;height:27px;right:4px;font-size:21px}.home-actions{gap:5px}.home-action{font-size:.58rem}.home-play{min-height:65px}}
 
+
+/* Arte exacto aprobado por el usuario. Los controles transparentes se alinean sobre la imagen original. */
+.home-image-shell{display:none;position:relative;width:100%;max-width:780px;aspect-ratio:2/3;margin:0 auto;overflow:hidden}
+.home-image-shell>img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+.home-screen.exact-art-loaded{max-width:780px;padding:0;margin:0 auto 16px;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+.home-screen.exact-art-loaded:before,.home-screen.exact-art-loaded:after{display:none}
+.home-screen.exact-art-loaded .home-image-shell{display:block}
+.home-screen.exact-art-loaded .home-css-fallback{display:none}
+.home-screen.missing-art .home-image-shell{display:none}
+.home-screen.missing-art .home-css-fallback{display:block}
+.home-hotspot{position:absolute;z-index:3;display:block;min-width:0!important;min-height:0!important;padding:0!important;margin:0;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:transparent!important;touch-action:manipulation;cursor:pointer}
+.home-hotspot:focus-visible{outline:3px solid #fff0a2!important;outline-offset:1px;background:#ffffff12!important}
+.home-image-language-label{position:absolute;z-index:4;left:75.4%;top:2.0%;width:14.5%;height:3.4%;align-items:center;justify-content:center;text-align:center;overflow:hidden;border:1px solid #b78935;border-radius:2px;background:rgba(5,22,45,.97);color:#fff0cc;font:600 clamp(8px,1.7vw,16px) Georgia,serif;pointer-events:none}
+.home-image-language-label:not([hidden]){display:flex}
+@media(max-width:420px){.home-image-language-label{font-size:clamp(8px,2.1vw,11px)}}
+
 </style></head><body><main class="app">
 
-<section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de Ludo">
-  <div class="home-topbar">
+<section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
+  <div id="homeImageShell" class="home-image-shell" aria-label="Ilustración principal de Ludo de Gongonia">
+    <img id="homeExactArt" src="pantalla-inicio-v0101.jpeg" alt="Pantalla de inicio original de LUDO: El Camino de la Concordia" />
+    <button id="homeExactGngPlus" class="home-hotspot" style="left:26.5%;top:1.5%;width:8.5%;height:5.5%" aria-label="Información sobre el saldo GNG"></button>
+    <button id="homeExactLanguageHeader" class="home-hotspot" style="left:68.5%;top:1.1%;width:29%;height:5.2%" aria-label="Selector de idiomas"></button>
+    <button class="home-hotspot home-language-hotspot" data-language="es" data-label="Español" style="left:80%;top:6.1%;width:18%;height:2.8%" aria-label="Seleccionar Español"></button>
+    <button class="home-hotspot home-language-hotspot" data-language="it" data-label="Italiano" style="left:80%;top:9.2%;width:18%;height:2.8%" aria-label="Seleccionar Italiano"></button>
+    <button class="home-hotspot home-language-hotspot" data-language="en" data-label="Inglés" style="left:80%;top:12.3%;width:18%;height:2.8%" aria-label="Seleccionar Inglés"></button>
+    <button class="home-hotspot home-language-hotspot" data-language="de" data-label="Alemán" style="left:80%;top:15.4%;width:18%;height:2.8%" aria-label="Seleccionar Alemán"></button>
+    <button class="home-hotspot home-language-hotspot" data-language="fr" data-label="Francés" style="left:80%;top:18.4%;width:18%;height:2.8%" aria-label="Seleccionar Francés"></button>
+    <span id="homeImageLanguageLabel" class="home-image-language-label" hidden>Español</span>
+    <button id="homeExactPlay" class="home-hotspot" style="left:21.5%;top:62.7%;width:57%;height:6.9%" aria-label="Jugar"></button>
+    <button id="homeExactPurchases" class="home-hotspot" style="left:5.6%;top:69.9%;width:28%;height:7.1%" aria-label="Compras"></button>
+    <button id="homeExactStats" class="home-hotspot" style="left:36%;top:69.9%;width:28%;height:7.1%" aria-label="Estadísticas"></button>
+    <button id="homeExactSettings" class="home-hotspot" style="left:66%;top:69.9%;width:28.5%;height:7.1%" aria-label="Ajustes"></button>
+    <button id="homeExactMusicToggle" class="home-hotspot" style="left:84.5%;top:77.7%;width:9%;height:4%" aria-label="Activar o silenciar música"></button>
+    <button id="homeExactStory" class="home-hotspot" style="left:30%;top:90.8%;width:40%;height:3.6%" aria-label="El origen de los Juegos"></button>
+  </div>
+  <div id="homeCssFallback" class="home-css-fallback"><div class="home-topbar">
     <div class="home-balance" aria-label="Saldo GNG visual: cero">
       <span class="home-coin" aria-hidden="true">✦</span>
       <span class="home-balance-text"><span>GNG</span><strong>0</strong></span>
@@ -211,8 +244,7 @@
   </div>
 
   <button id="homeStory" class="home-story" type="button"><span class="home-story-line" aria-hidden="true"></span><span class="home-book" aria-hidden="true">▤</span><span>El origen de los Juegos</span><span class="home-story-line" aria-hidden="true"></span></button>
-  <footer class="home-footer">Gongonia Works <span>•</span> v0.10.1</footer>
-
+  <footer class="home-footer">Gongonia Works <span>•</span> v0.10.1</footer></div>
   <div id="homeInfoModal" class="home-modal hidden" role="dialog" aria-modal="true" aria-labelledby="homeInfoTitle">
     <div class="home-modal-card">
       <button id="homeModalClose" class="home-modal-close" type="button" aria-label="Cerrar">×</button>
@@ -338,6 +370,35 @@ function enableEffects(){effectsEnabled=!effectsEnabled;updateEffectsButtons();}
 $('effectsToggle').addEventListener('click',enableEffects);
 $('gameEffectsToggle').addEventListener('click',enableEffects);
 updateMusicButtons();updateEffectsButtons();
+
+
+// El arte principal se muestra solo cuando el recurso exacto está disponible; si falta, queda la vista anterior.
+const exactHomeArt=$('homeExactArt');
+exactHomeArt.addEventListener('load',()=>{$('homeScreen').classList.add('exact-art-loaded');$('homeScreen').classList.remove('missing-art');});
+exactHomeArt.addEventListener('error',()=>{$('homeScreen').classList.remove('exact-art-loaded');$('homeScreen').classList.add('missing-art');});
+$('homeExactGngPlus').addEventListener('click',()=>showHomeInfo('Saldo GNG','En v0.10.1 el saldo se muestra como una imagen fija de 0 GNG. No está conectado a una cartera ni permite realizar operaciones.'));
+$('homeExactLanguageHeader').addEventListener('click',()=>showHomeInfo('Idiomas','Selecciona uno de los cinco idiomas visibles en el menú. En v0.10.1, la selección no traduce todavía los demás textos.'));
+document.querySelectorAll('.home-language-hotspot').forEach(button=>button.addEventListener('click',()=>{
+ const label=button.dataset.label;
+ const lang=button.dataset.language;
+ const overlay=$('homeImageLanguageLabel');
+ overlay.textContent=label;
+ overlay.hidden=(lang==='es');
+ if(lang==='es')overlay.style.display='none';else overlay.style.display='flex';
+ overlay.setAttribute('aria-label','Idioma seleccionado: '+label+' (sin traducción en esta versión)');
+}));
+$('homeExactPlay').addEventListener('click',()=>{$('homeScreen').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup');});
+$('homeExactPurchases').addEventListener('click',()=>showHomeInfo('Compras','El acceso queda preparado visualmente. La tienda se implementará en una versión posterior.'));
+$('homeExactStats').addEventListener('click',()=>showHomeInfo('Estadísticas','Este acceso queda reservado para consultar las estadísticas de tus partidas en una etapa posterior.'));
+$('homeExactSettings').addEventListener('click',()=>showHomeInfo('Ajustes','El selector de idioma permite elegir entre cinco opciones, pero v0.10.1 todavía no traduce los textos. Los demás ajustes se incorporarán por etapas.'));
+$('homeExactStory').addEventListener('click',()=>showHomeInfo('El origen de los Juegos','Aquí incorporaremos la historia corta que escribiste sobre el origen de los Juegos de Gongonia.'));
+function enableHomeMusic(){
+ musicEnabled=!musicEnabled;
+ if(!musicEnabled){introMusic.pause();gameMusic.pause();}
+ else{introMusic.pause();introMusic.currentTime=0;gameMusic.currentTime=0;gameMusic.play().catch(()=>{msg('Toca el botón de música para permitir la reproducción en Safari.');});}
+ updateMusicButtons();
+}
+$('homeExactMusicToggle').addEventListener('click',enableHomeMusic);
 
 function showHomeInfo(title,body){$('homeInfoTitle').textContent=title;$('homeInfoText').textContent=body;$('homeInfoModal').classList.remove('hidden');$('homeModalOk').focus();}
 function closeHomeInfo(){$('homeInfoModal').classList.add('hidden');}
