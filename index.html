@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171b2a"><title>Ludo de Gongonia · v0.9 (bot básico y estratégico)</title>
+<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.10.1</title>
 <style>
 :root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #0006)}.die-pips{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}.status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
@@ -89,9 +89,142 @@
 @keyframes guardianLegalGlow{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.06)}}
 @media(prefers-reduced-motion:reduce){.token-stack .piece.legal .guardian-token{animation:none}}
 .mode-label{justify-content:space-between;font-size:.78rem!important}.player-mode{width:auto;max-width:62%;min-width:0;padding:6px;border-radius:7px;background:#171b2a;color:var(--ink);border:1px solid #ffffff30;font:inherit}
+
+/* Pantalla de inicio v0.10.1: estética medieval azul y oro, con controles HTML funcionales. */
+.home-screen{position:relative;isolation:isolate;overflow:hidden;max-width:780px;margin:0 auto 16px;padding:12px 12px 10px;border:2px solid #9d6f28;border-radius:17px;color:#fff3d5;background:linear-gradient(180deg,#173a67 0%,#17223a 32%,#17151b 64%,#111016 100%);box-shadow:inset 0 0 0 2px #23180e,0 8px 28px #0009}
+.home-screen:before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 50% 7%,#54a7e67a 0,transparent 36%),radial-gradient(ellipse at 14% 27%,#2f7f7270 0,transparent 28%),radial-gradient(ellipse at 87% 31%,#2585ac66 0,transparent 30%),linear-gradient(90deg,#140f13a8,transparent 15%,transparent 85%,#140f13a8),linear-gradient(180deg,transparent 0 34%,#101522 57%,#17131a 100%)}
+.home-screen:after{content:"";position:absolute;inset:5px;z-index:-1;border:1px solid #d5a64a77;border-radius:11px;pointer-events:none}
+.home-topbar{display:flex;align-items:stretch;justify-content:space-between;gap:9px;margin:2px 2px 10px}
+.home-balance,.home-language{min-height:58px;display:flex;align-items:center;gap:9px;padding:7px 10px;background:linear-gradient(120deg,#06162c,#102b4e 66%,#041328);border:2px solid #d8a13c;border-radius:8px;box-shadow:inset 0 0 0 1px #f7d87a55,0 3px 7px #0009}
+.home-balance{min-width:138px;flex:0 1 48%;position:relative;padding-right:40px}
+.home-coin{display:grid;place-items:center;width:43px;height:43px;flex:none;border-radius:50%;color:#fff0a5;font-size:27px;background:radial-gradient(circle at 34% 25%,#ffeaa0,#c98b20 60%,#6f3d08);border:3px ridge #ffe080;box-shadow:0 0 0 2px #261605}
+.home-balance-text{display:flex;flex-direction:column;line-height:1.03;min-width:0}
+.home-balance-text span{font:700 1rem Georgia,serif;color:#ffe08a;letter-spacing:.03em}
+.home-balance-text strong{font:700 1.35rem Georgia,serif;color:#fff7e8;margin-top:4px}
+.home-plus{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;border:2px solid #eec75d;background:linear-gradient(#ffdc73,#b97716);color:#241708;font-size:25px;font-weight:800;line-height:1;box-shadow:0 2px 5px #0009}
+.home-language{flex:0 1 48%;min-width:0;gap:6px;padding:5px 7px;color:#fff1c8}
+.home-language>span:first-child{font-size:27px;color:#e8c56b}
+.home-language select{min-width:0;flex:1;appearance:none;border:0;outline:0;color:#fff4d9;background:transparent;font:600 clamp(.76rem,2.6vw,1rem) Georgia,serif;padding:7px 0}
+.home-language select option{background:#10213a;color:#fff4d9}
+.home-language-arrow{color:#f2c85f;font-size:21px}
+.home-brand{position:relative;margin:0 auto 9px;max-width:640px;padding:17px 13px 11px;text-align:center}
+.home-brand:before{content:"";position:absolute;inset:23px 4px 15px;background:linear-gradient(135deg,#06162b,#103864 45%,#07172d);border:3px solid #c38d31;clip-path:polygon(6% 0,94% 0,100% 16%,96% 50%,100% 84%,94% 100%,6% 100%,0 84%,4% 50%,0 16%);box-shadow:0 0 15px #0009}
+.home-brand-frame{position:relative;border-top:2px solid #f1ca69;border-bottom:2px solid #cf9a42;padding:8px 7px 10px;background:linear-gradient(90deg,#11182b33,#00112666,#11182b33)}
+.home-crown{position:relative;z-index:1;height:32px;margin-bottom:-3px;color:#ffdc75;text-shadow:0 3px #66370e,0 0 13px #f6be39;font-size:44px;line-height:1}
+.home-eyebrow{margin:0;color:#f5d178;font:700 clamp(.74rem,3.2vw,1.1rem) Georgia,serif;letter-spacing:.16em;text-shadow:0 2px 2px #000}
+.home-brand h1{margin:0;color:#ffdc81;font:900 clamp(3rem,12vw,5.6rem)/.98 Georgia,serif;letter-spacing:.03em;text-shadow:0 2px 0 #b77924,0 4px 0 #5b2e08,0 6px 10px #000; background:linear-gradient(#fff6bb 10%,#f5cd58 43%,#d28b18 73%,#fff0a1);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.home-brand-subtitle{margin-top:7px;color:#fff1cb;font:700 clamp(1rem,4vw,1.45rem) Georgia,serif;text-shadow:0 2px 3px #000}
+.home-brand-ribbon{display:inline-block;margin-top:7px;padding:5px 19px;color:#fff0bc;background:linear-gradient(90deg,#4c1013,#a32b22 25%,#67121c 75%,#3d0b12);border:1px solid #e7b64c;box-shadow:0 3px 5px #0009;font:italic 600 clamp(.78rem,3vw,1rem) Georgia,serif;clip-path:polygon(0 0,100% 0,94% 50%,100% 100%,0 100%,6% 50%)}
+.home-board-frame{position:relative;max-width:630px;margin:0 auto 11px;padding:5px;border:3px solid #c49137;border-radius:4px;background:linear-gradient(135deg,#f6d77c,#8b5115,#f1c96a);box-shadow:0 0 0 2px #281707,0 8px 16px #000b,inset 0 0 0 2px #ffeb9a}
+.home-board-art{display:block;width:100%;aspect-ratio:1;object-fit:contain;background:#18140f}
+.home-play{display:flex;align-items:center;justify-content:center;gap:clamp(15px,6vw,45px);width:min(84%,490px);min-height:74px;margin:0 auto 12px;padding:8px 18px;border:4px ridge #ffd76b;border-radius:9px;color:#311902;background:linear-gradient(180deg,#fff0a3,#f5c64a 46%,#c57e13 100%);box-shadow:inset 0 0 0 2px #fff0a0,0 6px 0 #50300d,0 9px 13px #0009;font:900 clamp(2rem,8vw,3.3rem) Georgia,serif;letter-spacing:.06em;text-shadow:0 1px #fff2b3}
+.home-play span{font-size:.65em;color:#8a5110}
+.home-play:active,.home-action:active{transform:translateY(2px);filter:brightness(1.1)}
+.home-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:15px 0 10px}
+.home-action{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:78px;padding:7px 3px;border:2px solid #dcaa48;border-radius:8px;color:#fff0c4;background:linear-gradient(135deg,#06172d,#07305a 55%,#041329);box-shadow:inset 0 0 0 1px #f6d36a55,0 3px 7px #0009;font:700 clamp(.62rem,2.7vw,.9rem) Georgia,serif;letter-spacing:.02em}
+.home-action-icon{color:#ffd66c;font-size:29px;line-height:1.05;text-shadow:0 2px #502a05}
+.home-bars{font-size:25px;letter-spacing:-4px;padding-right:4px}
+.home-music-row{display:flex;align-items:center;gap:11px;min-height:66px;margin:9px 0;padding:7px 10px;border:2px solid #c58e30;border-radius:8px;background:linear-gradient(110deg,#041329,#082b50 53%,#041329);box-shadow:inset 0 0 0 1px #f4d47433,0 3px 7px #0008}
+.home-music-note{display:grid;place-items:center;width:47px;height:47px;flex:none;border-radius:50%;border:1px solid #bd8b3e;color:#ffd36b;background:#071b35;font:700 34px Georgia,serif}
+.home-music-copy{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.home-music-copy span{color:#bcd7ed;font: .83rem Georgia,serif}
+.home-music-copy strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff0c9;font:700 clamp(.9rem,3.8vw,1.15rem) Georgia,serif}
+.home-music-toggle{min-width:36px;min-height:38px;border:0;color:#f8d36c;background:transparent;font-size:23px}
+.home-ad-space{position:relative;display:grid;place-items:center;min-height:72px;overflow:hidden;margin:10px 0 8px;border:2px solid #daa445;border-radius:7px;background:linear-gradient(180deg,#78b8e3 0%,#e4e8dc 53%,#3f7753 54%,#102b36 100%);box-shadow:inset 0 0 0 2px #fff0a14a}
+.home-ad-landscape{position:absolute;inset:0;overflow:hidden;background:linear-gradient(180deg,#6fbbf1 0%,#e6f2ff 54%,#a0c5c7 57%,#1a5260 100%)}
+.ad-mountain{position:absolute;bottom:0;width:72%;height:100%;background:linear-gradient(125deg,#f6f0d7 0 7%,#829e9b 8% 17%,#274e61 18% 55%,#3f7452 56% 100%);clip-path:polygon(0 100%,0 75%,13% 48%,23% 62%,40% 19%,53% 53%,67% 36%,82% 66%,100% 100%)}
+.ad-mountain-one{left:-4%;opacity:.95}
+.ad-mountain-two{right:-5%;transform:scaleX(-1);filter:brightness(1.2)}
+.ad-castle{position:absolute;right:17%;bottom:13%;color:#e7e2ce;font-size:30px;text-shadow:0 1px #40546a}
+.home-ad-copy{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:6px 8px;color:#12314e;text-align:center;text-shadow:0 1px 0 #fff9}
+.home-ad-copy strong{font:800 clamp(.8rem,3.4vw,1.08rem) Georgia,serif;letter-spacing:.03em}
+.home-ad-copy span{font: .8rem Georgia,serif}
+.home-story{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:42px;border:0;color:#f4cf62;background:transparent;font:600 clamp(.85rem,3.7vw,1.08rem) Georgia,serif;text-shadow:0 2px 3px #000}
+.home-story-line{height:1px;flex:1;max-width:90px;background:linear-gradient(90deg,transparent,#d6a547)}
+.home-book{font-size:27px;color:#efc256}
+.home-footer{display:flex;justify-content:center;align-items:center;gap:10px;padding:8px 0 3px;color:#e2cc9d;font: .85rem Georgia,serif;text-shadow:0 2px 3px #000}
+.home-footer span{color:#e1b84e}
+.home-modal{position:fixed;z-index:1000;inset:0;display:grid;place-items:center;padding:20px;background:#030812d9;backdrop-filter:blur(5px)}
+.home-modal.hidden{display:none!important}
+.home-modal-card{position:relative;width:min(100%,440px);padding:26px 20px 20px;border:3px ridge #d8ac4e;border-radius:12px;text-align:center;color:#fff0cd;background:linear-gradient(160deg,#122c4c,#071222 75%);box-shadow:0 14px 45px #000}
+.home-modal-close{position:absolute;right:7px;top:6px;border:0;color:#f5d578;background:transparent;font-size:28px}
+.home-modal-emblem{color:#ffda70;font-size:27px}
+.home-modal-card h2{margin:5px 0 10px;font:700 1.5rem Georgia,serif;color:#f8d575}
+.home-modal-card p{line-height:1.55;color:#e8ddc5}
+.home-modal-ok{min-width:130px;margin-top:8px;padding:10px 18px;border:2px solid #f1cc68;border-radius:6px;background:linear-gradient(#f9e390,#c88b22);color:#241506;font-weight:800}
+.home-screen button:focus-visible,.home-screen select:focus-visible{outline:3px solid #fff0a2;outline-offset:3px}
+@media(min-width:650px){.home-screen{padding:16px 24px 13px}.home-board-frame{max-width:560px}.home-brand{margin-bottom:13px}.home-actions{gap:12px}.home-action{min-height:88px}.home-music-row{padding:9px 15px}.home-ad-space{min-height:86px}}
+@media(max-width:360px){.home-screen{padding:8px 7px}.home-topbar{gap:5px;margin-left:0;margin-right:0}.home-balance,.home-language{min-height:50px;padding:5px 6px;gap:5px}.home-coin{width:34px;height:34px;font-size:21px}.home-balance{padding-right:32px}.home-plus{width:27px;height:27px;right:4px;font-size:21px}.home-actions{gap:5px}.home-action{font-size:.58rem}.home-play{min-height:65px}}
+
 </style></head><body><main class="app">
-<div style="text-align:center;color:var(--gold);letter-spacing:.18em;font-size:.7rem;font-weight:800">✦ GONGONIA GAME ✦</div><h1>Ludo de Gongonia</h1><p class="sub">Versión 0.9 · bots básico y estratégico</p>
-<section id="setup" class="panel"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Elige de dos a cuatro reinos, escribe los nombres y selecciona quién controla cada uno: Persona, Bot básico o Bot estratégico.</p>
+
+<section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de Ludo">
+  <div class="home-topbar">
+    <div class="home-balance" aria-label="Saldo GNG visual: cero">
+      <span class="home-coin" aria-hidden="true">✦</span>
+      <span class="home-balance-text"><span>GNG</span><strong>0</strong></span>
+      <button id="homeGngPlus" class="home-plus" type="button" aria-label="Información sobre GNG">+</button>
+    </div>
+    <label class="home-language">
+      <span aria-hidden="true">◎</span>
+      <select id="homeLanguage" aria-label="Idioma">
+        <option value="es">🇻🇪 Español</option>
+        <option value="it">🇮🇹 Italiano</option>
+        <option value="en">🇺🇸 Inglés</option>
+        <option value="de">🇩🇪 Alemán</option>
+        <option value="fr">🇫🇷 Francés</option>
+      </select>
+      <span class="home-language-arrow" aria-hidden="true">▾</span>
+    </label>
+  </div>
+
+  <div class="home-brand">
+    <div class="home-crown" aria-hidden="true">♛</div>
+    <div class="home-brand-frame">
+      <div class="home-eyebrow">EL CAMINO DE LA</div>
+      <h1>LUDO</h1>
+      <div class="home-brand-subtitle">Los Juegos de Gongonia</div>
+      <div class="home-brand-ribbon">Un Ludo de Gongonia</div>
+    </div>
+  </div>
+
+  <div class="home-board-frame">
+    <img class="home-board-art" src="tablero-gongonia.PNG" alt="Tablero ilustrado de los cuatro reinos de Gongonia">
+  </div>
+
+  <button id="homePlay" class="home-play" type="button"><span aria-hidden="true">✧</span> JUGAR <span aria-hidden="true">✧</span></button>
+
+  <div class="home-actions">
+    <button id="homePurchases" class="home-action" type="button"><span class="home-action-icon" aria-hidden="true">🛒</span><span>COMPRAS</span></button>
+    <button id="homeStats" class="home-action" type="button"><span class="home-action-icon home-bars" aria-hidden="true">▂▅▇</span><span>ESTADÍSTICAS</span></button>
+    <button id="homeSettings" class="home-action" type="button"><span class="home-action-icon" aria-hidden="true">⚙</span><span>AJUSTES</span></button>
+  </div>
+
+  <div class="home-music-row">
+    <span class="home-music-note" aria-hidden="true">♫</span>
+    <div class="home-music-copy"><span id="homeMusicState">Música apagada</span><strong id="homeMusicTitle">Música desactivada</strong></div>
+    <button id="homeMusicToggle" class="home-music-toggle" type="button" aria-label="Activar o silenciar música">🔇</button>
+  </div>
+
+  <div class="home-ad-space" aria-label="Espacio reservado para publicidad adaptable">
+    <div class="home-ad-landscape" aria-hidden="true"><span class="ad-mountain ad-mountain-one"></span><span class="ad-mountain ad-mountain-two"></span><span class="ad-castle">♜</span></div>
+    <div class="home-ad-copy"><strong>ESPACIO PUBLICITARIO</strong><span>Anuncio opcional y adaptable</span></div>
+  </div>
+
+  <button id="homeStory" class="home-story" type="button"><span class="home-story-line" aria-hidden="true"></span><span class="home-book" aria-hidden="true">▤</span><span>El origen de los Juegos</span><span class="home-story-line" aria-hidden="true"></span></button>
+  <footer class="home-footer">Gongonia Works <span>•</span> v0.10.1</footer>
+
+  <div id="homeInfoModal" class="home-modal hidden" role="dialog" aria-modal="true" aria-labelledby="homeInfoTitle">
+    <div class="home-modal-card">
+      <button id="homeModalClose" class="home-modal-close" type="button" aria-label="Cerrar">×</button>
+      <div class="home-modal-emblem" aria-hidden="true">✦</div>
+      <h2 id="homeInfoTitle">Gongonia</h2>
+      <p id="homeInfoText"></p>
+      <button id="homeModalOk" class="home-modal-ok" type="button">Volver</button>
+    </div>
+  </div>
+</section>
+<section id="setup" class="panel hidden"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Elige de dos a cuatro reinos, escribe los nombres y selecciona quién controla cada uno: Persona, Bot básico o Bot estratégico.</p>
 <div class="musicbar"><span id="musicLabel">♫ Música de inicio: The Kelta Mountains</span><button id="musicToggle" class="secondary" type="button">🔇 Activar música</button><button id="effectsToggle" class="secondary" type="button">🔊 Efectos activados</button></div>
 <div class="choices">
 <div class="choice"><label><input type="checkbox" value="red" checked> 🦁 Reino Rojo</label><input class="player-name" data-team="red" type="text" maxlength="24" placeholder="Nombre (ej. Sabrina)" aria-label="Nombre del jugador del Reino Rojo"><label class="mode-label">Control<select class="player-mode" data-team="red"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
@@ -116,7 +249,7 @@
   <button id="resultMenu" class="secondary">Volver al menú</button>
  </div>
 </section>
-<p class="credits">Gongonia Game · v0.8 · bot básico y controles de audio</p></main>
+</main>
 <audio id="introMusic" src="The%20Kelta%20Mountains.mp3" preload="none" loop></audio>
 <audio id="gameMusic" src="The%20Routa%20Plains%20of%20A%CC%81nganor%20(Take%202).mp3" preload="none" loop></audio>
 <script>
@@ -177,6 +310,13 @@ function updateMusicButtons(){
  const label=musicEnabled?'🔊 Silenciar música':'🔇 Activar música';
  $('musicToggle').textContent=label;
  $('gameMusicToggle').textContent=label;
+ const homeButton=$('homeMusicToggle');
+ const homeState=$('homeMusicState');
+ const homeTitle=$('homeMusicTitle');
+ if(homeButton)homeButton.textContent=musicEnabled?'🔊':'🔇';
+ if(homeButton)homeButton.setAttribute('aria-label',musicEnabled?'Silenciar música':'Activar música');
+ if(homeState)homeState.textContent=musicEnabled?'Sonando ahora':'Música apagada';
+ if(homeTitle)homeTitle.textContent=musicEnabled?'The Kelta Mountains':'Música desactivada';
 }
 async function playMusicFor(screen){
  if(!musicEnabled)return;
@@ -193,11 +333,26 @@ function enableMusic(){
 }
 $('musicToggle').addEventListener('click',enableMusic);
 $('gameMusicToggle').addEventListener('click',enableMusic);
+$('homeMusicToggle').addEventListener('click',enableMusic);
 function updateEffectsButtons(){const label=effectsEnabled?'🔊 Efectos activados':'🔇 Efectos desactivados';$('effectsToggle').textContent=label;$('gameEffectsToggle').textContent=label;}
 function enableEffects(){effectsEnabled=!effectsEnabled;updateEffectsButtons();}
 $('effectsToggle').addEventListener('click',enableEffects);
 $('gameEffectsToggle').addEventListener('click',enableEffects);
 updateMusicButtons();updateEffectsButtons();
+
+function showHomeInfo(title,body){$('homeInfoTitle').textContent=title;$('homeInfoText').textContent=body;$('homeInfoModal').classList.remove('hidden');$('homeModalOk').focus();}
+function closeHomeInfo(){$('homeInfoModal').classList.add('hidden');}
+$('homePlay').addEventListener('click',()=>{$('homeScreen').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup');});
+$('homeGngPlus').addEventListener('click',()=>showHomeInfo('Saldo GNG','En v0.10.1 el saldo se muestra como una imagen fija de 0 GNG. No está conectado a una cartera ni permite realizar operaciones.'));
+$('homePurchases').addEventListener('click',()=>showHomeInfo('Compras','El acceso queda preparado visualmente. La tienda se implementará en una versión posterior.'));
+$('homeStats').addEventListener('click',()=>showHomeInfo('Estadísticas','Este acceso queda reservado para consultar las estadísticas de tus partidas en una etapa posterior.'));
+$('homeSettings').addEventListener('click',()=>showHomeInfo('Ajustes','El selector de idioma ya permite elegir entre cinco idiomas, pero v0.10.1 todavía no traduce los textos. Los demás ajustes se incorporarán por etapas.'));
+$('homeStory').addEventListener('click',()=>showHomeInfo('El origen de los Juegos','Aquí incorporaremos la historia corta que escribiste sobre el origen de los Juegos de Gongonia.'));
+$('homeModalClose').addEventListener('click',closeHomeInfo);
+$('homeModalOk').addEventListener('click',closeHomeInfo);
+$('homeInfoModal').addEventListener('click',e=>{if(e.target===$('homeInfoModal'))closeHomeInfo();});
+$('homeLanguage').addEventListener('change',()=>{/* En v0.10.1 el selector no traduce todavía la interfaz. */});
+
 /* Efectos sonoros generados por el propio navegador: no requieren archivos adicionales. */
 let noiseBuffer=null;
 function getAudioContext(){
@@ -404,7 +559,7 @@ function scheduleBotTurn(delay=650){
 }
 document.querySelectorAll('.choice input[type="checkbox"]').forEach(x=>x.addEventListener('change',count));count();
 function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,playerName:getPlayerName(team),botMode:getPlayerMode(team),isBot:getPlayerMode(team)!=='human',finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;gameStartedAt=Date.now();gameStats={};finishOrder=[];teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});$('results').classList.add('hidden');$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado; necesitas un 6 para sacar una ficha.');render();playTurnSound();scheduleBotTurn()}
-$('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});$('newGame').addEventListener('click',start);$('resultMenu').addEventListener('click',()=>{$('results').classList.add('hidden');$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});
+$('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});$('newGame').addEventListener('click',start);$('resultMenu').addEventListener('click',()=>{$('results').classList.add('hidden');$('game').classList.add('hidden');$('setup').classList.add('hidden');$('homeScreen').classList.remove('hidden');playMusicFor('setup')});
 function position(team,p){
  if(p.progress<0)return HOME_POINTS[team][p.slot];
  /* Las 52 casillas comunes terminan justo antes del pasillo final propio. */
