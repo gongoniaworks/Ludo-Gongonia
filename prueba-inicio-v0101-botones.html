@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.10.1</title>
+<style>
+:root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #0006)}.die-pips{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}.status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
+
+/* Paso 3: mostrar el tablero ilustrado definitivo como fondo */
+.board{
+  background-image:url("tablero-gongonia.PNG");
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  background-position:center;
+  background-color:transparent;
+  border:0;
+  border-radius:0;
+}
+.cell,
+.home-red,.home-green,.home-yellow,.home-blue,
+.path,.safe,.lane-red,.lane-green,.lane-yellow,.lane-blue,.center{
+  background:transparent !important;
+  border-color:transparent !important;
+}
+.center{color:transparent !important}
+
+
+/* Paso 4: las casas se posicionan mediante coordenadas explícitas en JavaScript */
+.board{position:relative}
+.cell.home-red,.cell.home-green,.cell.home-yellow,.cell.home-blue{
+  position:absolute;width:10.2%;height:10.2%;padding:0;z-index:2;
+  display:flex;align-items:center;justify-content:center;overflow:visible;
+}
+.cell .pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}
+.cell .piece{width:42%;height:42%;max-width:28px;max-height:28px;min-width:12px;min-height:12px}
+
+/* v0.3.1: centros refinados y fichas agrupadas siempre circulares. */
+.board{display:block;position:relative;width:100%;aspect-ratio:1;overflow:hidden;background-image:url("tablero-gongonia.PNG");background-size:100% 100%;background-repeat:no-repeat;background-position:center;border:0;border-radius:0}
+.token-stack{position:absolute;transform:translate(-50%,-50%);z-index:5;width:6.2%;aspect-ratio:1 / 1;height:auto;min-width:26px;max-width:46px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));align-items:center;justify-items:center;gap:1px;pointer-events:none}
+.token-stack button{pointer-events:auto}
+.token-stack.single{display:flex;align-items:center;justify-content:center}
+.token-stack .piece{box-sizing:border-box;border-radius:50%;aspect-ratio:1 / 1;width:100%;height:100%;min-width:0;min-height:0;max-width:none;max-height:none;flex:none;padding:0;line-height:1;display:flex;align-items:center;justify-content:center}
+.token-stack.single .piece{width:82%;height:82%;font-size:clamp(10px,1.7vw,14px)}
+.token-stack.multi .piece{width:100%;height:100%;border-width:1.5px;font-size:clamp(7px,1.25vw,11px)}
+.token-stack.count-3 .piece:last-child{grid-column:1 / span 2;width:48%;height:100%;justify-self:center}
+.token-stack.many{width:8%;max-width:54px}
+.token-stack.many .piece{width:100%;height:100%;font-size:clamp(6px,1vw,9px)}
+
+
+.stats-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.84rem}.stats-table th,.stats-table td{padding:9px 6px;border-bottom:1px solid #ffffff20;text-align:left;vertical-align:top}.stats-table th{color:#f4d99b}.stat-captures{line-height:1.55}.stat-chip{display:inline-block;border-radius:7px;padding:3px 6px;margin:2px 3px 2px 0;background:#ffffff12}.musicbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0;padding:10px;border:1px solid #d8b76d55;border-radius:10px;background:#171b2a88;font-size:.85rem}
+.musicbar span{color:#f4d99b}
+
+/* v0.5: animaciones suaves para el dado y las fichas */
+@keyframes diceRollEffect{
+  0%{transform:rotate(0deg) scale(1)}
+  20%{transform:rotate(95deg) scale(1.12) translateY(-3px)}
+  45%{transform:rotate(190deg) scale(.94) translateY(1px)}
+  70%{transform:rotate(285deg) scale(1.1) translateY(-2px)}
+  100%{transform:rotate(360deg) scale(1)}
+}
+.die.rolling{animation:diceRollEffect .65s ease-in-out}
+@keyframes tokenHopEffect{
+  0%{transform:translate(-50%,-50%) scale(1)}
+  45%{transform:translate(-50%,-78%) scale(1.12)}
+  100%{transform:translate(-50%,-50%) scale(1)}
+}
+.token-stack.hopping{animation:tokenHopEffect .16s ease-out}
+@media(prefers-reduced-motion:reduce){
+  .die.rolling,.token-stack.hopping{animation-duration:.01ms}
+}
+
+/* v0.5.4: breve efecto al regresar una ficha capturada a su base */
+@keyframes capturedReturnEffect{
+  0%{transform:translate(-50%,-50%) scale(1);filter:brightness(1)}
+  22%{transform:translate(-50%,-50%) scale(1.24) rotate(-8deg);filter:brightness(1.8)}
+  48%{transform:translate(-50%,-50%) scale(.72) rotate(7deg);filter:brightness(1.3)}
+  72%{transform:translate(-50%,-50%) scale(1.12);filter:brightness(1.5)}
+  100%{transform:translate(-50%,-50%) scale(1);filter:brightness(1)}
+}
+.token-stack.captured-return{animation:capturedReturnEffect .48s ease-out}
+@media(prefers-reduced-motion:reduce){.token-stack.captured-return{animation-duration:.01ms}}
+
+/* v0.7.3: guardianes ilustrados como fichas del juego */
+.token-stack .piece{position:relative;overflow:visible;border:0!important;background:transparent!important;color:transparent!important;outline:0;box-shadow:none;padding:0;}
+.token-stack .piece.legal{outline:0;box-shadow:none;}
+.guardian-token{display:block;position:absolute;left:50%;top:50%;width:148%;height:148%;max-width:none;max-height:none;object-fit:contain;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 1px 1px #0009);}
+.piece-number{position:absolute;right:-3px;bottom:-3px;z-index:3;width:12px;height:12px;border:1px solid #fff1c5;border-radius:50%;background:#252033;color:#fff;font-size:8px;font-weight:900;line-height:10px;text-align:center;pointer-events:none;}
+.token-stack .piece.legal .guardian-token{filter:drop-shadow(0 0 2px #fff4a3) drop-shadow(0 0 4px #e5be55);animation:guardianLegalGlow .8s ease-in-out infinite alternate;}
+@keyframes guardianLegalGlow{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.06)}}
+@media(prefers-reduced-motion:reduce){.token-stack .piece.legal .guardian-token{animation:none}}
+.mode-label{justify-content:space-between;font-size:.78rem!important}.player-mode{width:auto;max-width:62%;min-width:0;padding:6px;border-radius:7px;background:#171b2a;color:var(--ink);border:1px solid #ffffff30;font:inherit}
+
+/* Arte exacto aprobado por el usuario. Los controles transparentes se alinean sobre la imagen original. */
+.home-image-shell{display:block;position:relative;width:100%;max-width:780px;aspect-ratio:2/3;margin:0 auto;overflow:hidden}
+.home-image-shell>img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+.home-hotspot{position:absolute;z-index:3;display:block;min-width:0!important;min-height:0!important;padding:0!important;margin:0;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:transparent!important;touch-action:manipulation;cursor:pointer}
+.home-hotspot:focus-visible{outline:3px solid #fff0a2!important;outline-offset:1px;background:#ffffff12!important}
+.home-image-language-label{position:absolute;z-index:4;left:75.4%;top:2.0%;width:14.5%;height:3.4%;align-items:center;justify-content:center;text-align:center;overflow:hidden;border:1px solid #b78935;border-radius:2px;background:rgba(5,22,45,.97);color:#fff0cc;font:600 clamp(8px,1.7vw,16px) Georgia,serif;pointer-events:none}
+.home-image-language-label:not([hidden]){display:flex}
+.home-language-menu{position:absolute;z-index:8;left:70%;top:6.2%;width:27.5%;padding:4px;border:2px solid #d9a746;border-radius:5px;background:linear-gradient(135deg,#07152a,#102c4b 55%,#061329);box-shadow:0 5px 12px #000b,inset 0 0 0 1px #f7d57855}
+.home-language-menu[hidden]{display:none!important}
+.home-language-option{display:flex;align-items:center;gap:6px;width:100%;min-height:31px;padding:4px 5px;border:0;border-bottom:1px solid #c59a4a55;border-radius:0;background:transparent;color:#fff0cf;text-align:left;font:clamp(8px,1.5vw,15px) Georgia,serif}
+.home-language-option:last-child{border-bottom:0}
+.home-language-option:active,.home-language-option:focus-visible{background:#d4a64b44;outline:1px solid #f7d578}
+@media(max-width:420px){.home-image-language-label{font-size:clamp(8px,2.1vw,11px)}.home-language-option{min-height:25px;gap:3px;padding:3px;font-size:clamp(8px,2vw,11px)}}
+
+
+/* Pantalla de historia: pergamino azul noche y oro, adaptada a lectura móvil. */
+.story-screen{width:min(100%,900px);min-height:calc(100dvh - 16px);margin:0 auto 18px;overflow:hidden;border:2px solid #b88938;border-radius:12px;background:linear-gradient(180deg,#07162a,#101c2c 42%,#16131a);color:#f8ecd1;box-shadow:0 8px 28px #0009}
+.story-screen.hidden{display:none!important}
+.story-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px clamp(12px,3vw,24px);background:linear-gradient(90deg,#061329,#10345a,#061329);border-bottom:1px solid #c39843}
+.story-back{display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:7px 13px;border:1px solid #d4a74c;border-radius:6px;color:#ffe7a1;background:linear-gradient(180deg,#102f50,#07162b);font:600 .9rem Georgia,serif}
+.story-back span{font-size:25px;line-height:.8;color:#f6d072}
+.story-brand{color:#d6b368;font:700 .7rem Georgia,serif;letter-spacing:.17em;text-align:right}
+.story-cover{position:relative;isolation:isolate;overflow:hidden;min-height:190px;aspect-ratio:3/1;background:linear-gradient(135deg,#142a3a,#7d623a,#0d263c)}
+.story-cover img{position:absolute;z-index:-2;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 56%}
+.story-cover-shade{position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,#04101aa8,#04101a40 45%,#04101a88),linear-gradient(0deg,#05111bf0,transparent 80%)}
+.story-cover-title{position:absolute;left:clamp(16px,5vw,52px);right:clamp(16px,5vw,52px);bottom:clamp(14px,3vw,28px);text-align:left;text-shadow:0 2px 8px #000}
+.story-cover-title>span{color:#f1d18a;font:700 clamp(.65rem,1.9vw,.85rem) Georgia,serif;letter-spacing:.17em}
+.story-cover-title h1{max-width:720px;margin:6px 0 4px;text-align:left;color:#ffdf8e;font:700 clamp(1.8rem,5.5vw,3.25rem)/1.05 Georgia,serif}
+.story-gold-rule{color:#e4bc64;letter-spacing:.25em}
+.story-article{max-width:780px;margin:0 auto;padding:clamp(19px,4vw,42px) clamp(18px,5vw,48px) 28px;font:1.04rem/1.78 Georgia,'Times New Roman',serif;color:#eee2c9}
+.story-article p{margin:0 0 1.05em}
+.story-article .story-opening:first-letter{float:left;padding:.02em .13em 0 0;color:#e8bc62;font:700 3.1em/.8 Georgia,serif}
+.story-quote{margin:1.6em 0;padding:12px 0 12px 18px;border-left:3px solid #c99b44;color:#ffdf96;font:italic 1.12rem/1.65 Georgia,serif}
+.story-ending{margin-top:1.35em!important;text-align:center;color:#ffda78;font:700 1.35rem/1.5 Georgia,serif}
+.story-bottom{display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 18px 20px}
+.story-back-bottom{justify-content:center;min-width:180px;min-height:46px;background:linear-gradient(#ffe59a,#bd8228);color:#291908;border:2px solid #f6d279;box-shadow:inset 0 0 0 1px #fff4ba}
+.story-footer{color:#c8b78f;font:.8rem Georgia,serif}
+#storyArtwork[hidden]{display:none}
+@media(max-width:520px){
+ .story-screen{border-radius:8px;margin-bottom:10px}
+ .story-topbar{padding:9px 10px}
+ .story-back{min-height:39px;padding:6px 9px;font-size:.82rem}
+ .story-brand{font-size:.58rem;letter-spacing:.1em}
+ .story-cover{min-height:190px;aspect-ratio:1.25/1}
+ .story-cover img{object-position:58% center}
+ .story-cover-title h1{font-size:clamp(1.75rem,8vw,2.5rem)}
+ .story-article{font-size:1rem;line-height:1.75;padding:22px 18px 20px}
+ .story-article .story-opening:first-letter{font-size:2.8em}
+}
+
+
+/* Pantalla principal única: se utiliza siempre el arte aprobado, sin menú alternativo ni cambio al cargar. */
+.home-screen{max-width:780px;padding:0;margin:0 auto 16px;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+.home-screen:before,.home-screen:after{display:none}
+.home-image-shell{display:block}
+
+
+/* v0.10.1b: los puntos interactivos siguen la proporción REAL de la imagen. */
+.home-image-shell{aspect-ratio:auto;height:auto;isolation:isolate}
+.home-image-shell>img{height:auto!important;aspect-ratio:auto;object-fit:initial;position:relative;z-index:0;pointer-events:none}
+.home-hotspot{z-index:20;pointer-events:auto;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
+.home-hotspot:focus{outline:none}
+</style></head><body><main class="app">
+
+<section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
+  <div id="homeImageShell" class="home-image-shell" aria-label="Ilustración principal de Ludo de Gongonia">
+    <img id="homeExactArt" src="254B8872-2807-4A38-8683-F09BDD31B2BA.png" alt="Pantalla de inicio original de LUDO: El Camino de la Concordia" />
+    <button id="homeExactGngPlus" class="home-hotspot" style="left:26.5%;top:1.5%;width:8.5%;height:5.5%" aria-label="Información sobre el saldo GNG"></button>
+    <button id="homeExactLanguageHeader" class="home-hotspot" style="left:68.5%;top:1.1%;width:29%;height:5.2%" aria-label="Abrir selector de idiomas" aria-expanded="false"></button>
+    <span id="homeImageLanguageLabel" class="home-image-language-label" hidden>Español</span>
+    <div id="homeLanguageMenu" class="home-language-menu" hidden role="menu" aria-label="Seleccionar idioma">
+      <button class="home-language-option" data-language="es" data-label="Español" role="menuitem">🇻🇪 <span>Español</span></button>
+      <button class="home-language-option" data-language="it" data-label="Italiano" role="menuitem">🇮🇹 <span>Italiano</span></button>
+      <button class="home-language-option" data-language="en" data-label="Inglés" role="menuitem">🇺🇸 <span>Inglés</span></button>
+      <button class="home-language-option" data-language="de" data-label="Alemán" role="menuitem">🇩🇪 <span>Alemán</span></button>
+      <button class="home-language-option" data-language="fr" data-label="Francés" role="menuitem">🇨🇵 <span>Francés</span></button>
+    </div>
+    <button id="homeExactPlay" class="home-hotspot" style="left:17%;top:62%;width:66%;height:7.8%" aria-label="Jugar"></button>
+    <button id="homeExactPurchases" class="home-hotspot" style="left:5.6%;top:69.9%;width:28%;height:7.1%" aria-label="Compras"></button>
+    <button id="homeExactStats" class="home-hotspot" style="left:36%;top:69.9%;width:28%;height:7.1%" aria-label="Estadísticas"></button>
+    <button id="homeExactSettings" class="home-hotspot" style="left:66%;top:69.9%;width:28.5%;height:7.1%" aria-label="Ajustes"></button>
+    <button id="homeExactMusicToggle" class="home-hotspot" style="left:84.5%;top:77.7%;width:9%;height:4%" aria-label="Activar o silenciar música"></button>
+    <button id="homeExactStory" class="home-hotspot" style="left:30%;top:90.8%;width:40%;height:3.6%" aria-label="El origen de los Juegos"></button>
+  </div>
+  
+  <div id="homeInfoModal" class="home-modal hidden" role="dialog" aria-modal="true" aria-labelledby="homeInfoTitle">
+    <div class="home-modal-card">
+      <button id="homeModalClose" class="home-modal-close" type="button" aria-label="Cerrar">×</button>
+      <div class="home-modal-emblem" aria-hidden="true">✦</div>
+      <h2 id="homeInfoTitle">Gongonia</h2>
+      <p id="homeInfoText"></p>
+      <button id="homeModalOk" class="home-modal-ok" type="button">Volver</button>
+    </div>
+  </div>
+</section>
+
+<section id="storyScreen" class="story-screen hidden" aria-label="Los Juegos de Gongonia: El camino de la concordia">
+  <div class="story-topbar">
+    <button id="storyBackTop" class="story-back" type="button"><span aria-hidden="true">‹</span> Volver al menú</button>
+    <span class="story-brand">GONGONIA WORKS</span>
+  </div>
+  <div class="story-cover">
+    <img id="storyArtwork" src="IMG_0912.JPG" alt="Un viajero contempla un camino hacia un gran castillo entre montañas al atardecer" />
+    <div class="story-cover-shade"></div>
+    <div class="story-cover-title">
+      <span>LOS JUEGOS DE GONGONIA</span>
+      <h1>El camino de la concordia</h1>
+      <div class="story-gold-rule" aria-hidden="true">✦ ◆ ✦</div>
+    </div>
+  </div>
+  <article class="story-article">
+    <p class="story-opening">Cuenta la tradición que, hace muchos siglos, los reinos de Gongonia, Kelta, Brunia y Routa atravesaron una época de rivalidades y desconfianza. Cada reino defendía sus propios intereses, y las disputas amenazaban con quebrar los lazos que unían a sus pueblos.</p>
+    <p>Para preservar la paz y fortalecer la unión entre sus tierras, los antiguos sabios propusieron una prueba diferente a cualquier batalla: una competición en la que los representantes de los cuatro reinos recorrerían un mismo camino, guiados por el azar, la paciencia y la estrategia.</p>
+    <p>Así nacieron los Juegos de Gongonia.</p>
+    <p>Desde entonces, cada reino envía a sus campeones para participar en esta antigua tradición. Las fichas parten de sus respectivos hogares y recorren el gran circuito hasta alcanzar la meta. En el camino pueden adelantarse, encontrarse con sus rivales o verse obligadas a regresar al punto de partida. Ninguna ventaja es eterna, pues el destino puede cambiar con cada lanzamiento del dado.</p>
+    <p>Los Juegos no se celebran para conquistar territorios ni humillar a los vencidos. Su verdadero propósito es recordar que la fortuna favorece hoy a unos y mañana a otros, que la astucia debe acompañarse de paciencia y que, a pesar de sus diferencias, los cuatro reinos comparten un mismo destino.</p>
+    <p>Al final, solo un reino alcanza la victoria. Pero, mientras Gongonia, Kelta, Brunia y Routa regresen dispuestos a competir de nuevo, la tradición habrá cumplido su propósito.</p>
+    <blockquote class="story-quote">Porque en Gongonia, la verdadera concordia no consiste en que todos recorran el camino al mismo ritmo, sino en que todos tengan la oportunidad de llegar a la meta.</blockquote>
+    <p class="story-ending">¡Que comiencen los Juegos de Gongonia!</p>
+  </article>
+  <div class="story-bottom">
+    <span class="story-gold-rule" aria-hidden="true">✦ ◆ ✦</span>
+    <button id="storyBackBottom" class="story-back story-back-bottom" type="button">Volver al menú</button>
+    <span class="story-footer">Gongonia Works · v0.10.1</span>
+  </div>
+</section>
+
+<section id="setup" class="panel hidden"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Elige de dos a cuatro reinos, escribe los nombres y selecciona quién controla cada uno: Persona, Bot básico o Bot estratégico.</p>
+<div class="musicbar"><span id="musicLabel">♫ Música de inicio: The Kelta Mountains</span><button id="musicToggle" class="secondary" type="button">🔇 Activar música</button><button id="effectsToggle" class="secondary" type="button">🔊 Efectos activados</button></div>
+<div class="choices">
+<div class="choice"><label><input type="checkbox" value="red" checked> 🦁 Reino Rojo</label><input class="player-name" data-team="red" type="text" maxlength="24" placeholder="Nombre (ej. Sabrina)" aria-label="Nombre del jugador del Reino Rojo"><label class="mode-label">Control<select class="player-mode" data-team="red"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
+<div class="choice"><label><input type="checkbox" value="green" checked> 🦌 Reino Verde</label><input class="player-name" data-team="green" type="text" maxlength="24" placeholder="Nombre (ej. Nicole)" aria-label="Nombre del jugador del Reino Verde"><label class="mode-label">Control<select class="player-mode" data-team="green"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
+<div class="choice"><label><input type="checkbox" value="yellow"> ☀️ Reino Amarillo</label><input class="player-name" data-team="yellow" type="text" maxlength="24" placeholder="Nombre del jugador" aria-label="Nombre del jugador del Reino Amarillo"><label class="mode-label">Control<select class="player-mode" data-team="yellow"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
+<div class="choice"><label><input type="checkbox" value="blue"> 🦅 Reino Azul</label><input class="player-name" data-team="blue" type="text" maxlength="24" placeholder="Nombre del jugador" aria-label="Nombre del jugador del Reino Azul"><label class="mode-label">Control<select class="player-mode" data-team="blue"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
+</div>
+<p><span id="count">2 reinos</span> <button id="start" class="primary" style="float:right">Iniciar partida</button></p></section>
+<section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"></div></div><aside class="panel side">
+<div class="wide"><div class="label">Turno actual</div><div id="turn" class="turn"></div></div>
+<div class="dice"><div id="die" class="die" aria-label="Dado sin lanzar"><img class="die-art" src="dado-gongonia.webp" alt="Dado de marfil con bordes dorados y gemas rojas"><svg id="die-pips" class="die-pips" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="die-top-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5e8c8"/><stop offset="1" stop-color="#d9c397"/></linearGradient><radialGradient id="die-gem-fill" cx="30%" cy="25%" r="75%"><stop offset="0" stop-color="#ff8b68"/><stop offset=".35" stop-color="#d52b26"/><stop offset="1" stop-color="#620a0b"/></radialGradient></defs><polygon points="50,7 81,20 50,37 19,20" fill="url(#die-top-fill)" stroke="#b99a60" stroke-width=".65"/><g id="die-pip-group"></g></svg><span id="die-result" class="die-result">—</span></div><button id="roll" class="primary">Lanzar dado</button></div>
+<div id="status" class="status wide">Lanza el dado para comenzar.</div><div class="wide"><div class="label">Jugadores</div><div id="players" class="players"></div></div>
+<div class="wide"><button id="back" class="secondary">Menú</button> <button id="restart" class="secondary">Reiniciar</button> <button id="gameMusicToggle" class="secondary" type="button">🔇 Activar música</button> <button id="gameEffectsToggle" class="secondary" type="button">🔊 Efectos activados</button></div>
+</aside></div><p class="note">Durante la partida puedes activar o desactivar la música y los efectos de sonido por separado.</p></section>
+<section id="results" class="panel hidden" aria-live="polite">
+ <h2 style="font:1.7rem Georgia,serif;color:#f4d99b;text-align:center;margin:4px 0 8px">🏆 Crónicas de la partida</h2>
+ <p id="resultWinner" style="text-align:center;font:1.25rem Georgia,serif;margin:8px 0"></p>
+ <p id="resultDuration" class="sub"></p>
+ <div id="resultStats"></div>
+ <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px">
+  <button id="newGame" class="primary">Nueva partida</button>
+  <button id="resultMenu" class="secondary">Volver al menú</button>
+ </div>
+</section>
+</main>
+<audio id="introMusic" src="The%20Kelta%20Mountains.mp3" preload="none" loop></audio>
+<audio id="gameMusic" src="The%20Routa%20Plains%20of%20A%CC%81nganor%20(Take%202).mp3" preload="none" loop></audio>
+<script>
+(()=>{
+const T={
+ red:{name:'Rojo',color:'#c44b50',icon:'🦁',start:0,home:[[0,0],[0,1],[1,0],[1,1]]},
+ green:{name:'Verde',color:'#32815c',icon:'🦌',start:13,home:[[0,9],[0,10],[1,9],[1,10]]},
+ yellow:{name:'Amarillo',color:'#e0b83c',icon:'☀️',start:26,home:[[9,9],[9,10],[10,9],[10,10]]},
+ blue:{name:'Azul',color:'#427cbd',icon:'🦅',start:39,home:[[9,0],[9,1],[10,0],[10,1]]}
+};
+const ORDER=['red','green','yellow','blue'];
+const IMAGE_SIZE=1254;
+const pct=(x,y)=>[+(x/IMAGE_SIZE*100).toFixed(3),+(y/IMAGE_SIZE*100).toFixed(3)];
+/* 52 casillas comunes, en el orden del recorrido, tomadas de los puntos negros del tablero. */
+const ROUTE_PIXELS=[
+ /* Índice 0: salida roja. Cada punto coincide con el centro de una casilla marcada. */
+ [151,487],[225,487],[303,487],[382,487],[455,487],
+ [550,405],[550,337],[550,270],[550,205],[550,137],[550,75],[627,75],[700,75],
+ [700,137],[700,205],[700,270],[700,337],[700,405],
+ [785,487],[862,487],[940,487],[1018,487],[1096,487],[1174,487],
+ [1174,567],[1174,647],[1096,647],[1018,647],[940,647],[862,647],[785,647],
+ [700,735],[700,805],[700,880],[700,948],[700,1025],[700,1100],[627,1100],[550,1100],
+ [550,1025],[550,948],[550,880],[550,805],[550,735],
+ [455,647],[382,647],[303,647],[225,647],[151,647],[73,647],[73,567],[73,487]
+];
+const ROUTE=ROUTE_PIXELS.map(([x,y])=>pct(x,y));
+/* Las cuatro estrellas doradas de salida y las cuatro estrellas blancas son seguras. */
+const SAFE=new Set([0,8,13,21,26,34,39,47]);
+/* Cada carril tiene cinco casillas coloreadas; el paso siguiente es la meta central. */
+const LANES={
+ red:[[152,569],[226,569],[305,569],[385,569],[459,569]].map(([x,y])=>pct(x,y)),
+ green:[[627,137],[627,205],[627,273],[627,342],[627,410]].map(([x,y])=>pct(x,y)),
+ /* Amarillo entra desde su estrella hacia el centro: de derecha a izquierda. */
+ yellow:[[1102,569],[1023,569],[945,569],[868,569],[789,569]].map(([x,y])=>pct(x,y)),
+ /* Azul entra desde su estrella hacia el centro: de abajo hacia arriba. */
+ blue:[[627,1025],[627,948],[627,881],[627,806],[627,742]].map(([x,y])=>pct(x,y))
+};
+const TOKEN_IMAGES={
+ red:'ficha-reino-rojo.webp',
+ green:'ficha-reino-verde.webp',
+ yellow:'ficha-reino-amarillo.webp',
+ blue:'ficha-reino-azul.webp'
+};
+const HOME_POINTS={
+ /* Las mismas posiciones verificadas visualmente por el usuario en v0.2. */
+ red:[[15.71,15.31],[27.83,15.23],[15.55,26.40],[27.91,26.16]],
+ green:[[72.41,15.23],[84.45,15.31],[72.49,26.32],[84.61,26.32]],
+ yellow:[[72.65,68.26],[84.69,68.18],[72.41,79.90],[84.69,79.83]],
+ blue:[[15.39,68.18],[27.99,68.26],[15.39,80.22],[27.67,79.90]]
+};
+const GOAL=pct(627,570), $=id=>document.getElementById(id);
+let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false,effectsEnabled=true,botTimer=null,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set(),gameStartedAt=0,gameStats={},finishOrder=[];
+updateDieFace(1);
+const introMusic=$('introMusic'),gameMusic=$('gameMusic');
+/* Mezcla de audio: bajar música para dejar espacio a los efectos del juego. */
+introMusic.volume=0.56;gameMusic.volume=0.48;
+function updateMusicButtons(){
+ const label=musicEnabled?'🔊 Silenciar música':'🔇 Activar música';
+ $('musicToggle').textContent=label;
+ $('gameMusicToggle').textContent=label;
+}
+async function playMusicFor(screen){
+ if(!musicEnabled)return;
+ const target=screen==='game'?gameMusic:introMusic;
+ const other=screen==='game'?introMusic:gameMusic;
+ other.pause();other.currentTime=0;
+ try{await target.play();}catch(e){msg('Toca «Activar música» para permitir la reproducción en Safari.');}
+}
+function enableMusic(){
+ musicEnabled=!musicEnabled;
+ if(!musicEnabled){introMusic.pause();gameMusic.pause();}
+ else{playMusicFor($('game').classList.contains('hidden')?'setup':'game');}
+ updateMusicButtons();
+}
+$('musicToggle').addEventListener('click',enableMusic);
+$('gameMusicToggle').addEventListener('click',enableMusic);
+
+function updateEffectsButtons(){const label=effectsEnabled?'🔊 Efectos activados':'🔇 Efectos desactivados';$('effectsToggle').textContent=label;$('gameEffectsToggle').textContent=label;}
+function enableEffects(){effectsEnabled=!effectsEnabled;updateEffectsButtons();}
+$('effectsToggle').addEventListener('click',enableEffects);
+$('gameEffectsToggle').addEventListener('click',enableEffects);
+updateMusicButtons();updateEffectsButtons();
+
+
+// v0.10.1b: controles centralizados por delegación para que los hotspots
+// respondan de forma consistente en Safari de iPad y en navegadores móviles.
+function enableHomeMusic(){
+ musicEnabled=!musicEnabled;
+ if(!musicEnabled){introMusic.pause();gameMusic.pause();}
+ else{introMusic.pause();introMusic.currentTime=0;gameMusic.currentTime=0;gameMusic.play().catch(()=>{if($('status'))msg('Toca el botón de música para permitir la reproducción en Safari.');});}
+ updateMusicButtons();
+}
+document.addEventListener('click',(event)=>{
+ const button=event.target.closest('button.home-hotspot,button.home-language-option');
+ if(!button)return;
+ event.preventDefault();
+ if(button.classList.contains('home-language-option')){
+  const label=button.dataset.label;
+  const lang=button.dataset.language;
+  const overlay=$('homeImageLanguageLabel');
+  overlay.textContent=label;
+  overlay.hidden=(lang==='es');
+  overlay.style.display=lang==='es'?'none':'flex';
+  overlay.setAttribute('aria-label','Idioma seleccionado: '+label+' (sin traducción en esta versión)');
+  $('homeLanguageMenu').hidden=true;
+  $('homeExactLanguageHeader').setAttribute('aria-expanded','false');
+  return;
+ }
+ switch(button.id){
+  case 'homeExactGngPlus':
+   showHomeInfo('Saldo GNG','En v0.10.1 el saldo se muestra como una imagen fija de 0 GNG. No está conectado a una cartera ni permite realizar operaciones.');
+   break;
+  case 'homeExactLanguageHeader':{
+   const menu=$('homeLanguageMenu');
+   const opening=menu.hidden;
+   menu.hidden=!opening;
+   button.setAttribute('aria-expanded',String(opening));
+   break;
+  }
+  case 'homeExactPlay':
+   $('homeScreen').classList.add('hidden');
+   $('setup').classList.remove('hidden');
+   playMusicFor('setup');
+   window.scrollTo(0,0);
+   break;
+  case 'homeExactPurchases':
+   showHomeInfo('Compras','El acceso queda preparado visualmente. La tienda se implementará en una versión posterior.');
+   break;
+  case 'homeExactStats':
+   showHomeInfo('Estadísticas','Este acceso queda reservado para consultar las estadísticas de tus partidas en una etapa posterior.');
+   break;
+  case 'homeExactSettings':
+   showHomeInfo('Ajustes','El selector de idioma permite elegir entre cinco opciones, pero v0.10.1 todavía no traduce los textos. Los demás ajustes se incorporarán por etapas.');
+   break;
+  case 'homeExactMusicToggle':
+   enableHomeMusic();
+   break;
+  case 'homeExactStory':
+   openStoryScreen();
+   break;
+ }
+},true);
+function showHomeInfo(title,body){$('homeInfoTitle').textContent=title;$('homeInfoText').textContent=body;$('homeInfoModal').classList.remove('hidden');$('homeModalOk').focus();}
+function closeHomeInfo(){$('homeInfoModal').classList.add('hidden');}
+function openStoryScreen(){
+ $('homeInfoModal').classList.add('hidden');
+ $('homeScreen').classList.add('hidden');
+ $('setup').classList.add('hidden');
+ $('game').classList.add('hidden');
+ $('results').classList.add('hidden');
+ $('storyScreen').classList.remove('hidden');
+ window.scrollTo(0,0);
+}
+function closeStoryScreen(){
+ $('storyScreen').classList.add('hidden');
+ $('homeScreen').classList.remove('hidden');
+ window.scrollTo(0,0);
+}
+$('storyBackTop').addEventListener('click',closeStoryScreen);
+$('storyBackBottom').addEventListener('click',closeStoryScreen);
+$('storyArtwork').addEventListener('error',()=>{$('storyArtwork').hidden=true;});
+$('homeModalClose').addEventListener('click',closeHomeInfo);
+$('homeModalOk').addEventListener('click',closeHomeInfo);
+$('homeInfoModal').addEventListener('click',e=>{if(e.target===$('homeInfoModal'))closeHomeInfo();});
+/* Se eliminaron los antiguos manejadores del menú CSS; la pantalla usa los botones transparentes sobre la ilustración. */
+
+/* Efectos sonoros generados por el propio navegador: no requieren archivos adicionales. */
+let noiseBuffer=null;
+function getAudioContext(){
+ const AudioCtx=window.AudioContext||window.webkitAudioContext;
+ if(!AudioCtx)return null;
+ try{
+  if(!audioContext)audioContext=new AudioCtx();
+  if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});
+  if(!noiseBuffer&&audioContext){
+   const length=Math.ceil(audioContext.sampleRate*1.2);
+   noiseBuffer=audioContext.createBuffer(1,length,audioContext.sampleRate);
+   const data=noiseBuffer.getChannelData(0);
+   for(let i=0;i<length;i++)data[i]=Math.random()*2-1;
+  }
+  return audioContext;
+ }catch(e){return null;}
+}
+/* Sonido breve de fantasía al comenzar el turno de cada reino. */
+function playTurnSound(){
+ if(!effectsEnabled)return;
+ const ctx=getAudioContext();if(!ctx)return;
+ const now=ctx.currentTime;
+ [[659.25,0],[783.99,.12],[987.77,.24]].forEach(([frequency,delay])=>{
+  const osc=ctx.createOscillator(),gain=ctx.createGain();
+  osc.type='sine';osc.frequency.setValueAtTime(frequency,now+delay);
+  gain.gain.setValueAtTime(.0001,now+delay);
+  gain.gain.exponentialRampToValueAtTime(.10,now+delay+.025);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+delay+.18);
+  osc.connect(gain);gain.connect(ctx.destination);
+  osc.start(now+delay);osc.stop(now+delay+.19);
+ });
+}
+/* Dados rodando: pequeños golpecitos irregulares y un traqueteo corto. */
+function updateDieFace(value){
+ const group=$('die-pip-group');
+ if(!group)return;
+ const patterns={
+  1:[[50,20]],
+  2:[[40,15],[60,25]],
+  3:[[40,15],[50,20],[60,25]],
+  4:[[40,15],[60,15],[40,25],[60,25]],
+  5:[[40,15],[60,15],[50,20],[40,25],[60,25]],
+  6:[[40,14],[60,14],[40,20],[60,20],[40,26],[60,26]]
+ };
+ const dots=patterns[Number(value)]||[];
+ group.innerHTML=dots.map(([x,y])=>'<g><circle cx="'+x+'" cy="'+y+'" r="4.1" fill="url(#die-gem-fill)" stroke="#74120d" stroke-width=".9"/><ellipse cx="'+(x-1.05)+'" cy="'+(y-1.35)+'" rx="1.25" ry=".8" fill="#ffd0a5" opacity=".82"/></g>').join('');
+}
+function playDiceSound(){
+ if(!effectsEnabled)return;
+ const ctx=getAudioContext();if(!ctx||!noiseBuffer)return;
+ const now=ctx.currentTime;
+ const rattle=[0,.055,.125,.205,.27,.365,.435,.49];
+ rattle.forEach((delay,index)=>{
+  const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+  source.buffer=noiseBuffer;
+  filter.type='bandpass';filter.frequency.value=950+Math.random()*1500;filter.Q.value=.7+Math.random()*1.4;
+  const volume=(.13+Math.random()*.12)*(1-index*.055);
+  gain.gain.setValueAtTime(.0001,now+delay);
+  gain.gain.exponentialRampToValueAtTime(volume,now+delay+.004);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+delay+.045+Math.random()*.025);
+  source.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
+  source.start(now+delay);source.stop(now+delay+.085);
+ });
+}
+/* Pisada corta y suave cada vez que una ficha avanza una casilla. */
+function playFootstep(){
+ if(!effectsEnabled)return;
+ const ctx=getAudioContext();if(!ctx||!noiseBuffer)return;
+ const now=ctx.currentTime;
+ const thump=ctx.createOscillator(),thumpGain=ctx.createGain();
+ thump.type='sine';thump.frequency.setValueAtTime(115,now);
+ thump.frequency.exponentialRampToValueAtTime(62,now+.085);
+ thumpGain.gain.setValueAtTime(.0001,now);
+ thumpGain.gain.exponentialRampToValueAtTime(.30,now+.008);
+ thumpGain.gain.exponentialRampToValueAtTime(.0001,now+.105);
+ thump.connect(thumpGain);thumpGain.connect(ctx.destination);
+ thump.start(now);thump.stop(now+.11);
+ const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+ source.buffer=noiseBuffer;filter.type='lowpass';filter.frequency.value=620;
+ gain.gain.setValueAtTime(.0001,now);
+ gain.gain.exponentialRampToValueAtTime(.12,now+.006);
+ gain.gain.exponentialRampToValueAtTime(.0001,now+.055);
+ source.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
+ source.start(now);source.stop(now+.06);
+}
+/* Vítor muy corto y alegre cuando una ficha sale de la base. */
+function playPieceCheer(){
+ if(!effectsEnabled)return;
+ const ctx=getAudioContext();if(!ctx||!noiseBuffer)return;
+ const now=ctx.currentTime;
+ /* Tres voces sintéticas ascendentes y un pequeño murmullo filtrado. */
+ [[520,0,.21],[660,.035,.24],[790,.075,.20]].forEach(([frequency,delay,duration])=>{
+  const osc=ctx.createOscillator(),gain=ctx.createGain(),vibrato=ctx.createOscillator(),vibratoGain=ctx.createGain();
+  osc.type='sawtooth';
+  osc.frequency.setValueAtTime(frequency*.88,now+delay);
+  osc.frequency.exponentialRampToValueAtTime(frequency*1.18,now+delay+duration);
+  vibrato.type='sine';vibrato.frequency.value=13;vibratoGain.gain.value=frequency*.018;
+  vibrato.connect(vibratoGain);vibratoGain.connect(osc.frequency);
+  gain.gain.setValueAtTime(.0001,now+delay);
+  gain.gain.exponentialRampToValueAtTime(.085,now+delay+.025);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+delay+duration);
+  osc.connect(gain);gain.connect(ctx.destination);
+  vibrato.start(now+delay);osc.start(now+delay);
+  vibrato.stop(now+delay+duration+.01);osc.stop(now+delay+duration+.01);
+ });
+ const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+ source.buffer=noiseBuffer;filter.type='bandpass';filter.frequency.value=1050;filter.Q.value=.65;
+ gain.gain.setValueAtTime(.0001,now);
+ gain.gain.exponentialRampToValueAtTime(.16,now+.035);
+ gain.gain.exponentialRampToValueAtTime(.0001,now+.29);
+ source.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
+ source.start(now);source.stop(now+.31);
+}
+/* Golpe mágico breve al capturar: caída tonal, impacto grave y destello. */
+function playCaptureSound(){
+ if(!effectsEnabled)return;
+ const ctx=getAudioContext();if(!ctx||!noiseBuffer)return;
+ const now=ctx.currentTime;
+ /* Impacto grave más fuerte, con un golpe de ruido para que destaque sobre la música. */
+ const impact=ctx.createOscillator(),impactGain=ctx.createGain();
+ impact.type='sine';
+ impact.frequency.setValueAtTime(210,now);
+ impact.frequency.exponentialRampToValueAtTime(48,now+.30);
+ impactGain.gain.setValueAtTime(.0001,now);
+ impactGain.gain.exponentialRampToValueAtTime(.72,now+.012);
+ impactGain.gain.exponentialRampToValueAtTime(.0001,now+.34);
+ impact.connect(impactGain);impactGain.connect(ctx.destination);
+ impact.start(now);impact.stop(now+.35);
+ const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),noiseGain=ctx.createGain();
+ source.buffer=noiseBuffer;filter.type='lowpass';filter.frequency.setValueAtTime(1250,now);filter.frequency.exponentialRampToValueAtTime(260,now+.22);
+ noiseGain.gain.setValueAtTime(.0001,now);
+ noiseGain.gain.exponentialRampToValueAtTime(.48,now+.008);
+ noiseGain.gain.exponentialRampToValueAtTime(.0001,now+.24);
+ source.connect(filter);filter.connect(noiseGain);noiseGain.connect(ctx.destination);
+ source.start(now);source.stop(now+.25);
+ const chime=ctx.createOscillator(),chimeGain=ctx.createGain();
+ chime.type='triangle';chime.frequency.setValueAtTime(740,now+.025);
+ chime.frequency.exponentialRampToValueAtTime(220,now+.28);
+ chimeGain.gain.setValueAtTime(.0001,now+.025);
+ chimeGain.gain.exponentialRampToValueAtTime(.24,now+.045);
+ chimeGain.gain.exponentialRampToValueAtTime(.0001,now+.32);
+ chime.connect(chimeGain);chimeGain.connect(ctx.destination);
+ chime.start(now+.025);chime.stop(now+.33);
+}
+const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+function chosen(){return [...document.querySelectorAll('.choice input[type="checkbox"]:checked')].map(x=>x.value)}
+function getPlayerMode(team){const select=document.querySelector('.player-mode[data-team="'+team+'"]');return select?select.value:'human'}
+function getPlayerName(team){const input=document.querySelector('.player-name[data-team="'+team+'"]');const mode=getPlayerMode(team);return input&&input.value.trim()?input.value.trim():(mode==='strategic'?'Bot estratégico '+T[team].name:mode==='bot'?'Bot '+T[team].name:'Jugador '+T[team].name)}
+function escapeHTML(value){return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function msg(s){$('status').textContent=s}
+function count(){let n=chosen().length;$('count').textContent=n+' reinos seleccionados';$('start').disabled=n<2||n>4}
+function botModeLabel(pl){return pl.botMode==='strategic'?'Bot estratégico':'Bot básico'}
+function chooseStrategicBotMove(pl,options){
+ const ranked=options.map(p=>{
+  let score=Math.random()*0.4;
+  if(p.progress<0){
+   /* Sacar una ficha nueva suele ser mejor que dejarla esperando en la base. */
+   score+=380;
+   if(!pl.pieces.some(other=>other.progress>=0))score+=35;
+  }else{
+   const target=p.progress+roll;
+   if(target===56){
+    /* Completar una ficha es la prioridad más alta. */
+    score+=2000;
+   }else{
+    /* Si no puede terminar, prefiere avanzar, especialmente cerca de la meta. */
+    score+=target*1.5;
+    if(target>=51&&target<=55)score+=20;
+    if(target<=50){
+     const landing=(T[pl.team].start+target)%52;
+     if(SAFE.has(landing)){
+      score+=25;
+     }else{
+      let captures=0;
+      players.filter(other=>other!==pl).forEach(op=>op.pieces.forEach(e=>{
+       if(e.progress>=0&&e.progress<=50&&(T[op.team].start+e.progress)%52===landing)captures++;
+      }));
+      if(captures>0)score+=1000+captures*30;
+     }
+    }
+   }
+  }
+  return {piece:p,score};
+ });
+ const bestScore=Math.max(...ranked.map(item=>item.score));
+ const best=ranked.filter(item=>bestScore-item.score<0.75);
+ return best[Math.floor(Math.random()*best.length)].piece;
+}
+function scheduleBotTurn(delay=650){
+ if(botTimer!==null){clearTimeout(botTimer);botTimer=null;}
+ if(over||!players[current]||!players[current].isBot)return;
+ botTimer=setTimeout(()=>{
+  botTimer=null;
+  if(over||!players[current]||!players[current].isBot||animating)return;
+  if(waiting&&roll!==null){
+   const pl=players[current];
+   const options=pl.pieces.filter(p=>legal(p));
+   if(options.length){
+    const pick=pl.botMode==='strategic'?chooseStrategicBotMove(pl,options):options[Math.floor(Math.random()*options.length)];
+    move(pl,pick);
+   }
+  }else if(!waiting){$('roll').click();}
+ },delay);
+}
+document.querySelectorAll('.choice input[type="checkbox"]').forEach(x=>x.addEventListener('change',count));count();
+function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,playerName:getPlayerName(team),botMode:getPlayerMode(team),isBot:getPlayerMode(team)!=='human',finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;gameStartedAt=Date.now();gameStats={};finishOrder=[];teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});$('results').classList.add('hidden');$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado; necesitas un 6 para sacar una ficha.');render();playTurnSound();scheduleBotTurn()}
+$('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});$('newGame').addEventListener('click',start);$('resultMenu').addEventListener('click',()=>{$('results').classList.add('hidden');$('game').classList.add('hidden');$('setup').classList.add('hidden');$('homeScreen').classList.remove('hidden');playMusicFor('setup')});
+function position(team,p){
+ if(p.progress<0)return HOME_POINTS[team][p.slot];
+ /* Las 52 casillas comunes terminan justo antes del pasillo final propio. */
+ if(p.progress<=50)return ROUTE[(T[team].start+p.progress)%52];
+ if(p.progress<=55)return LANES[team][p.progress-51];
+ return GOAL;
+}
+function positionKey(team,p){
+ if(p.progress<0)return 'base-'+team+'-'+p.slot;
+ if(p.progress<=50)return 'route-'+((T[team].start+p.progress)%52);
+ if(p.progress<=55)return 'lane-'+team+'-'+(p.progress-51);
+ return 'goal';
+}
+/* En Gongonia se puede sacar ficha con 1 o 6; ambas tiradas dan turno adicional. */
+function legal(p){return roll!==null&&(p.progress<0?(roll===1||roll===6):(p.progress<56&&p.progress+roll<=56))}
+function render(){
+ const board=$('board');board.innerHTML='';
+ const groups=new Map();
+ players.forEach(pl=>pl.pieces.forEach(p=>{
+   const key=positionKey(pl.team,p);
+   if(!groups.has(key))groups.set(key,{point:position(pl.team,p),items:[]});
+   groups.get(key).items.push({pl,p});
+ }));
+ groups.forEach(({point,items})=>{
+   const stack=document.createElement('div');
+   const n=items.length;
+   stack.className='token-stack '+(n===1?'single':'multi')+' count-'+n+(n>=5?' many':'');
+   if(items.some(item=>item.p.id===animatingPieceId))stack.classList.add('hopping');
+   if(items.some(item=>capturedPieceIds.has(item.p.id)))stack.classList.add('captured-return');
+   stack.style.left=point[0]+'%';stack.style.top=point[1]+'%';
+   stack.setAttribute('aria-label',n+' ficha(s) en esta casilla');
+   items.forEach(({pl,p})=>{
+     const b=document.createElement('button');
+     b.className='piece '+pl.team+(waiting&&pl===players[current]&&legal(p)?' legal':'');
+     b.style.setProperty('--team',T[pl.team].color);
+     const img=document.createElement('img');
+     img.className='guardian-token';
+     img.src=TOKEN_IMAGES[pl.team];
+     img.alt='';
+     img.draggable=false;
+     b.append(img);
+     const badge=document.createElement('span');
+     badge.className='piece-number';
+     badge.textContent=p.slot+1;
+     b.append(badge);
+     b.setAttribute('aria-label','Reino '+T[pl.team].name+', ficha '+(p.slot+1));
+     b.disabled=pl!==players[current]||!waiting||!legal(p);
+     b.onclick=()=>move(pl,p);
+     stack.append(b);
+   });
+   board.append(stack);
+ });
+ $('turn').textContent=T[players[current].team].icon+' Reino '+T[players[current].team].name+' de '+players[current].playerName+(players[current].isBot?' · '+botModeLabel(players[current]):'');
+ $('roll').disabled=waiting||over||animating;
+ $('roll').textContent=waiting?'Elige ficha':'🎲 Lanzar dado';
+ $('players').innerHTML=players.map((p,i)=>'<div class="player '+(i===current&&!over?'current':'')+'"><span class="dot" style="background:'+T[p.team].color+'"></span><b>'+escapeHTML(p.playerName)+(p.isBot?' · '+botModeLabel(p):'')+' — Reino '+T[p.team].name+'</b><span class="right">'+p.pieces.filter(x=>x.progress===56).length+'/4 en meta</span></div>').join('');
+}
+function showFinalStats(winnerTeam){
+ const seconds=Math.max(0,Math.floor((Date.now()-gameStartedAt)/1000));
+ const mm=String(Math.floor(seconds/60)).padStart(2,'0'),ss=String(seconds%60).padStart(2,'0');
+ const winner=players.find(pl=>pl.team===winnerTeam);$('resultWinner').textContent='¡Victoria de '+winner.playerName+' — Reino '+T[winnerTeam].name+' '+T[winnerTeam].icon+'!';
+ $('resultDuration').textContent='Duración total: '+mm+':'+ss;
+ const teamNames={red:'Rojo',green:'Verde',yellow:'Amarillo',blue:'Azul'};
+ const orderedPlayers=[...finishOrder.map(team=>players.find(pl=>pl.team===team)).filter(Boolean),...players.filter(pl=>!finishOrder.includes(pl.team))];
+ const rows=orderedPlayers.map(pl=>{
+  const s=gameStats[pl.team];
+  const total=Object.values(s.captures).reduce((a,b)=>a+b,0);
+  const details=players.filter(other=>other.team!==pl.team).map(other=>{
+   const n=s.captures[other.team];
+   return '<span class="stat-chip">'+T[other.team].icon+' A '+escapeHTML(other.playerName)+' (Reino '+teamNames[other.team]+'): <b>'+n+'</b></span>';
+  }).join('');
+  const arrivalIndex=finishOrder.indexOf(pl.team);
+  const arrivalLabel=arrivalIndex===0?'1.º lugar':arrivalIndex===1?'2.º lugar':arrivalIndex===2?'3.º lugar':arrivalIndex===3?'4.º lugar':'No completó';
+  return '<tr><td><b>'+T[pl.team].icon+' '+escapeHTML(pl.playerName)+' — Reino '+teamNames[pl.team]+'</b>'+(pl.team===winnerTeam?' <span style="color:#f4d99b">🏆 Ganador</span>':'')+'</td><td>'+arrivalLabel+'</td><td>'+s.rolls+'</td><td>'+s.moves+'</td><td><b>'+total+'</b><div class="stat-captures">'+details+'</div></td></tr>';
+ }).join('');
+ $('resultStats').innerHTML='<table class="stats-table"><thead><tr><th>Jugador</th><th>Llegada</th><th>Tiradas</th><th>Movimientos</th><th>Capturas realizadas y reino capturado</th></tr></thead><tbody>'+rows+'</tbody></table><p class="note">El puesto depende del orden real en que cada reino completó sus cuatro fichas. “No completó” significa que la partida terminó antes de que ese reino llegara a la meta. Las capturas se muestran por reino rival.</p>';
+ $('game').classList.add('hidden');$('results').classList.remove('hidden');
+}
+function next(){let old=current;do{current=(current+1)%players.length}while(players[current].finished&&current!==old);roll=null;waiting=false;render();msg('Turno de '+players[current].playerName+(players[current].isBot?' · '+botModeLabel(players[current]):'')+' — Reino '+T[players[current].team].name+'. Lanza el dado.');if(current!==old)playTurnSound();scheduleBotTurn()}
+$('roll').onclick=async()=>{
+ if(waiting||over||animating)return;
+ animating=true;
+ $('roll').disabled=true;
+ const faces=[1,2,3,4,5,6];
+ gameStats[players[current].team].rolls++;
+ const finalRoll=1+Math.floor(Math.random()*6);
+ playDiceSound();
+ let faceIndex=0;
+ $('die').classList.add('rolling');
+ $('die-result').textContent='1';updateDieFace(1);
+ const faceTimer=setInterval(()=>{const face=faces[faceIndex++%faces.length];$('die-result').textContent=face;updateDieFace(face)},75);
+ await pause(650);
+ clearInterval(faceTimer);
+ roll=finalRoll;
+ $('die').classList.remove('rolling');
+ $('die-result').textContent=roll;updateDieFace(roll); $('die').setAttribute('aria-label','Resultado del dado: '+roll);
+ animating=false;
+ if(!players[current].pieces.some(legal)){
+  let extra=roll===1||roll===6;
+  waiting=false;render();
+  if(extra){msg('Salió '+roll+'. No puedes mover; tienes otra tirada.');scheduleBotTurn(650);}
+  else{msg(players[current].playerName+' no tiene movimiento posible. Termina su turno.');setTimeout(next,600)}
+  return;
+ }
+ waiting=true;render();msg('Salió '+roll+'. Toca una ficha resaltada para moverla.');scheduleBotTurn(750);
+};
+async function move(pl,p){
+ if(!waiting||pl!==players[current]||!legal(p))return;
+ const n=roll;
+ const oldProgress=p.progress;
+ const targetProgress=oldProgress<0?0:oldProgress+n;
+ const reachedGoal=oldProgress<56&&targetProgress===56;
+ gameStats[pl.team].moves++;
+ if(oldProgress<0)playPieceCheer();
+ waiting=false;roll=null;animating=true;animatingPieceId=p.id;
+ const steps=[];
+ if(oldProgress<0)steps.push(0);
+ else for(let step=oldProgress+1;step<=targetProgress;step++)steps.push(step);
+ for(const step of steps){
+  p.progress=step;
+  playFootstep();
+  render();
+  await pause(165);
+ }
+ animatingPieceId=null;animating=false;
+ let capturedCount=0;
+ const capturedByTeam={};
+ /* Las capturas se resuelven al terminar el movimiento animado. */
+ if(p.progress<=50){
+   const landing=(T[pl.team].start+p.progress)%52;
+   if(!SAFE.has(landing)){
+     players.filter(x=>x!==pl).forEach(op=>op.pieces.forEach(e=>{
+       if(e.progress>=0&&e.progress<=50&&(T[op.team].start+e.progress)%52===landing){
+         e.progress=-1;capturedCount++;capturedPieceIds.add(e.id);gameStats[pl.team].captures[op.team]++;capturedByTeam[op.team]=(capturedByTeam[op.team]||0)+1;
+       }
+     }));
+   }
+ }
+ if(capturedCount>0){playCaptureSound();}
+ render();
+ if(capturedCount>0){
+   await pause(520);
+   capturedPieceIds.clear();
+   render();
+ }
+ if(pl.pieces.every(x=>x.progress===56)){
+   pl.finished=true;
+   if(!finishOrder.includes(pl.team))finishOrder.push(pl.team);
+   if(players.filter(x=>!x.finished).length<=1){
+     over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!');render();showFinalStats(finishOrder[0]||pl.team);return;
+   }
+   next();msg('¡'+pl.playerName+' — Reino '+T[pl.team].name+' completó sus fichas! Puesto de llegada: '+finishOrder.length+'.');render();return;
+ }
+ /* Sacar 1/6, capturar o llegar a la meta concede una tirada adicional.
+    Si ocurren varias cosas en el mismo movimiento, la tirada extra no se acumula. */
+ if(n===1||n===6||capturedCount>0||reachedGoal){
+   roll=null;render();
+   const notices=[];
+   if(capturedCount>0){Object.keys(capturedByTeam).forEach(team=>{const target=players.find(other=>other.team===team);const nCaptured=capturedByTeam[team];notices.push('¡'+pl.playerName+' (Reino '+T[pl.team].name+') capturó '+nCaptured+' '+(nCaptured===1?'ficha':'fichas')+' de '+target.playerName+' (Reino '+T[team].name+'); regresan a su base.');});}
+   const reasons=[];
+   if(n===1||n===6)reasons.push('sacó '+n);
+   if(capturedCount>0)reasons.push('capturó una ficha');
+   if(reachedGoal)reasons.push('llegó con una ficha a la meta');
+   notices.push(pl.playerName+' — Reino '+T[pl.team].name+' obtiene otra tirada porque '+reasons.join(' y ')+'.');
+   msg(notices.join(' '));scheduleBotTurn(650);return;
+ }
+ next();
+}
+})();
+</script></body></html>
