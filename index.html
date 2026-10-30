@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.10.3</title>
+<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.10.4</title>
 <style>
 :root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #0006)}.die-pips{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}.status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
@@ -383,6 +383,154 @@
   #setup .player-mode option{background:#101b2d;color:#fff0c9}
 }
 
+
+/* v0.10.4 — Una sola interfaz: arte recortado arriba y tarjetas funcionales debajo. */
+#setup.setup-screen{
+  position:fixed;inset:0;z-index:1000;display:block;
+  width:100%;height:100dvh;margin:0;padding:0;
+  overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background:#100d14;
+}
+#setup .setup-artboard{
+  position:relative;display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-auto-rows:auto;align-content:start;align-items:stretch;
+  gap:12px;width:min(100%,1600px);height:auto;min-height:100dvh;
+  max-height:none;margin:0 auto;padding:0 16px 24px;
+  aspect-ratio:auto;overflow:visible;container-type:inline-size;
+}
+#setup .setup-background{
+  position:relative;inset:auto;grid-column:1/-1;
+  display:block;width:calc(100% + 32px);
+  height:calc((min(100vw,1600px) + 32px)/2.55);
+  max-height:none;margin:0 -16px;
+  object-fit:cover;object-position:center top;
+}
+#setup .setup-player-panel,#setup .realm-hit{display:none!important}
+#setup .setup-back{
+  position:absolute!important;left:8px!important;top:8px!important;
+  width:clamp(78px,14vw,112px)!important;height:clamp(38px,7vw,54px)!important;
+  min-width:0!important;min-height:0!important;padding:0!important;
+  border:0!important;border-radius:0!important;background:transparent!important;
+  box-shadow:none!important;color:transparent!important;font-size:0!important;
+  z-index:12;
+}
+#setup .setup-back:focus-visible{outline:3px solid #fff0a2!important;outline-offset:2px}
+#setup .setup-audio{
+  position:relative!important;top:auto!important;right:auto!important;
+  grid-column:1/-1;display:flex;justify-content:center;align-items:center;
+  flex-wrap:wrap;gap:8px;margin:0;padding:10px;
+  border:1px solid #d9b46166;border-radius:12px;background:#17121b;
+}
+#setup .setup-audio-button{
+  min-height:42px!important;padding:8px 14px!important;
+  font:600 14px Georgia,serif!important;
+}
+#setup .music-status{flex-basis:100%;text-align:center}
+#setup .setup-native-player{
+  position:relative!important;display:grid!important;
+  grid-column:auto;grid-template-columns:24px minmax(0,1fr);
+  grid-template-rows:auto auto auto;align-items:center;gap:9px;
+  min-width:0;min-height:0;padding:12px;
+  border:1px solid #d8b76d99;border-radius:12px;
+  background:linear-gradient(145deg,#171b2a,#090e18);
+  box-shadow:0 3px 10px #0005;
+}
+#setup .realm-check{
+  display:block!important;position:static!important;
+  grid-column:1;grid-row:1;width:20px;height:20px;
+  margin:0;accent-color:#e8bd62;
+}
+#setup .setup-team-name{
+  display:block!important;position:static!important;
+  grid-column:2;grid-row:1;width:auto!important;height:auto!important;
+  margin:0!important;padding:0!important;overflow:visible!important;
+  clip:auto!important;clip-path:none!important;white-space:normal!important;
+  color:#f5d58e;font:700 clamp(15px,1.55cqw,22px) Georgia,serif;
+  text-align:left;
+}
+#setup .player-name{
+  display:block!important;position:relative!important;
+  grid-column:1/-1!important;grid-row:2!important;
+  top:auto!important;left:auto!important;width:100%!important;height:42px!important;
+  min-width:0;padding:0 10px!important;
+  border:1px solid #b98d45!important;border-radius:7px!important;
+  background:#071020!important;color:#fff4dd!important;
+  -webkit-text-fill-color:#fff4dd;font:15px Georgia,serif!important;
+  text-shadow:none!important;box-shadow:none!important;
+}
+#setup .player-name::placeholder{color:#c8c0b0;opacity:1}
+#setup .player-mode{display:none!important}
+#setup .setup-mode-group{
+  position:relative!important;top:auto!important;left:auto!important;
+  grid-column:1/-1!important;grid-row:3!important;
+  display:grid!important;width:100%!important;height:auto!important;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(40px,auto));gap:7px!important;
+  z-index:1;
+}
+#setup .setup-mode-group.inactive{opacity:1!important;pointer-events:auto!important}
+#setup .setup-mode-hit{
+  position:relative!important;display:flex!important;
+  align-items:center;justify-content:flex-start;gap:7px;
+  min-width:0;min-height:40px;padding:6px 8px;
+  border:1px solid #42516a;border-radius:999px;
+  background:linear-gradient(180deg,#18304a,#0b1b30);
+  box-shadow:0 1px 4px #0008;color:#f4ead2;
+  font:600 clamp(11px,1.05cqw,14px) Georgia,serif;line-height:1.1;overflow:hidden;
+}
+#setup .setup-mode-hit.selected{
+  border-color:#f4cd70;background:linear-gradient(180deg,#765324,#39240e);
+  box-shadow:0 0 7px #edbd5599,inset 0 0 5px #ffe6a044;
+}
+#setup .setup-mode-hit input{
+  appearance:none;-webkit-appearance:none;position:absolute;inset:0;
+  width:100%;height:100%;margin:0;opacity:0;cursor:pointer;
+}
+#setup .setup-mode-hit .mode-icon{
+  flex:none;width:20px;text-align:center;color:#f4c66a;
+  font:700 14px/1 system-ui,sans-serif;
+}
+#setup .setup-mode-hit .mode-text{
+  min-width:0;white-space:normal;overflow:hidden;text-overflow:ellipsis;
+}
+#setup #count{
+  position:relative!important;display:block!important;
+  grid-column:1/-1!important;width:auto!important;height:auto!important;
+  margin:2px 0 0!important;padding:2px!important;
+  overflow:visible!important;clip:auto!important;white-space:normal!important;
+  color:#f4d99b;text-align:center;font:13px system-ui,sans-serif;
+}
+#setup .setup-start{
+  position:relative!important;display:block!important;
+  grid-column:1/-1!important;justify-self:center!important;
+  left:auto!important;top:auto!important;width:min(440px,96%)!important;
+  height:56px!important;min-height:56px!important;margin:4px 0 0!important;
+  padding:8px 20px!important;border:2px solid #e7c36f!important;
+  border-radius:999px!important;background:linear-gradient(#153e70,#061a35)!important;
+  color:#fff0bd!important;font:700 18px Georgia,serif!important;
+  letter-spacing:.04em;box-shadow:0 3px 12px #0009,inset 0 0 0 2px #fff2!important;
+}
+#setup .setup-start:disabled{opacity:.4}
+@media (max-width:900px){
+  #setup .setup-artboard{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:0 12px 22px}
+  #setup .setup-background{
+    width:calc(100% + 24px);height:calc((min(100vw,900px) + 24px)/2.55);
+    margin:0 -12px;
+  }
+  #setup .setup-audio{grid-column:1/-1}
+  #setup .setup-native-player{padding:11px}
+}
+@media (max-width:600px){
+  #setup .setup-artboard{grid-template-columns:minmax(0,1fr);gap:9px;padding:0 10px 20px}
+  #setup .setup-background{
+    width:calc(100% + 20px);height:calc((100vw + 20px)/2.55);
+    margin:0 -10px;
+  }
+  #setup .setup-native-player{padding:10px}
+  #setup .setup-mode-hit{min-height:42px}
+}
+
 </style></head><body><main class="app">
 
 <section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
@@ -471,6 +619,12 @@
       <select class="player-mode" data-team="red" aria-label="Control de Gongonia">
         <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option><option value="empty">Vacío</option>
       </select>
+<div class="setup-mode-group" data-team="red" role="radiogroup" aria-label="Control del jugador de Gongonia">
+      <label class="setup-mode-hit"><input type="radio" name="mode-red" data-team="red" value="human"><span class="mode-icon">♙</span><span class="mode-text">Persona</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-red" data-team="red" value="bot"><span class="mode-icon">🤖</span><span class="mode-text">Bot básico</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-red" data-team="red" value="strategic"><span class="mode-icon">⚙</span><span class="mode-text">Bot avanzado</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-red" data-team="red" value="empty"><span class="mode-icon">○</span><span class="mode-text">Vacío</span></label>
+    </div>
     </div>
     <div class="choice setup-native-player" data-team="blue">
       <input id="realm-blue" class="realm-check" type="checkbox" value="blue">
@@ -479,6 +633,12 @@
       <select class="player-mode" data-team="blue" aria-label="Control de Kelta">
         <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option><option value="empty">Vacío</option>
       </select>
+<div class="setup-mode-group" data-team="blue" role="radiogroup" aria-label="Control del jugador de Kelta">
+      <label class="setup-mode-hit"><input type="radio" name="mode-blue" data-team="blue" value="human"><span class="mode-icon">♙</span><span class="mode-text">Persona</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-blue" data-team="blue" value="bot"><span class="mode-icon">🤖</span><span class="mode-text">Bot básico</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-blue" data-team="blue" value="strategic"><span class="mode-icon">⚙</span><span class="mode-text">Bot avanzado</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-blue" data-team="blue" value="empty"><span class="mode-icon">○</span><span class="mode-text">Vacío</span></label>
+    </div>
     </div>
     <div class="choice setup-native-player" data-team="green">
       <input id="realm-green" class="realm-check" type="checkbox" value="green" checked>
@@ -487,6 +647,12 @@
       <select class="player-mode" data-team="green" aria-label="Control de Brunia">
         <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option><option value="empty">Vacío</option>
       </select>
+<div class="setup-mode-group" data-team="green" role="radiogroup" aria-label="Control del jugador de Brunia">
+      <label class="setup-mode-hit"><input type="radio" name="mode-green" data-team="green" value="human"><span class="mode-icon">♙</span><span class="mode-text">Persona</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-green" data-team="green" value="bot"><span class="mode-icon">🤖</span><span class="mode-text">Bot básico</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-green" data-team="green" value="strategic"><span class="mode-icon">⚙</span><span class="mode-text">Bot avanzado</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-green" data-team="green" value="empty"><span class="mode-icon">○</span><span class="mode-text">Vacío</span></label>
+    </div>
     </div>
     <div class="choice setup-native-player" data-team="yellow">
       <input id="realm-yellow" class="realm-check" type="checkbox" value="yellow">
@@ -495,6 +661,12 @@
       <select class="player-mode" data-team="yellow" aria-label="Control de Routa">
         <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option><option value="empty">Vacío</option>
       </select>
+<div class="setup-mode-group" data-team="yellow" role="radiogroup" aria-label="Control del jugador de Routa">
+      <label class="setup-mode-hit"><input type="radio" name="mode-yellow" data-team="yellow" value="human"><span class="mode-icon">♙</span><span class="mode-text">Persona</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-yellow" data-team="yellow" value="bot"><span class="mode-icon">🤖</span><span class="mode-text">Bot básico</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-yellow" data-team="yellow" value="strategic"><span class="mode-icon">⚙</span><span class="mode-text">Bot avanzado</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-yellow" data-team="yellow" value="empty"><span class="mode-icon">○</span><span class="mode-text">Vacío</span></label>
+    </div>
     </div>
 
     <label for="realm-red" class="realm-hit realm-gongonia" aria-label="Seleccionar Gongonia"></label>
@@ -502,30 +674,10 @@
     <label for="realm-green" class="realm-hit realm-brunia" aria-label="Seleccionar Brunia"></label>
     <label for="realm-yellow" class="realm-hit realm-routa" aria-label="Seleccionar Routa"></label>
 
-    <div class="setup-mode-group" data-team="red" role="radiogroup" aria-label="Control del jugador de Gongonia">
-      <label class="setup-mode-hit"><input type="radio" name="mode-red" data-team="red" value="human"><span class="mode-icon">♙</span><span class="mode-text">Persona</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-red" data-team="red" value="bot"><span class="mode-icon">🤖</span><span class="mode-text">Bot básico</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-red" data-team="red" value="strategic"><span class="mode-icon">⚙</span><span class="mode-text">Bot avanzado</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-red" data-team="red" value="empty"><span class="mode-icon">○</span><span class="mode-text">Vacío</span></label>
-    </div>
-    <div class="setup-mode-group" data-team="blue" role="radiogroup" aria-label="Control del jugador de Kelta">
-      <label class="setup-mode-hit"><input type="radio" name="mode-blue" data-team="blue" value="human"><span class="mode-icon">♙</span><span class="mode-text">Persona</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-blue" data-team="blue" value="bot"><span class="mode-icon">🤖</span><span class="mode-text">Bot básico</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-blue" data-team="blue" value="strategic"><span class="mode-icon">⚙</span><span class="mode-text">Bot avanzado</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-blue" data-team="blue" value="empty"><span class="mode-icon">○</span><span class="mode-text">Vacío</span></label>
-    </div>
-    <div class="setup-mode-group" data-team="green" role="radiogroup" aria-label="Control del jugador de Brunia">
-      <label class="setup-mode-hit"><input type="radio" name="mode-green" data-team="green" value="human"><span class="mode-icon">♙</span><span class="mode-text">Persona</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-green" data-team="green" value="bot"><span class="mode-icon">🤖</span><span class="mode-text">Bot básico</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-green" data-team="green" value="strategic"><span class="mode-icon">⚙</span><span class="mode-text">Bot avanzado</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-green" data-team="green" value="empty"><span class="mode-icon">○</span><span class="mode-text">Vacío</span></label>
-    </div>
-    <div class="setup-mode-group" data-team="yellow" role="radiogroup" aria-label="Control del jugador de Routa">
-      <label class="setup-mode-hit"><input type="radio" name="mode-yellow" data-team="yellow" value="human"><span class="mode-icon">♙</span><span class="mode-text">Persona</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-yellow" data-team="yellow" value="bot"><span class="mode-icon">🤖</span><span class="mode-text">Bot básico</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-yellow" data-team="yellow" value="strategic"><span class="mode-icon">⚙</span><span class="mode-text">Bot avanzado</span></label>
-      <label class="setup-mode-hit"><input type="radio" name="mode-yellow" data-team="yellow" value="empty"><span class="mode-icon">○</span><span class="mode-text">Vacío</span></label>
-    </div>
+    
+    
+    
+    
 
     <span id="count" class="setup-sr-only" aria-live="polite">2 reinos seleccionados</span>
     <button id="start" class="setup-start" type="button" aria-label="Comenzar los Juegos">Comenzar los Juegos</button>
