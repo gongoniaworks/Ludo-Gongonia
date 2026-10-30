@@ -90,73 +90,6 @@
 @media(prefers-reduced-motion:reduce){.token-stack .piece.legal .guardian-token{animation:none}}
 .mode-label{justify-content:space-between;font-size:.78rem!important}.player-mode{width:auto;max-width:62%;min-width:0;padding:6px;border-radius:7px;background:#171b2a;color:var(--ink);border:1px solid #ffffff30;font:inherit}
 
-/* Pantalla de inicio v0.10.1: estética medieval azul y oro, con controles HTML funcionales. */
-.home-screen{position:relative;isolation:isolate;overflow:hidden;max-width:780px;margin:0 auto 16px;padding:12px 12px 10px;border:2px solid #9d6f28;border-radius:17px;color:#fff3d5;background:linear-gradient(180deg,#173a67 0%,#17223a 32%,#17151b 64%,#111016 100%);box-shadow:inset 0 0 0 2px #23180e,0 8px 28px #0009}
-.home-screen:before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 50% 7%,#54a7e67a 0,transparent 36%),radial-gradient(ellipse at 14% 27%,#2f7f7270 0,transparent 28%),radial-gradient(ellipse at 87% 31%,#2585ac66 0,transparent 30%),linear-gradient(90deg,#140f13a8,transparent 15%,transparent 85%,#140f13a8),linear-gradient(180deg,transparent 0 34%,#101522 57%,#17131a 100%)}
-.home-screen:after{content:"";position:absolute;inset:5px;z-index:-1;border:1px solid #d5a64a77;border-radius:11px;pointer-events:none}
-.home-topbar{display:flex;align-items:stretch;justify-content:space-between;gap:9px;margin:2px 2px 10px}
-.home-balance,.home-language{min-height:58px;display:flex;align-items:center;gap:9px;padding:7px 10px;background:linear-gradient(120deg,#06162c,#102b4e 66%,#041328);border:2px solid #d8a13c;border-radius:8px;box-shadow:inset 0 0 0 1px #f7d87a55,0 3px 7px #0009}
-.home-balance{min-width:138px;flex:0 1 48%;position:relative;padding-right:40px}
-.home-coin{display:grid;place-items:center;width:43px;height:43px;flex:none;border-radius:50%;color:#fff0a5;font-size:27px;background:radial-gradient(circle at 34% 25%,#ffeaa0,#c98b20 60%,#6f3d08);border:3px ridge #ffe080;box-shadow:0 0 0 2px #261605}
-.home-balance-text{display:flex;flex-direction:column;line-height:1.03;min-width:0}
-.home-balance-text span{font:700 1rem Georgia,serif;color:#ffe08a;letter-spacing:.03em}
-.home-balance-text strong{font:700 1.35rem Georgia,serif;color:#fff7e8;margin-top:4px}
-.home-plus{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;border:2px solid #eec75d;background:linear-gradient(#ffdc73,#b97716);color:#241708;font-size:25px;font-weight:800;line-height:1;box-shadow:0 2px 5px #0009}
-.home-language{flex:0 1 48%;min-width:0;gap:6px;padding:5px 7px;color:#fff1c8}
-.home-language>span:first-child{font-size:27px;color:#e8c56b}
-.home-language select{min-width:0;flex:1;appearance:none;border:0;outline:0;color:#fff4d9;background:transparent;font:600 clamp(.76rem,2.6vw,1rem) Georgia,serif;padding:7px 0}
-.home-language select option{background:#10213a;color:#fff4d9}
-.home-language-arrow{color:#f2c85f;font-size:21px}
-.home-brand{position:relative;margin:0 auto 9px;max-width:640px;padding:17px 13px 11px;text-align:center}
-.home-brand:before{content:"";position:absolute;inset:23px 4px 15px;background:linear-gradient(135deg,#06162b,#103864 45%,#07172d);border:3px solid #c38d31;clip-path:polygon(6% 0,94% 0,100% 16%,96% 50%,100% 84%,94% 100%,6% 100%,0 84%,4% 50%,0 16%);box-shadow:0 0 15px #0009}
-.home-brand-frame{position:relative;border-top:2px solid #f1ca69;border-bottom:2px solid #cf9a42;padding:12px 7px 14px;background:linear-gradient(90deg,#11182b33,#00112666,#11182b33)}
-.home-crown{position:relative;z-index:1;height:32px;margin-bottom:-3px;color:#ffdc75;text-shadow:0 3px #66370e,0 0 13px #f6be39;font-size:44px;line-height:1}
-.home-eyebrow{margin:0;color:#f5d178;font:700 clamp(.74rem,3.2vw,1.1rem) Georgia,serif;letter-spacing:.16em;text-shadow:0 2px 2px #000}
-.home-brand h1{margin:0;color:#ffdc81;font:900 clamp(3rem,12vw,5.6rem)/.98 Georgia,serif;letter-spacing:.03em;text-shadow:0 2px 0 #b77924,0 4px 0 #5b2e08,0 6px 10px #000; background:linear-gradient(#fff6bb 10%,#f5cd58 43%,#d28b18 73%,#fff0a1);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.home-brand-subtitle{margin-top:7px;color:#fff1cb;font:700 clamp(1rem,4vw,1.45rem) Georgia,serif;text-shadow:0 2px 3px #000}
-.home-brand-ribbon{display:inline-block;margin-top:7px;padding:5px 19px;color:#fff0bc;background:linear-gradient(90deg,#4c1013,#a32b22 25%,#67121c 75%,#3d0b12);border:1px solid #e7b64c;box-shadow:0 3px 5px #0009;font:italic 600 clamp(.78rem,3vw,1rem) Georgia,serif;clip-path:polygon(0 0,100% 0,94% 50%,100% 100%,0 100%,6% 50%)}
-.home-board-frame{position:relative;max-width:630px;margin:0 auto 11px;padding:5px;border:3px solid #c49137;border-radius:4px;background:linear-gradient(135deg,#f6d77c,#8b5115,#f1c96a);box-shadow:0 0 0 2px #281707,0 8px 16px #000b,inset 0 0 0 2px #ffeb9a}
-.home-board-art{display:block;width:100%;aspect-ratio:1;object-fit:contain;background:#18140f}
-.home-play{display:flex;align-items:center;justify-content:center;gap:clamp(15px,6vw,45px);width:min(84%,490px);min-height:74px;margin:0 auto 12px;padding:8px 18px;border:4px ridge #ffd76b;border-radius:9px;color:#311902;background:linear-gradient(180deg,#fff0a3,#f5c64a 46%,#c57e13 100%);box-shadow:inset 0 0 0 2px #fff0a0,0 6px 0 #50300d,0 9px 13px #0009;font:900 clamp(2rem,8vw,3.3rem) Georgia,serif;letter-spacing:.06em;text-shadow:0 1px #fff2b3}
-.home-play span{font-size:.65em;color:#8a5110}
-.home-play:active,.home-action:active{transform:translateY(2px);filter:brightness(1.1)}
-.home-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:15px 0 10px}
-.home-action{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:78px;padding:7px 3px;border:2px solid #dcaa48;border-radius:8px;color:#fff0c4;background:linear-gradient(135deg,#06172d,#07305a 55%,#041329);box-shadow:inset 0 0 0 1px #f6d36a55,0 3px 7px #0009;font:700 clamp(.62rem,2.7vw,.9rem) Georgia,serif;letter-spacing:.02em}
-.home-action-icon{color:#ffd66c;font-size:29px;line-height:1.05;text-shadow:0 2px #502a05}
-.home-bars{font-size:25px;letter-spacing:-4px;padding-right:4px}
-.home-music-row{display:flex;align-items:center;gap:11px;min-height:66px;margin:9px 0;padding:7px 10px;border:2px solid #c58e30;border-radius:8px;background:linear-gradient(110deg,#041329,#082b50 53%,#041329);box-shadow:inset 0 0 0 1px #f4d47433,0 3px 7px #0008}
-.home-music-note{display:grid;place-items:center;width:47px;height:47px;flex:none;border-radius:50%;border:1px solid #bd8b3e;color:#ffd36b;background:#071b35;font:700 34px Georgia,serif}
-.home-music-copy{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
-.home-music-copy span{color:#bcd7ed;font: .83rem Georgia,serif}
-.home-music-copy strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff0c9;font:700 clamp(.9rem,3.8vw,1.15rem) Georgia,serif}
-.home-music-toggle{min-width:36px;min-height:38px;border:0;color:#f8d36c;background:transparent;font-size:23px}
-.home-ad-space{position:relative;display:grid;place-items:center;min-height:72px;overflow:hidden;margin:10px 0 8px;border:2px solid #daa445;border-radius:7px;background:linear-gradient(180deg,#78b8e3 0%,#e4e8dc 53%,#3f7753 54%,#102b36 100%);box-shadow:inset 0 0 0 2px #fff0a14a}
-.home-ad-landscape{position:absolute;inset:0;overflow:hidden;background:linear-gradient(180deg,#6fbbf1 0%,#e6f2ff 54%,#a0c5c7 57%,#1a5260 100%)}
-.ad-mountain{position:absolute;bottom:0;width:72%;height:100%;background:linear-gradient(125deg,#f6f0d7 0 7%,#829e9b 8% 17%,#274e61 18% 55%,#3f7452 56% 100%);clip-path:polygon(0 100%,0 75%,13% 48%,23% 62%,40% 19%,53% 53%,67% 36%,82% 66%,100% 100%)}
-.ad-mountain-one{left:-4%;opacity:.95}
-.ad-mountain-two{right:-5%;transform:scaleX(-1);filter:brightness(1.2)}
-.ad-castle{position:absolute;right:17%;bottom:13%;color:#e7e2ce;font-size:30px;text-shadow:0 1px #40546a}
-.home-ad-copy{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:6px 8px;color:#12314e;text-align:center;text-shadow:0 1px 0 #fff9}
-.home-ad-copy strong{font:800 clamp(.8rem,3.4vw,1.08rem) Georgia,serif;letter-spacing:.03em}
-.home-ad-copy span{font: .8rem Georgia,serif}
-.home-story{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:42px;border:0;color:#f4cf62;background:transparent;font:600 clamp(.85rem,3.7vw,1.08rem) Georgia,serif;text-shadow:0 2px 3px #000}
-.home-story-line{height:1px;flex:1;max-width:90px;background:linear-gradient(90deg,transparent,#d6a547)}
-.home-book{font-size:27px;color:#efc256}
-.home-footer{display:flex;justify-content:center;align-items:center;gap:10px;padding:8px 0 3px;color:#e2cc9d;font: .85rem Georgia,serif;text-shadow:0 2px 3px #000}
-.home-footer span{color:#e1b84e}
-.home-modal{position:fixed;z-index:1000;inset:0;display:grid;place-items:center;padding:20px;background:#030812d9;backdrop-filter:blur(5px)}
-.home-modal.hidden{display:none!important}
-.home-modal-card{position:relative;width:min(100%,440px);padding:26px 20px 20px;border:3px ridge #d8ac4e;border-radius:12px;text-align:center;color:#fff0cd;background:linear-gradient(160deg,#122c4c,#071222 75%);box-shadow:0 14px 45px #000}
-.home-modal-close{position:absolute;right:7px;top:6px;border:0;color:#f5d578;background:transparent;font-size:28px}
-.home-modal-emblem{color:#ffda70;font-size:27px}
-.home-modal-card h2{margin:5px 0 10px;font:700 1.5rem Georgia,serif;color:#f8d575}
-.home-modal-card p{line-height:1.55;color:#e8ddc5}
-.home-modal-ok{min-width:130px;margin-top:8px;padding:10px 18px;border:2px solid #f1cc68;border-radius:6px;background:linear-gradient(#f9e390,#c88b22);color:#241506;font-weight:800}
-.home-screen button:focus-visible,.home-screen select:focus-visible{outline:3px solid #fff0a2;outline-offset:3px}
-@media(min-width:650px){.home-screen{padding:16px 24px 13px}.home-board-frame{max-width:560px}.home-brand{margin-bottom:13px}.home-actions{gap:12px}.home-action{min-height:88px}.home-music-row{padding:9px 15px}.home-ad-space{min-height:86px}}
-@media(max-width:360px){.home-screen{padding:8px 7px}.home-topbar{gap:5px;margin-left:0;margin-right:0}.home-balance,.home-language{min-height:50px;padding:5px 6px;gap:5px}.home-coin{width:34px;height:34px;font-size:21px}.home-balance{padding-right:32px}.home-plus{width:27px;height:27px;right:4px;font-size:21px}.home-actions{gap:5px}.home-action{font-size:.58rem}.home-play{min-height:65px}}
-
-
 /* Arte exacto aprobado por el usuario. Los controles transparentes se alinean sobre la imagen original. */
 .home-image-shell{display:block;position:relative;width:100%;max-width:780px;aspect-ratio:2/3;margin:0 auto;overflow:hidden}
 .home-image-shell>img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
@@ -429,22 +362,7 @@ $('homeExactMusicToggle').addEventListener('click',enableHomeMusic);
 
 function showHomeInfo(title,body){$('homeInfoTitle').textContent=title;$('homeInfoText').textContent=body;$('homeInfoModal').classList.remove('hidden');$('homeModalOk').focus();}
 function closeHomeInfo(){$('homeInfoModal').classList.add('hidden');}
-$('homePlay').addEventListener('click',()=>{$('homeScreen').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup');});
-$('homeGngPlus').addEventListener('click',()=>showHomeInfo('Saldo GNG','En v0.10.1 el saldo se muestra como una imagen fija de 0 GNG. No está conectado a una cartera ni permite realizar operaciones.'));
-$('homePurchases').addEventListener('click',()=>showHomeInfo('Compras','El acceso queda preparado visualmente. La tienda se implementará en una versión posterior.'));
-$('homeStats').addEventListener('click',()=>showHomeInfo('Estadísticas','Este acceso queda reservado para consultar las estadísticas de tus partidas en una etapa posterior.'));
-$('homeSettings').addEventListener('click',()=>showHomeInfo('Ajustes','El selector de idioma ya permite elegir entre cinco idiomas, pero v0.10.1 todavía no traduce los textos. Los demás ajustes se incorporarán por etapas.'));
-function openStoryScreen(){ $('homeInfoModal').classList.add('hidden'); $('homeScreen').classList.add('hidden'); $('setup').classList.add('hidden'); $('game').classList.add('hidden'); $('results').classList.add('hidden'); $('storyScreen').classList.remove('hidden'); window.scrollTo(0,0); }
-function closeStoryScreen(){ $('storyScreen').classList.add('hidden'); $('homeScreen').classList.remove('hidden'); window.scrollTo(0,0); }
-$('homeStory').addEventListener('click',openStoryScreen);
-$('homeExactStory').addEventListener('click',openStoryScreen);
-$('storyBackTop').addEventListener('click',closeStoryScreen);
-$('storyBackBottom').addEventListener('click',closeStoryScreen);
-$('storyArtwork').addEventListener('error',()=>{$('storyArtwork').hidden=true;});
-$('homeModalClose').addEventListener('click',closeHomeInfo);
-$('homeModalOk').addEventListener('click',closeHomeInfo);
-$('homeInfoModal').addEventListener('click',e=>{if(e.target===$('homeInfoModal'))closeHomeInfo();});
-$('homeLanguage').addEventListener('change',()=>{/* En v0.10.1 el selector no traduce todavía la interfaz. */});
+/* Se eliminaron los antiguos manejadores del menú CSS; la pantalla usa los botones transparentes sobre la ilustración. */
 
 /* Efectos sonoros generados por el propio navegador: no requieren archivos adicionales. */
 let noiseBuffer=null;
