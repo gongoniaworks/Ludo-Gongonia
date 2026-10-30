@@ -35,7 +35,8 @@
 .cell .piece{width:42%;height:42%;max-width:28px;max-height:28px;min-width:12px;min-height:12px}
 
 /* v0.3.1: centros refinados y fichas agrupadas siempre circulares. */
-.board{display:block;position:relative;width:100%;aspect-ratio:1;overflow:hidden;background-image:url("tablero-gongonia.PNG");background-size:100% 100%;background-repeat:no-repeat;background-position:center;border:0;border-radius:0}
+.board{display:block;position:relative;width:100%;aspect-ratio:1;overflow:hidden;background-color:#252d42;background-image:url("tablero-gongonia.PNG?v=0.10.3");background-size:100% 100%;background-repeat:no-repeat;background-position:center;border:0;border-radius:0}
+.board-art{position:absolute;inset:0;z-index:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
 .token-stack{position:absolute;transform:translate(-50%,-50%);z-index:5;width:6.2%;aspect-ratio:1 / 1;height:auto;min-width:26px;max-width:46px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));align-items:center;justify-items:center;gap:1px;pointer-events:none}
 .token-stack button{pointer-events:auto}
 .token-stack.single{display:flex;align-items:center;justify-content:center}
@@ -198,15 +199,11 @@
 #setup .setup-mode-group.inactive{opacity:.32;pointer-events:none}
 #setup .setup-mode-hit{position:relative;display:block;min-height:0;cursor:pointer}
 #setup .setup-mode-hit input{
-  appearance:none;-webkit-appearance:none;position:absolute;left:0;top:50%;
-  width:clamp(10px,1.48cqw,23px);height:clamp(10px,1.48cqw,23px);
-  margin:0;transform:translateY(-50%);border:2px solid #efc36d;border-radius:50%;
-  background:#090e18;box-shadow:0 1px 3px #000b;cursor:pointer;
+  appearance:none;-webkit-appearance:none;position:absolute;inset:0;
+  width:100%;height:100%;margin:0;transform:none;opacity:0;
+  border:0;border-radius:0;background:transparent;box-shadow:none;cursor:pointer;
 }
-#setup .setup-mode-hit input:checked:after{
-  content:"";position:absolute;inset:23%;border-radius:50%;background:#ffe39a;
-  box-shadow:0 0 .5cqw #ffdc7b;
-}
+#setup .setup-mode-hit input:checked:after{display:none}
 #setup .setup-mode-hit.selected:after{
   content:"";position:absolute;left:12%;right:0;top:7%;bottom:7%;
   border:1px solid #f3c968;border-radius:999px;
@@ -891,7 +888,17 @@ function positionKey(team,p){
 /* En Gongonia se puede sacar ficha con 1 o 6; ambas tiradas dan turno adicional. */
 function legal(p){return roll!==null&&(p.progress<0?(roll===1||roll===6):(p.progress<56&&p.progress+roll<=56))}
 function render(){
- const board=$('board');board.innerHTML='';
+ const board=$('board');
+ board.querySelectorAll('.token-stack').forEach(node=>node.remove());
+ let boardArt=board.querySelector('.board-art');
+ if(!boardArt){
+  boardArt=document.createElement('img');
+  boardArt.className='board-art';
+  boardArt.src='tablero-gongonia.PNG?v=0.10.3';
+  boardArt.alt='Tablero de Ludo de Gongonia';
+  boardArt.draggable=false;
+  board.insertBefore(boardArt,board.firstChild);
+ }
  const groups=new Map();
  players.forEach(pl=>pl.pieces.forEach(p=>{
    const key=positionKey(pl.team,p);
