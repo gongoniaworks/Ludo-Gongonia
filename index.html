@@ -165,11 +165,12 @@
 #setup .player-name{
   position:absolute;z-index:4;top:67.55%;height:3.75%;padding:0 1.1cqw!important;
   border:1px solid transparent!important;border-radius:.45cqw!important;
-  outline:0;background:transparent!important;color:#fff4dd!important;
+  outline:0;background:rgba(5,15,30,.97)!important;color:#fff4dd!important;
+  -webkit-text-fill-color:#fff4dd;text-shadow:none!important;-webkit-text-stroke:0 transparent;
   font:clamp(8px,1.02cqw,16px) Georgia,serif!important;box-shadow:none!important;
-  min-width:0;text-align:left;
+  min-width:0;text-align:left;opacity:1;
 }
-#setup .player-name:focus{border-color:#f7d47c!important;box-shadow:0 0 0 .18cqw #e9b95088,0 0 .7cqw #f4c65f88!important;background:#071020b8!important}
+#setup .player-name:focus{border-color:#f7d47c!important;box-shadow:0 0 0 .18cqw #e9b95088,0 0 .7cqw #f4c65f88!important;background:#071020!important}
 #setup .player-name[data-team="red"]{left:13.65%;width:14.8%}
 #setup .player-name[data-team="blue"]{left:38.45%;width:14.9%}
 #setup .player-name[data-team="green"]{left:59.8%;width:12.1%}
@@ -217,8 +218,8 @@
   padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;
   box-shadow:none!important;cursor:pointer;touch-action:manipulation;
 }
-#setup .setup-back{left:.55%;top:2.15%;width:11.2%;height:6.1%}
-#setup .setup-start{left:32.6%;top:87.1%;width:34.5%;height:9.5%}
+#setup .setup-back{left:.55%;top:2.15%;width:11.2%;height:6.1%;font-size:0;color:transparent}
+#setup .setup-start{left:32.6%;top:87.1%;width:34.5%;height:9.5%;font-size:0;color:transparent}
 #setup .setup-back:focus-visible,#setup .setup-start:focus-visible{
   outline:3px solid #fff0a2!important;outline-offset:2px;background:#ffffff16!important;
 }
@@ -233,10 +234,85 @@
   box-shadow:0 1px .45cqw #000a,inset 0 0 0 1px #fff2;
 }
 #setup .setup-audio-button:active{transform:scale(.97)}
+#setup .music-status{display:none;color:#ffe39a;font:11px system-ui,sans-serif;text-align:center}
+#setup .music-status:not(:empty){display:block}
+
+/* En vertical, el arte se convierte en cabecera y los controles pasan a tarjetas legibles. */
+@media (orientation:portrait) and (max-width:900px){
+  #setup.setup-screen{display:block;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0;background:#100d14}
+  #setup .setup-artboard{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start;
+    width:100%;max-height:none;min-height:100dvh;height:auto;aspect-ratio:auto;
+    padding:0 12px 24px;overflow:visible;container-type:normal;
+  }
+  #setup .setup-background{
+    position:relative;grid-column:1/-1;width:calc(100% + 24px);height:auto;aspect-ratio:2/1;
+    margin:0 -12px;object-fit:cover;object-position:top center;
+  }
+  #setup .setup-back{
+    left:2%;top:1%;width:15%;height:5%;min-height:30px!important;
+    border:1px solid #d9b461!important;border-radius:999px!important;
+    background:#08152be8!important;color:#fff0c9!important;font:600 12px Georgia,serif!important;
+    padding:4px 8px!important;box-shadow:0 1px 5px #000a!important;
+  }
+  #setup .setup-audio{
+    position:relative;grid-column:1/-1;right:auto;top:auto;justify-content:center;flex-wrap:wrap;
+    padding:8px;background:#17121b;border:1px solid #d9b46166;border-radius:10px;
+  }
+  #setup .setup-audio-button{font:600 12px Georgia,serif!important;min-height:36px!important;padding:8px 12px!important}
+  #setup .music-status{flex-basis:100%}
+  #setup .setup-native-player{
+    position:relative;display:grid!important;grid-template-columns:24px minmax(0,1fr);
+    grid-template-rows:auto auto auto;align-items:center;gap:8px;
+    min-width:0;padding:12px;background:linear-gradient(145deg,#171b2a,#090e18);
+    border:1px solid #d8b76d99;border-radius:12px;
+  }
+  #setup .realm-check{
+    display:block!important;position:relative;grid-column:1;grid-row:1;
+    width:20px;height:20px;margin:0;accent-color:#e8bd62;
+  }
+  #setup .setup-team-name{
+    display:block!important;position:relative!important;grid-column:2;grid-row:1;
+    width:auto!important;height:auto!important;margin:0!important;padding:0!important;
+    overflow:visible!important;clip:auto!important;white-space:normal!important;
+    color:#f5d58e;font:600 15px Georgia,serif;text-align:left;
+  }
+  #setup .player-name{
+    position:relative!important;grid-column:1/-1;grid-row:2;top:auto!important;left:auto!important;
+    width:100%!important;height:40px;padding:0 10px!important;
+    border:1px solid #b98d45!important;border-radius:7px!important;
+    background:#071020!important;color:#fff4dd!important;-webkit-text-fill-color:#fff4dd;
+    font:15px Georgia,serif!important;text-shadow:none!important;box-shadow:none!important;
+  }
+  #setup .player-mode{
+    display:block!important;position:relative;grid-column:1/-1;grid-row:3;
+    width:100%;min-height:40px;padding:7px 10px;border:1px solid #b98d45;
+    border-radius:7px;background:#101b2d;color:#fff0c9;font:14px Georgia,serif;
+  }
+  #setup .realm-hit,#setup .setup-mode-group{display:none!important}
+  #setup #count{
+    display:block!important;position:relative!important;grid-column:1/-1;
+    width:auto!important;height:auto!important;margin:2px 0!important;padding:4px!important;
+    overflow:visible!important;clip:auto!important;white-space:normal!important;
+    color:#f4d99b;text-align:center;font:13px system-ui,sans-serif;
+  }
+  #setup .setup-start{
+    position:relative;grid-column:1/-1;left:auto;top:auto;width:100%;height:52px;
+    border:1px solid #e7c36f!important;border-radius:999px!important;
+    background:linear-gradient(#153e70,#061a35)!important;color:#fff0bd!important;
+    font:700 17px Georgia,serif!important;letter-spacing:.04em;
+    box-shadow:0 3px 12px #0009,inset 0 0 0 2px #fff2!important;
+  }
+  #setup .setup-start:disabled{opacity:.4}
+}
 @media (orientation:portrait) and (max-width:600px){
-  #setup .setup-audio{right:2%;top:2%}
-  #setup .setup-audio-button{font-size:7px;padding:4px 5px!important}
-  #setup .setup-mode-hit input{min-width:9px;min-height:9px}
+  #setup .setup-artboard{grid-template-columns:minmax(0,1fr);gap:9px;padding:0 10px 22px}
+  #setup .setup-background{width:calc(100% + 20px);margin:0 -10px}
+  #setup .setup-native-player{padding:10px}
+}
+@media (orientation:landscape) and (max-height:500px){
+  #setup .player-name{font-size:clamp(10px,1.25cqw,15px)!important}
+  #setup .setup-mode-hit input{min-width:12px;min-height:12px}
 }
 
 </style></head><body><main class="app">
@@ -307,16 +383,18 @@
 <section id="setup" class="setup-screen hidden" aria-label="El Consejo de los Cuatro Reinos">
   <div class="setup-artboard" id="setupArtboard">
     <img class="setup-background" src="assets/consejo-cuatro-reinos.JPG" alt="El Consejo de los Cuatro Reinos: Gongonia, Kelta, Brunia y Routa" draggable="false">
-    <button id="setupBack" class="setup-back" type="button" aria-label="Volver al menú principal"></button>
+    <button id="setupBack" class="setup-back" type="button" aria-label="Volver al menú principal">Volver</button>
 
     <div class="setup-audio" aria-label="Controles de sonido">
       <span id="musicLabel" class="setup-sr-only">Música de inicio: The Kelta Mountains</span>
       <button id="musicToggle" class="setup-audio-button secondary" type="button">🔇 Activar música</button>
       <button id="effectsToggle" class="setup-audio-button secondary" type="button">🔊 Efectos activados</button>
+      <span id="musicStatus" class="music-status" aria-live="polite"></span>
     </div>
 
     <div class="choice setup-native-player" data-team="red">
       <input id="realm-red" class="realm-check" type="checkbox" value="red" checked>
+      <span class="setup-team-name setup-sr-only">Gongonia</span>
       <input class="player-name" data-team="red" type="text" maxlength="24" value="Jugador 1" aria-label="Nombre del jugador de Gongonia">
       <select class="player-mode" data-team="red" aria-label="Control de Gongonia">
         <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option>
@@ -324,6 +402,7 @@
     </div>
     <div class="choice setup-native-player" data-team="blue">
       <input id="realm-blue" class="realm-check" type="checkbox" value="blue">
+      <span class="setup-team-name setup-sr-only">Kelta</span>
       <input class="player-name" data-team="blue" type="text" maxlength="24" value="Jugador 2" aria-label="Nombre del jugador de Kelta">
       <select class="player-mode" data-team="blue" aria-label="Control de Kelta">
         <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option>
@@ -331,6 +410,7 @@
     </div>
     <div class="choice setup-native-player" data-team="green">
       <input id="realm-green" class="realm-check" type="checkbox" value="green" checked>
+      <span class="setup-team-name setup-sr-only">Brunia</span>
       <input class="player-name" data-team="green" type="text" maxlength="24" value="Jugador 3" aria-label="Nombre del jugador de Brunia">
       <select class="player-mode" data-team="green" aria-label="Control de Brunia">
         <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option>
@@ -338,6 +418,7 @@
     </div>
     <div class="choice setup-native-player" data-team="yellow">
       <input id="realm-yellow" class="realm-check" type="checkbox" value="yellow">
+      <span class="setup-team-name setup-sr-only">Routa</span>
       <input class="player-name" data-team="yellow" type="text" maxlength="24" value="Jugador 4" aria-label="Nombre del jugador de Routa">
       <select class="player-mode" data-team="yellow" aria-label="Control de Routa">
         <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option>
@@ -371,7 +452,7 @@
     </div>
 
     <span id="count" class="setup-sr-only" aria-live="polite">2 reinos seleccionados</span>
-    <button id="start" class="setup-start" type="button" aria-label="Comenzar los Juegos"></button>
+    <button id="start" class="setup-start" type="button" aria-label="Comenzar los Juegos">Comenzar los Juegos</button>
   </div>
 </section>
 <section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"></div></div><aside class="panel side">
@@ -448,22 +529,45 @@ const introMusic=$('introMusic'),gameMusic=$('gameMusic');
 /* Mezcla de audio: bajar música para dejar espacio a los efectos del juego. */
 introMusic.volume=0.56;gameMusic.volume=0.48;
 function updateMusicButtons(){
- const label=musicEnabled?'🔊 Silenciar música':'🔇 Activar música';
+ const label=musicError?'⚠️ Reintentar música':musicEnabled?'🔊 Silenciar música':'🔇 Activar música';
  $('musicToggle').textContent=label;
  $('gameMusicToggle').textContent=label;
+ $('musicToggle').title=musicError||'Música de inicio';
+ $('gameMusicToggle').title=musicError||'Música de la partida';
+ $('musicStatus').textContent=musicError;
+ $('homeExactMusicToggle').setAttribute('aria-label',musicError?'No se pudo iniciar la música. Toca para reintentar.':musicEnabled?'Silenciar música':'Activar música');
 }
+let musicError='';
 async function playMusicFor(screen){
- if(!musicEnabled)return;
+ if(!musicEnabled)return false;
  const target=screen==='game'?gameMusic:introMusic;
  const other=screen==='game'?introMusic:gameMusic;
  other.pause();other.currentTime=0;
- try{await target.play();}catch(e){msg('Toca «Activar música» para permitir la reproducción en Safari.');}
+ try{
+  target.muted=false;
+  target.volume=screen==='game'?0.48:0.56;
+  await target.play();
+  musicError='';
+  updateMusicButtons();
+  return true;
+ }catch(e){
+  musicEnabled=false;
+  musicError='No se pudo iniciar el audio. Toca para reintentar.';
+  updateMusicButtons();
+  return false;
+ }
 }
-function enableMusic(){
- musicEnabled=!musicEnabled;
- if(!musicEnabled){introMusic.pause();gameMusic.pause();}
- else{playMusicFor($('game').classList.contains('hidden')?'setup':'game');}
+async function enableMusic(){
+ if(musicEnabled){
+  musicEnabled=false;musicError='';
+  introMusic.pause();gameMusic.pause();
+  updateMusicButtons();
+  return;
+ }
+ musicEnabled=true;musicError='';
  updateMusicButtons();
+ const screen=$('game').classList.contains('hidden')?'setup':'game';
+ await playMusicFor(screen);
 }
 $('musicToggle').addEventListener('click',enableMusic);
 $('gameMusicToggle').addEventListener('click',enableMusic);
@@ -500,12 +604,7 @@ $('homeExactPurchases').addEventListener('click',()=>showHomeInfo('Compras','El 
 $('homeExactStats').addEventListener('click',()=>showHomeInfo('Estadísticas','Este acceso queda reservado para consultar las estadísticas de tus partidas en una etapa posterior.'));
 $('homeExactSettings').addEventListener('click',()=>showHomeInfo('Ajustes','El selector de idioma permite elegir entre cinco opciones, pero v0.10.1 todavía no traduce los textos. Los demás ajustes se incorporarán por etapas.'));
 
-function enableHomeMusic(){
- musicEnabled=!musicEnabled;
- if(!musicEnabled){introMusic.pause();gameMusic.pause();}
- else{introMusic.pause();introMusic.currentTime=0;gameMusic.currentTime=0;gameMusic.play().catch(()=>{msg('Toca el botón de música para permitir la reproducción en Safari.');});}
- updateMusicButtons();
-}
+function enableHomeMusic(){enableMusic();}
 $('homeExactMusicToggle').addEventListener('click',enableHomeMusic);
 
 function showHomeInfo(title,body){$('homeInfoTitle').textContent=title;$('homeInfoText').textContent=body;$('homeInfoModal').classList.remove('hidden');$('homeModalOk').focus();}
@@ -694,6 +793,10 @@ function count(){
  });
  document.querySelectorAll('.setup-mode-group').forEach(group=>{
   const input=document.querySelector('.realm-check[value="'+group.dataset.team+'"]');
+  group.classList.toggle('inactive',!(input&&input.checked));
+ });
+ document.querySelectorAll('.setup-native-player').forEach(group=>{
+  const input=group.querySelector('.realm-check');
   group.classList.toggle('inactive',!(input&&input.checked));
  });
 }
