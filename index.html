@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.10.1</title>
+<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.10.2</title>
 <style>
 :root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #0006)}.die-pips{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}.status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
@@ -146,6 +146,99 @@
 .home-screen:before,.home-screen:after{display:none}
 .home-image-shell{display:block}
 
+
+/* v0.10.2 — El Consejo de los Cuatro Reinos: arte original con controles interactivos */
+#setup.setup-screen{
+  position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
+  width:100vw;height:100vh;height:100dvh;margin:0;padding:0;border:0;border-radius:0;
+  overflow:hidden;background:#100d14;
+}
+#setup .setup-artboard{
+  position:relative;flex:none;width:min(100vw,150vh);width:min(100vw,150dvh);
+  aspect-ratio:3/2;max-height:100vh;max-height:100dvh;container-type:inline-size;
+  overflow:hidden;isolation:isolate;
+}
+#setup .setup-background{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;user-select:none;-webkit-user-drag:none}
+#setup .setup-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+#setup .setup-native-player{display:contents!important}
+#setup .realm-check,#setup .player-mode{display:none!important}
+#setup .player-name{
+  position:absolute;z-index:4;top:67.55%;height:3.75%;padding:0 1.1cqw!important;
+  border:1px solid transparent!important;border-radius:.45cqw!important;
+  outline:0;background:transparent!important;color:#fff4dd!important;
+  font:clamp(8px,1.02cqw,16px) Georgia,serif!important;box-shadow:none!important;
+  min-width:0;text-align:left;
+}
+#setup .player-name:focus{border-color:#f7d47c!important;box-shadow:0 0 0 .18cqw #e9b95088,0 0 .7cqw #f4c65f88!important;background:#071020b8!important}
+#setup .player-name[data-team="red"]{left:13.65%;width:14.8%}
+#setup .player-name[data-team="blue"]{left:38.45%;width:14.9%}
+#setup .player-name[data-team="green"]{left:59.8%;width:12.1%}
+#setup .player-name[data-team="yellow"]{left:81.35%;width:12.1%}
+#setup .realm-hit{
+  position:absolute;z-index:3;top:17.7%;height:42.3%;display:block;cursor:pointer;
+  border:2px solid transparent;border-radius:1.2cqw;background:transparent;
+  transition:border-color .15s ease,box-shadow .15s ease;
+}
+#setup .realm-hit.selected{
+  border-color:#ffe29a;box-shadow:inset 0 0 1.4cqw #ffd56d50,0 0 1.25cqw #ffd36dba;
+}
+#setup .realm-gongonia{left:9.7%;width:19.2%}
+#setup .realm-kelta{left:31.5%;width:17.8%}
+#setup .realm-brunia{left:53.1%;width:17.8%}
+#setup .realm-routa{left:72%;width:18.5%}
+#setup .setup-mode-group{
+  position:absolute;z-index:5;top:72.9%;height:13.4%;display:grid;
+  grid-template-rows:repeat(3,minmax(0,1fr));row-gap:.15cqw;
+}
+#setup .setup-mode-group[data-team="red"]{left:9.65%;width:11.7%}
+#setup .setup-mode-group[data-team="blue"]{left:34.8%;width:12.7%}
+#setup .setup-mode-group[data-team="green"]{left:56.4%;width:12.7%}
+#setup .setup-mode-group[data-team="yellow"]{left:77.6%;width:12.8%}
+#setup .setup-mode-group.inactive{opacity:.32;pointer-events:none}
+#setup .setup-mode-hit{position:relative;display:block;min-height:0;cursor:pointer}
+#setup .setup-mode-hit input{
+  appearance:none;-webkit-appearance:none;position:absolute;left:0;top:50%;
+  width:clamp(10px,1.48cqw,23px);height:clamp(10px,1.48cqw,23px);
+  margin:0;transform:translateY(-50%);border:2px solid #efc36d;border-radius:50%;
+  background:#090e18;box-shadow:0 1px 3px #000b;cursor:pointer;
+}
+#setup .setup-mode-hit input:checked:after{
+  content:"";position:absolute;inset:23%;border-radius:50%;background:#ffe39a;
+  box-shadow:0 0 .5cqw #ffdc7b;
+}
+#setup .setup-mode-hit.selected:after{
+  content:"";position:absolute;left:12%;right:0;top:7%;bottom:7%;
+  border:1px solid #f3c968;border-radius:999px;
+  box-shadow:0 0 .7cqw #f4c35b9c,inset 0 0 .45cqw #f4c35b35;
+  pointer-events:none;
+}
+#setup .setup-back,#setup .setup-start{
+  position:absolute;z-index:8;display:block;min-width:0!important;min-height:0!important;
+  padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;
+  box-shadow:none!important;cursor:pointer;touch-action:manipulation;
+}
+#setup .setup-back{left:.55%;top:2.15%;width:11.2%;height:6.1%}
+#setup .setup-start{left:32.6%;top:87.1%;width:34.5%;height:9.5%}
+#setup .setup-back:focus-visible,#setup .setup-start:focus-visible{
+  outline:3px solid #fff0a2!important;outline-offset:2px;background:#ffffff16!important;
+}
+#setup .setup-start:disabled{cursor:not-allowed;pointer-events:none;opacity:.38}
+#setup .setup-audio{
+  position:absolute;z-index:9;right:1.1%;top:1.8%;display:flex;gap:.55cqw;align-items:center;
+}
+#setup .setup-audio-button{
+  min-height:0!important;padding:.48cqw .72cqw!important;border:1px solid #d9b461!important;
+  border-radius:999px!important;background:#08152be8!important;color:#fff0c9!important;
+  font:600 clamp(7px,.72cqw,11px) Georgia,serif!important;line-height:1.2;white-space:nowrap;
+  box-shadow:0 1px .45cqw #000a,inset 0 0 0 1px #fff2;
+}
+#setup .setup-audio-button:active{transform:scale(.97)}
+@media (orientation:portrait) and (max-width:600px){
+  #setup .setup-audio{right:2%;top:2%}
+  #setup .setup-audio-button{font-size:7px;padding:4px 5px!important}
+  #setup .setup-mode-hit input{min-width:9px;min-height:9px}
+}
+
 </style></head><body><main class="app">
 
 <section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
@@ -211,15 +304,76 @@
   </div>
 </section>
 
-<section id="setup" class="panel hidden"><h2 style="font:1.4rem Georgia,serif;color:#f4d99b">Elige tus reinos</h2><p>Elige de dos a cuatro reinos, escribe los nombres y selecciona quién controla cada uno: Persona, Bot básico o Bot estratégico.</p>
-<div class="musicbar"><span id="musicLabel">♫ Música de inicio: The Kelta Mountains</span><button id="musicToggle" class="secondary" type="button">🔇 Activar música</button><button id="effectsToggle" class="secondary" type="button">🔊 Efectos activados</button></div>
-<div class="choices">
-<div class="choice"><label><input type="checkbox" value="red" checked> 🦁 Reino Rojo</label><input class="player-name" data-team="red" type="text" maxlength="24" placeholder="Nombre (ej. Sabrina)" aria-label="Nombre del jugador del Reino Rojo"><label class="mode-label">Control<select class="player-mode" data-team="red"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
-<div class="choice"><label><input type="checkbox" value="green" checked> 🦌 Reino Verde</label><input class="player-name" data-team="green" type="text" maxlength="24" placeholder="Nombre (ej. Nicole)" aria-label="Nombre del jugador del Reino Verde"><label class="mode-label">Control<select class="player-mode" data-team="green"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
-<div class="choice"><label><input type="checkbox" value="yellow"> ☀️ Reino Amarillo</label><input class="player-name" data-team="yellow" type="text" maxlength="24" placeholder="Nombre del jugador" aria-label="Nombre del jugador del Reino Amarillo"><label class="mode-label">Control<select class="player-mode" data-team="yellow"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
-<div class="choice"><label><input type="checkbox" value="blue"> 🦅 Reino Azul</label><input class="player-name" data-team="blue" type="text" maxlength="24" placeholder="Nombre del jugador" aria-label="Nombre del jugador del Reino Azul"><label class="mode-label">Control<select class="player-mode" data-team="blue"><option value="human">Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot estratégico</option></select></label></div>
-</div>
-<p><span id="count">2 reinos</span> <button id="start" class="primary" style="float:right">Iniciar partida</button></p></section>
+<section id="setup" class="setup-screen hidden" aria-label="El Consejo de los Cuatro Reinos">
+  <div class="setup-artboard" id="setupArtboard">
+    <img class="setup-background" src="assets/consejo-cuatro-reinos.JPG" alt="El Consejo de los Cuatro Reinos: Gongonia, Kelta, Brunia y Routa" draggable="false">
+    <button id="setupBack" class="setup-back" type="button" aria-label="Volver al menú principal"></button>
+
+    <div class="setup-audio" aria-label="Controles de sonido">
+      <span id="musicLabel" class="setup-sr-only">Música de inicio: The Kelta Mountains</span>
+      <button id="musicToggle" class="setup-audio-button secondary" type="button">🔇 Activar música</button>
+      <button id="effectsToggle" class="setup-audio-button secondary" type="button">🔊 Efectos activados</button>
+    </div>
+
+    <div class="choice setup-native-player" data-team="red">
+      <input id="realm-red" class="realm-check" type="checkbox" value="red" checked>
+      <input class="player-name" data-team="red" type="text" maxlength="24" value="Jugador 1" aria-label="Nombre del jugador de Gongonia">
+      <select class="player-mode" data-team="red" aria-label="Control de Gongonia">
+        <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option>
+      </select>
+    </div>
+    <div class="choice setup-native-player" data-team="blue">
+      <input id="realm-blue" class="realm-check" type="checkbox" value="blue">
+      <input class="player-name" data-team="blue" type="text" maxlength="24" value="Jugador 2" aria-label="Nombre del jugador de Kelta">
+      <select class="player-mode" data-team="blue" aria-label="Control de Kelta">
+        <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option>
+      </select>
+    </div>
+    <div class="choice setup-native-player" data-team="green">
+      <input id="realm-green" class="realm-check" type="checkbox" value="green" checked>
+      <input class="player-name" data-team="green" type="text" maxlength="24" value="Jugador 3" aria-label="Nombre del jugador de Brunia">
+      <select class="player-mode" data-team="green" aria-label="Control de Brunia">
+        <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option>
+      </select>
+    </div>
+    <div class="choice setup-native-player" data-team="yellow">
+      <input id="realm-yellow" class="realm-check" type="checkbox" value="yellow">
+      <input class="player-name" data-team="yellow" type="text" maxlength="24" value="Jugador 4" aria-label="Nombre del jugador de Routa">
+      <select class="player-mode" data-team="yellow" aria-label="Control de Routa">
+        <option value="human" selected>Persona</option><option value="bot">Bot básico</option><option value="strategic">Bot avanzado</option>
+      </select>
+    </div>
+
+    <label for="realm-red" class="realm-hit realm-gongonia" aria-label="Seleccionar Gongonia"></label>
+    <label for="realm-blue" class="realm-hit realm-kelta" aria-label="Seleccionar Kelta"></label>
+    <label for="realm-green" class="realm-hit realm-brunia" aria-label="Seleccionar Brunia"></label>
+    <label for="realm-yellow" class="realm-hit realm-routa" aria-label="Seleccionar Routa"></label>
+
+    <div class="setup-mode-group" data-team="red" role="radiogroup" aria-label="Control del jugador de Gongonia">
+      <label class="setup-mode-hit"><input type="radio" name="mode-red" data-team="red" value="human" checked><span class="setup-sr-only">Persona</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-red" data-team="red" value="bot"><span class="setup-sr-only">Bot básico</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-red" data-team="red" value="strategic"><span class="setup-sr-only">Bot avanzado</span></label>
+    </div>
+    <div class="setup-mode-group" data-team="blue" role="radiogroup" aria-label="Control del jugador de Kelta">
+      <label class="setup-mode-hit"><input type="radio" name="mode-blue" data-team="blue" value="human" checked><span class="setup-sr-only">Persona</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-blue" data-team="blue" value="bot"><span class="setup-sr-only">Bot básico</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-blue" data-team="blue" value="strategic"><span class="setup-sr-only">Bot avanzado</span></label>
+    </div>
+    <div class="setup-mode-group" data-team="green" role="radiogroup" aria-label="Control del jugador de Brunia">
+      <label class="setup-mode-hit"><input type="radio" name="mode-green" data-team="green" value="human" checked><span class="setup-sr-only">Persona</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-green" data-team="green" value="bot"><span class="setup-sr-only">Bot básico</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-green" data-team="green" value="strategic"><span class="setup-sr-only">Bot avanzado</span></label>
+    </div>
+    <div class="setup-mode-group" data-team="yellow" role="radiogroup" aria-label="Control del jugador de Routa">
+      <label class="setup-mode-hit"><input type="radio" name="mode-yellow" data-team="yellow" value="human" checked><span class="setup-sr-only">Persona</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-yellow" data-team="yellow" value="bot"><span class="setup-sr-only">Bot básico</span></label>
+      <label class="setup-mode-hit"><input type="radio" name="mode-yellow" data-team="yellow" value="strategic"><span class="setup-sr-only">Bot avanzado</span></label>
+    </div>
+
+    <span id="count" class="setup-sr-only" aria-live="polite">2 reinos seleccionados</span>
+    <button id="start" class="setup-start" type="button" aria-label="Comenzar los Juegos"></button>
+  </div>
+</section>
 <section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"></div></div><aside class="panel side">
 <div class="wide"><div class="label">Turno actual</div><div id="turn" class="turn"></div></div>
 <div class="dice"><div id="die" class="die" aria-label="Dado sin lanzar"><img class="die-art" src="dado-gongonia.webp" alt="Dado de marfil con bordes dorados y gemas rojas"><svg id="die-pips" class="die-pips" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="die-top-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5e8c8"/><stop offset="1" stop-color="#d9c397"/></linearGradient><radialGradient id="die-gem-fill" cx="30%" cy="25%" r="75%"><stop offset="0" stop-color="#ff8b68"/><stop offset=".35" stop-color="#d52b26"/><stop offset="1" stop-color="#620a0b"/></radialGradient></defs><polygon points="50,7 81,20 50,37 19,20" fill="url(#die-top-fill)" stroke="#b99a60" stroke-width=".65"/><g id="die-pip-group"></g></svg><span id="die-result" class="die-result">—</span></div><button id="roll" class="primary">Lanzar dado</button></div>
@@ -341,6 +495,7 @@ document.querySelectorAll('.home-language-option').forEach(button=>button.addEve
  $('homeExactLanguageHeader').setAttribute('aria-expanded','false');
 }));
 $('homeExactPlay').addEventListener('click',()=>{$('homeScreen').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup');});
+$('setupBack').addEventListener('click',()=>{$('setup').classList.add('hidden');$('homeScreen').classList.remove('hidden');playMusicFor('setup');window.scrollTo(0,0);});
 $('homeExactPurchases').addEventListener('click',()=>showHomeInfo('Compras','El acceso queda preparado visualmente. La tienda se implementará en una versión posterior.'));
 $('homeExactStats').addEventListener('click',()=>showHomeInfo('Estadísticas','Este acceso queda reservado para consultar las estadísticas de tus partidas en una etapa posterior.'));
 $('homeExactSettings').addEventListener('click',()=>showHomeInfo('Ajustes','El selector de idioma permite elegir entre cinco opciones, pero v0.10.1 todavía no traduce los textos. Los demás ajustes se incorporarán por etapas.'));
@@ -528,7 +683,20 @@ function getPlayerMode(team){const select=document.querySelector('.player-mode[d
 function getPlayerName(team){const input=document.querySelector('.player-name[data-team="'+team+'"]');const mode=getPlayerMode(team);return input&&input.value.trim()?input.value.trim():(mode==='strategic'?'Bot estratégico '+T[team].name:mode==='bot'?'Bot '+T[team].name:'Jugador '+T[team].name)}
 function escapeHTML(value){return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 function msg(s){$('status').textContent=s}
-function count(){let n=chosen().length;$('count').textContent=n+' reinos seleccionados';$('start').disabled=n<2||n>4}
+function count(){
+ let n=chosen().length;
+ $('count').textContent=n+' reinos seleccionados';
+ $('start').disabled=n<2||n>4;
+ document.querySelectorAll('.realm-hit').forEach(label=>{
+  const input=document.getElementById(label.htmlFor);
+  const selected=!!(input&&input.checked);
+  label.classList.toggle('selected',selected);
+ });
+ document.querySelectorAll('.setup-mode-group').forEach(group=>{
+  const input=document.querySelector('.realm-check[value="'+group.dataset.team+'"]');
+  group.classList.toggle('inactive',!(input&&input.checked));
+ });
+}
 function botModeLabel(pl){return pl.botMode==='strategic'?'Bot estratégico':'Bot básico'}
 function chooseStrategicBotMove(pl,options){
  const ranked=options.map(p=>{
@@ -582,7 +750,26 @@ function scheduleBotTurn(delay=650){
   }else if(!waiting){$('roll').click();}
  },delay);
 }
-document.querySelectorAll('.choice input[type="checkbox"]').forEach(x=>x.addEventListener('change',count));count();
+document.querySelectorAll('.choice input[type="checkbox"]').forEach(x=>x.addEventListener('change',count));
+document.querySelectorAll('.setup-mode-group').forEach(group=>{
+ const team=group.dataset.team;
+ const nativeSelect=document.querySelector('.player-mode[data-team="'+team+'"]');
+ const selectedMode=nativeSelect?nativeSelect.value:'human';
+ const initial=group.querySelector('input[value="'+selectedMode+'"]');
+ if(initial)initial.checked=true;
+ group.querySelectorAll('.setup-mode-hit').forEach(label=>{
+  const radio=label.querySelector('input');
+  label.classList.toggle('selected',!!(radio&&radio.checked));
+ });
+ group.querySelectorAll('input[type="radio"]').forEach(radio=>radio.addEventListener('change',()=>{
+  if(nativeSelect)nativeSelect.value=radio.value;
+  group.querySelectorAll('.setup-mode-hit').forEach(label=>{
+   const item=label.querySelector('input');
+   label.classList.toggle('selected',!!(item&&item.checked));
+  });
+ }));
+});
+count();
 function start(){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,playerName:getPlayerName(team),botMode:getPlayerMode(team),isBot:getPlayerMode(team)!=='human',finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=0;roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;gameStartedAt=Date.now();gameStats={};finishOrder=[];teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});$('results').classList.add('hidden');$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado; necesitas un 6 para sacar una ficha.');render();playTurnSound();scheduleBotTurn()}
 $('start').addEventListener('click',start);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start()});$('newGame').addEventListener('click',start);$('resultMenu').addEventListener('click',()=>{$('results').classList.add('hidden');$('game').classList.add('hidden');$('setup').classList.add('hidden');$('homeScreen').classList.remove('hidden');playMusicFor('setup')});
 function position(team,p){
