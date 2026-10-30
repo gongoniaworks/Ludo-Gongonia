@@ -158,8 +158,11 @@
 
 
 /* Arte exacto aprobado por el usuario. Los controles transparentes se alinean sobre la imagen original. */
-.home-image-shell{display:none;position:relative;width:100%;max-width:780px;aspect-ratio:2/3;margin:0 auto;overflow:hidden}
+.home-image-shell{display:block;position:relative;width:100%;max-width:780px;aspect-ratio:2/3;margin:0 auto;overflow:hidden}
 .home-image-shell>img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+.home-css-fallback{display:none}
+.home-screen.missing-art .home-css-fallback{display:block}
+.home-screen.missing-art .home-image-shell{display:none}
 .home-screen.exact-art-loaded{max-width:780px;padding:0;margin:0 auto 16px;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible}
 .home-screen.exact-art-loaded:before,.home-screen.exact-art-loaded:after{display:none}
 .home-screen.exact-art-loaded .home-image-shell{display:block}
