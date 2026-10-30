@@ -297,13 +297,6 @@ function updateMusicButtons(){
  const label=musicEnabled?'🔊 Silenciar música':'🔇 Activar música';
  $('musicToggle').textContent=label;
  $('gameMusicToggle').textContent=label;
- const homeButton=$('homeMusicToggle');
- const homeState=$('homeMusicState');
- const homeTitle=$('homeMusicTitle');
- if(homeButton)homeButton.textContent=musicEnabled?'🔊':'🔇';
- if(homeButton)homeButton.setAttribute('aria-label',musicEnabled?'Silenciar música':'Activar música');
- if(homeState)homeState.textContent=musicEnabled?'Sonando ahora':'Música apagada';
- if(homeTitle)homeTitle.textContent=musicEnabled?'The Kelta Mountains':'Música desactivada';
 }
 async function playMusicFor(screen){
  if(!musicEnabled)return;
@@ -320,7 +313,7 @@ function enableMusic(){
 }
 $('musicToggle').addEventListener('click',enableMusic);
 $('gameMusicToggle').addEventListener('click',enableMusic);
-$('homeMusicToggle').addEventListener('click',enableMusic);
+
 function updateEffectsButtons(){const label=effectsEnabled?'🔊 Efectos activados':'🔇 Efectos desactivados';$('effectsToggle').textContent=label;$('gameEffectsToggle').textContent=label;}
 function enableEffects(){effectsEnabled=!effectsEnabled;updateEffectsButtons();}
 $('effectsToggle').addEventListener('click',enableEffects);
@@ -362,6 +355,27 @@ $('homeExactMusicToggle').addEventListener('click',enableHomeMusic);
 
 function showHomeInfo(title,body){$('homeInfoTitle').textContent=title;$('homeInfoText').textContent=body;$('homeInfoModal').classList.remove('hidden');$('homeModalOk').focus();}
 function closeHomeInfo(){$('homeInfoModal').classList.add('hidden');}
+function openStoryScreen(){
+ $('homeInfoModal').classList.add('hidden');
+ $('homeScreen').classList.add('hidden');
+ $('setup').classList.add('hidden');
+ $('game').classList.add('hidden');
+ $('results').classList.add('hidden');
+ $('storyScreen').classList.remove('hidden');
+ window.scrollTo(0,0);
+}
+function closeStoryScreen(){
+ $('storyScreen').classList.add('hidden');
+ $('homeScreen').classList.remove('hidden');
+ window.scrollTo(0,0);
+}
+$('homeExactStory').addEventListener('click',openStoryScreen);
+$('storyBackTop').addEventListener('click',closeStoryScreen);
+$('storyBackBottom').addEventListener('click',closeStoryScreen);
+$('storyArtwork').addEventListener('error',()=>{$('storyArtwork').hidden=true;});
+$('homeModalClose').addEventListener('click',closeHomeInfo);
+$('homeModalOk').addEventListener('click',closeHomeInfo);
+$('homeInfoModal').addEventListener('click',e=>{if(e.target===$('homeInfoModal'))closeHomeInfo();});
 /* Se eliminaron los antiguos manejadores del menú CSS; la pantalla usa los botones transparentes sobre la ilustración. */
 
 /* Efectos sonoros generados por el propio navegador: no requieren archivos adicionales. */
