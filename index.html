@@ -531,6 +531,22 @@
   #setup .setup-mode-hit{min-height:42px}
 }
 
+
+/* v0.10.5 — Selección sencilla: solo amarillo, sin contorno duplicado ni resplandor. */
+#setup .setup-mode-hit.selected{
+  border:1px solid #f3cf79!important;
+  background:#e6bd63!important;
+  color:#211a10!important;
+  box-shadow:none!important;
+}
+#setup .setup-mode-hit.selected:after{
+  content:none!important;
+  display:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#setup .setup-mode-hit.selected .mode-icon{color:#332511!important}
+
 </style></head><body><main class="app">
 
 <section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
