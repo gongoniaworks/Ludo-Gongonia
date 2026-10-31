@@ -35,7 +35,7 @@
 .cell .piece{width:42%;height:42%;max-width:28px;max-height:28px;min-width:12px;min-height:12px}
 
 /* v0.3.1: centros refinados y fichas agrupadas siempre circulares. */
-.board{display:block;position:relative;width:100%;aspect-ratio:1;overflow:hidden;background-color:#252d42;background-image:url("tablero-gongonia.PNG?v=0.10.3");background-size:100% 100%;background-repeat:no-repeat;background-position:center;border:0;border-radius:0}
+.board{display:block;position:relative;width:100%;aspect-ratio:1;overflow:hidden;background-color:#252d42;background-image:url("tablero-gongonia.PNG?v=0.10.4");background-size:100% 100%;background-repeat:no-repeat;background-position:center;border:0;border-radius:0}
 .board-art{position:absolute;inset:0;z-index:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
 .token-stack{position:absolute;transform:translate(-50%,-50%);z-index:5;width:6.2%;aspect-ratio:1 / 1;height:auto;min-width:26px;max-width:46px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));align-items:center;justify-items:center;gap:1px;pointer-events:none}
 .token-stack button{pointer-events:auto}
@@ -833,11 +833,11 @@ const TOKEN_IMAGES={
  blue:'ficha-reino-azul.webp'
 };
 const HOME_POINTS={
- /* Las mismas posiciones verificadas visualmente por el usuario en v0.2. */
- red:[[15.71,15.31],[27.83,15.23],[15.55,26.40],[27.91,26.16]],
- green:[[72.41,15.23],[84.45,15.31],[72.49,26.32],[84.61,26.32]],
- yellow:[[72.65,68.26],[84.69,68.18],[72.41,79.90],[84.69,79.83]],
- blue:[[15.39,68.18],[27.99,68.26],[15.39,80.22],[27.67,79.90]]
+ /* Centros de los 16 alojamientos de fichas del tablero actualizado (1254×1254). */
+ red:[[17.265,14.713],[28.987,14.633],[17.185,25.319],[28.987,25.399]],
+ green:[[72.049,14.952],[83.772,14.793],[71.970,25.399],[83.772,25.399]],
+ yellow:[[71.970,65.909],[83.852,65.909],[71.970,77.233],[83.931,77.233]],
+ blue:[[16.866,65.909],[28.907,65.909],[16.866,77.233],[28.828,77.233]]
 };
 const GOAL=pct(627,570), $=id=>document.getElementById(id);
 let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false,effectsEnabled=true,botTimer=null,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set(),gameStartedAt=0,gameStats={},finishOrder=[],drawState=null,lastStartingTeam=null;
@@ -1353,7 +1353,7 @@ function render(){
  if(!boardArt){
   boardArt=document.createElement('img');
   boardArt.className='board-art';
-  boardArt.src='tablero-gongonia.PNG?v=0.10.3';
+  boardArt.src='tablero-gongonia.PNG?v=0.10.4';
   boardArt.alt='Tablero de Ludo de Gongonia';
   boardArt.draggable=false;
   board.insertBefore(boardArt,board.firstChild);
