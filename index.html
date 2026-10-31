@@ -35,7 +35,7 @@
 .cell .piece{width:42%;height:42%;max-width:28px;max-height:28px;min-width:12px;min-height:12px}
 
 /* v0.3.1: centros refinados y fichas agrupadas siempre circulares. */
-.board{display:block;position:relative;width:100%;aspect-ratio:1;overflow:hidden;background-color:#252d42;background-image:url("tablero-gongonia.PNG?v=0.10.5");background-size:100% 100%;background-repeat:no-repeat;background-position:center;border:0;border-radius:0}
+.board{display:block;position:relative;width:100%;aspect-ratio:1;overflow:hidden;background-color:#252d42;background-image:url("tablero-gongonia.PNG?v=0.10.6");background-size:100% 100%;background-repeat:no-repeat;background-position:center;border:0;border-radius:0}
 .board-art{position:absolute;inset:0;z-index:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
 .token-stack{position:absolute;transform:translate(-50%,-50%);z-index:5;width:6.2%;aspect-ratio:1 / 1;height:auto;min-width:26px;max-width:46px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));align-items:center;justify-items:center;gap:1px;pointer-events:none}
 .token-stack button{pointer-events:auto}
@@ -61,9 +61,9 @@
 }
 .die.rolling{animation:diceRollEffect .65s ease-in-out}
 @keyframes tokenHopEffect{
-  0%{transform:translate(-50%,-50%) scale(1)}
+  0%{transform:translate(-50%,-62%) scale(1)}
   45%{transform:translate(-50%,-78%) scale(1.12)}
-  100%{transform:translate(-50%,-50%) scale(1)}
+  100%{transform:translate(-50%,-62%) scale(1)}
 }
 .token-stack.hopping{animation:tokenHopEffect .16s ease-out}
 @media(prefers-reduced-motion:reduce){
@@ -72,11 +72,11 @@
 
 /* v0.5.4: breve efecto al regresar una ficha capturada a su base */
 @keyframes capturedReturnEffect{
-  0%{transform:translate(-50%,-50%) scale(1);filter:brightness(1)}
+  0%{transform:translate(-50%,-62%) scale(1);filter:brightness(1)}
   22%{transform:translate(-50%,-50%) scale(1.24) rotate(-8deg);filter:brightness(1.8)}
   48%{transform:translate(-50%,-50%) scale(.72) rotate(7deg);filter:brightness(1.3)}
   72%{transform:translate(-50%,-50%) scale(1.12);filter:brightness(1.5)}
-  100%{transform:translate(-50%,-50%) scale(1);filter:brightness(1)}
+  100%{transform:translate(-50%,-62%) scale(1);filter:brightness(1)}
 }
 .token-stack.captured-return{animation:capturedReturnEffect .48s ease-out}
 @media(prefers-reduced-motion:reduce){.token-stack.captured-return{animation-duration:.01ms}}
@@ -84,10 +84,10 @@
 /* v0.7.3: guardianes ilustrados como fichas del juego */
 .token-stack .piece{position:relative;overflow:visible;border:0!important;background:transparent!important;color:transparent!important;outline:0;box-shadow:none;padding:0;}
 .token-stack .piece.legal{outline:0;box-shadow:none;}
-.guardian-token{display:block;position:absolute;left:50%;top:50%;width:148%;height:148%;max-width:none;max-height:none;object-fit:contain;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 1px 1px #0009);}
+.guardian-token{display:block;position:absolute;left:50%;top:50%;width:148%;height:148%;max-width:none;max-height:none;object-fit:contain;transform:translate(-50%,-62%);pointer-events:none;filter:drop-shadow(0 1px 1px #0009);}
 .piece-number{position:absolute;right:-3px;bottom:-3px;z-index:3;width:12px;height:12px;border:1px solid #fff1c5;border-radius:50%;background:#252033;color:#fff;font-size:8px;font-weight:900;line-height:10px;text-align:center;pointer-events:none;}
 .token-stack .piece.legal .guardian-token{filter:drop-shadow(0 0 2px #fff4a3) drop-shadow(0 0 4px #e5be55);animation:guardianLegalGlow .8s ease-in-out infinite alternate;}
-@keyframes guardianLegalGlow{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.06)}}
+@keyframes guardianLegalGlow{from{transform:translate(-50%,-62%) scale(1)}to{transform:translate(-50%,-62%) scale(1.06)}}
 @media(prefers-reduced-motion:reduce){.token-stack .piece.legal .guardian-token{animation:none}}
 .mode-label{justify-content:space-between;font-size:.78rem!important}.player-mode{width:auto;max-width:62%;min-width:0;padding:6px;border-radius:7px;background:#171b2a;color:var(--ink);border:1px solid #ffffff30;font:inherit}
 
@@ -1393,7 +1393,7 @@ function render(){
  if(!boardArt){
   boardArt=document.createElement('img');
   boardArt.className='board-art';
-  boardArt.src='tablero-gongonia.PNG?v=0.10.5';
+  boardArt.src='tablero-gongonia.PNG?v=0.10.6';
   boardArt.alt='Tablero de Ludo de Gongonia';
   boardArt.draggable=false;
   board.insertBefore(boardArt,board.firstChild);
