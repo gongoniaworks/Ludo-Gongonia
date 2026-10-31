@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+<defs>
+ <linearGradient id="g" x2="0" y2="1"><stop stop-color="#f5dda0"/><stop offset=".5" stop-color="#c69a55"/><stop offset="1" stop-color="#80572e"/></linearGradient>
+ <radialGradient id="b"><stop stop-color="#1e5271"/><stop offset="1" stop-color="#092239"/></radialGradient>
+</defs>
+<circle cx="300" cy="300" r="268" fill="none" stroke="url(#g)" stroke-width="8"/>
+<circle cx="300" cy="300" r="246" fill="none" stroke="#d8b76d" stroke-width="2" stroke-dasharray="3 11"/>
+<circle cx="300" cy="300" r="208" fill="url(#b)" fill-opacity=".45" stroke="url(#g)" stroke-width="5"/>
+<circle cx="300" cy="300" r="180" fill="none" stroke="#d8b76d" stroke-width="2"/>
+<g fill="url(#g)" opacity=".9">
+ <path d="M300 68l24 167-24-18-24 18Z"/><path d="M532 300l-167 24 18-24-18-24Z"/>
+ <path d="M300 532l-24-167 24 18 24-18Z"/><path d="M68 300l167-24-18 24 18 24Z"/>
+ <path d="M300 115l12 127-12-15-12 15Z" transform="rotate(45 300 300)"/><path d="M300 115l12 127-12-15-12 15Z" transform="rotate(135 300 300)"/><path d="M300 115l12 127-12-15-12 15Z" transform="rotate(225 300 300)"/><path d="M300 115l12 127-12-15-12 15Z" transform="rotate(315 300 300)"/>
+</g>
+<g stroke="url(#g)" stroke-width="5" fill="#0d2a43">
+ <path d="M246 118h108l-10 84-44 31-44-31Z" fill="#8f2930"/><path d="M482 246h-84l-31 54 31 54h84l31-54Z" fill="#2e6b9b"/>
+ <path d="M246 482h108l-10-84-44-31-44 31Z" fill="#b18a2d"/><path d="M118 246h84l31 54-31 54h-84l-31-54Z" fill="#287454"/>
+</g>
+<g fill="#f5dca0" font-family="Georgia,serif" text-anchor="middle" font-size="55">
+ <text x="300" y="184">♜</text><text x="416" y="319">✦</text><text x="300" y="448">☀</text><text x="184" y="319">♜</text>
+</g>
+<circle cx="300" cy="300" r="73" fill="url(#b)" stroke="url(#g)" stroke-width="7"/>
+<circle cx="300" cy="300" r="55" fill="none" stroke="#d8b76d" stroke-width="2"/>
+<path d="M300 247l14 39 39 14-39 14-14 39-14-39-39-14 39-14Z" fill="url(#g)"/>
+<circle cx="300" cy="300" r="12" fill="#082037" stroke="#f1d89b" stroke-width="3"/>
+<g fill="#e7c887"><circle cx="300" cy="36" r="7"/><circle cx="564" cy="300" r="7"/><circle cx="300" cy="564" r="7"/><circle cx="36" cy="300" r="7"/></g>
+</svg>
