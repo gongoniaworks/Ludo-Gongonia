@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.10.6</title>
+<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.10.7</title>
 <style>
 :root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #0006)}.die-pips{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}.status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
@@ -596,6 +596,65 @@
 .draw-action:disabled{opacity:.45;cursor:wait}
 .draw-action.hidden{display:none!important}
 @media(prefers-reduced-motion:reduce){.draw-die.rolling{animation:none}}
+
+
+/* v0.10.7 — pantalla de partida adaptable a horizontal y vertical */
+#game{width:100%;margin:0 auto}
+#game .layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;align-items:start;gap:14px}
+#game .layout>.panel,
+#game .side{
+  background:linear-gradient(145deg,rgba(8,28,49,.97),rgba(13,43,68,.96) 55%,rgba(5,20,36,.98));
+  border:1px solid rgba(216,183,109,.72);
+  border-radius:13px;
+  box-shadow:inset 0 0 0 1px rgba(255,226,164,.08),0 7px 20px rgba(0,0,0,.28);
+}
+#game .layout>.panel:first-child{padding:10px}
+#game .side{padding:13px;gap:12px}
+#game .label{color:#e3c783;letter-spacing:.12em}
+#game .turn{color:#fff0cf;font:clamp(1.05rem,2vw,1.35rem) Georgia,serif;line-height:1.25}
+#game .status{color:#e7dcc6;background:rgba(2,13,25,.42);border:1px solid rgba(216,183,109,.24);border-radius:8px;padding:10px;min-height:0}
+#game .player{background:linear-gradient(90deg,rgba(255,255,255,.09),rgba(255,255,255,.025));border:1px solid rgba(216,183,109,.18);border-radius:8px;color:#f8f0dd}
+#game .player.current{outline:1px solid #e4c16f;background:rgba(216,183,109,.14)}
+#game .primary{background:linear-gradient(180deg,#f1d58e,#bd8d3c);border:1px solid #ffe5a5;color:#2b1b0b;box-shadow:inset 0 1px rgba(255,255,255,.55),0 3px 8px #0005}
+#game .secondary{background:linear-gradient(180deg,#173b5b,#091d33);border:1px solid #c49a51;color:#f8e6bd}
+#game .note{color:#b9c4ce}
+#game:before{content:"LOS JUEGOS DE GONGONIA";display:block;text-align:center;margin:0 0 10px;color:#e9ce91;font:600 clamp(.8rem,1.5vw,1rem) Georgia,serif;letter-spacing:.22em;text-shadow:0 2px 5px #000}
+@media (orientation:landscape) and (min-width:700px){
+  .app:has(#game:not(.hidden)){max-width:1320px;padding:10px 14px 18px}
+  #game .layout{grid-template-columns:minmax(0,1fr) clamp(245px,24vw,310px);gap:16px}
+  #game .layout>.panel:first-child{padding:12px}
+  #game .side{display:flex;flex-direction:column}
+  #game .side .wide{width:100%}
+  #game .players{gap:7px}
+  #game .player{padding:9px;font-size:.84rem}
+  #game .dice{grid-template-columns:66px minmax(0,1fr);gap:12px}
+  #game .die{width:64px;height:64px}
+  #game #roll{min-height:52px}
+  #game .side>.wide:last-child{display:flex;flex-wrap:wrap;gap:7px}
+  #game .side>.wide:last-child button{flex:1 1 42%}
+}
+@media (orientation:portrait), (max-width:699px){
+  .app:has(#game:not(.hidden)){max-width:760px;padding:8px 8px 18px}
+  #game .layout{grid-template-columns:minmax(0,1fr);gap:9px}
+  #game .layout>.panel:first-child{padding:5px}
+  #game .side{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;padding:10px}
+  #game .side>.wide{grid-column:1/-1}
+  #game .side>.dice{grid-column:1/-1;display:grid;grid-template-columns:62px minmax(0,1fr);align-items:center;gap:12px;padding:8px 10px;border:1px solid rgba(216,183,109,.3);border-radius:9px;background:rgba(2,13,25,.34)}
+  #game .die{width:58px;height:58px}
+  #game #roll{min-height:48px}
+  #game .side .players{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  #game .player{padding:7px;font-size:.74rem;min-width:0}
+  #game .player b{overflow-wrap:anywhere}
+  #game .side>.wide:last-child{display:flex;flex-wrap:wrap;gap:6px}
+  #game .side>.wide:last-child button{flex:1 1 calc(50% - 6px);padding:9px 10px}
+  #game:before{margin:0 0 6px;font-size:.76rem}
+  #game .note{margin-top:7px}
+}
+@media (max-width:380px){
+  #game .side .players{grid-template-columns:1fr 1fr}
+  #game .player{font-size:.68rem;padding:6px}
+  #game .side>.wide:last-child button{font-size:.78rem}
+}
 
 </style></head><body><main class="app">
 
