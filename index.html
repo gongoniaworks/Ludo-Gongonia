@@ -1029,7 +1029,7 @@
   background-color:#3f2819;
   background-image:
     linear-gradient(180deg,rgba(16,10,6,.08),rgba(16,10,6,.16)),
-    url("mesa-mantel-gongonia-v0112.svg");
+    url("mesa-mantel-horizontal-v0113.svg");
   background-position:center center;
   background-size:cover;
   background-repeat:no-repeat;
@@ -1304,8 +1304,13 @@
 @media screen and (orientation:landscape) and (min-width:700px){
   /* El mantel deja de recortarse por arriba: sus esquinas coinciden con el marco. */
   #game{
+    background-color:#0c2034!important;
+    background-image:
+      linear-gradient(180deg,rgba(6,22,38,.08),rgba(6,22,38,.13)),
+      url("mesa-mantel-horizontal-v0113.svg")!important;
     background-size:100% 100%!important;
     background-position:center center!important;
+    background-repeat:no-repeat!important;
   }
   /* Anula las antiguas reglas de 46–64 px que reducían el dado. */
   #game .side>.dice.dice-interaction{
@@ -1321,12 +1326,12 @@
   }
   #game .side>.dice.dice-interaction .die{
     display:block!important;
-    width:112px!important;
-    height:112px!important;
-    min-width:112px!important;
-    min-height:112px!important;
-    max-width:112px!important;
-    max-height:112px!important;
+    width:160px!important;
+    height:160px!important;
+    min-width:160px!important;
+    min-height:160px!important;
+    max-width:160px!important;
+    max-height:160px!important;
     flex:none!important;
     cursor:pointer;
   }
