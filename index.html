@@ -2388,7 +2388,7 @@ async function move(pl,p){
  if(pl.pieces.every(x=>x.progress===56)){
    pl.finished=true;
    if(!finishOrder.includes(pl.team))finishOrder.push(pl.team);
-   if(players.filter(x=>!x.finished).length<=1){
+   if(players.every(x=>x.finished)){
      over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!');render();showFinalStats(finishOrder[0]||pl.team);return;
    }
    next();msg('¡'+pl.playerName+' — Reino '+T[pl.team].name+' completó sus fichas! Puesto de llegada: '+finishOrder.length+'.');render();enqueueVictoryCelebration(pl);return;
