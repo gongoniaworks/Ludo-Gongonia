@@ -1351,6 +1351,52 @@
   }
   #game .side>.dice.dice-interaction #roll{display:none!important}
 }
+
+/* v0.11.6 — el dado y el jugador siempre van apilados, también en los breakpoints antiguos. */
+#game .side>.dice.dice-interaction{
+ display:flex!important;
+ flex-direction:column!important;
+ flex-wrap:nowrap!important;
+ align-items:center!important;
+ justify-content:center!important;
+ grid-template-columns:none!important;
+ grid-auto-flow:row!important;
+ gap:8px!important;
+ width:100%!important;
+}
+#game .side>.dice.dice-interaction .die{
+ display:block!important;
+ width:132px!important;
+ height:132px!important;
+ min-width:132px!important;
+ min-height:132px!important;
+ max-width:132px!important;
+ max-height:132px!important;
+ flex:0 0 132px!important;
+}
+#game .side>.dice.dice-interaction .die-art{
+ display:block!important;
+ width:100%!important;
+ height:100%!important;
+}
+#game .side>.dice.dice-interaction .dice-turn-wrap{
+ display:block!important;
+ width:100%!important;
+ max-width:100%!important;
+ flex:none!important;
+ text-align:center!important;
+}
+@media screen and (orientation:landscape) and (min-width:700px){
+ #game .side>.dice.dice-interaction .die{
+  width:160px!important;
+  height:160px!important;
+  min-width:160px!important;
+  min-height:160px!important;
+  max-width:160px!important;
+  max-height:160px!important;
+  flex:0 0 160px!important;
+ }
+}
 </style></head><body><main class="app">
 
 <section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
