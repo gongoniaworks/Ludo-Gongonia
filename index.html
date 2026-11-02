@@ -1626,7 +1626,7 @@ $('musicToggle').addEventListener('click',enableMusic);
 $('gameMusicToggle').addEventListener('click',enableMusic);
 
 function updateEffectsButtons(){const label=effectsEnabled?'🔊 Efectos activados':'🔇 Efectos desactivados';$('effectsToggle').textContent=label;$('gameEffectsToggle').textContent=label;}
-function enableEffects(){effectsEnabled=!effectsEnabled;updateEffectsButtons();}
+function enableEffects(){effectsEnabled=!effectsEnabled;if(!effectsEnabled)stopVictoryAudio();updateEffectsButtons();}
 $('effectsToggle').addEventListener('click',enableEffects);
 $('gameEffectsToggle').addEventListener('click',enableEffects);
 updateMusicButtons();updateEffectsButtons();
@@ -1942,8 +1942,8 @@ function buildVictoryConfetti(){
  const colors=['#f2d28b','#fff0c1','#c84a50','#32815c','#e0b83c','#427cbd','#d8b76d'];
  host.innerHTML=Array.from({length:52},()=>{
   const left=(Math.random()*100).toFixed(2);
-  const delay=(Math.random()*.58).toFixed(2);
-  const duration=(3.05+Math.random()*.7).toFixed(2);
+  const delay=(Math.random()*.45).toFixed(2);
+  const duration=(2.9+Math.random()*.35).toFixed(2);
   const drift=Math.round((Math.random()-.5)*220);
   const spin=Math.round(360+Math.random()*900);
   const color=colors[Math.floor(Math.random()*colors.length)];
