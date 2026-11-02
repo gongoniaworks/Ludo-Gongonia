@@ -1564,7 +1564,7 @@
 </section>
 <section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"><div id="goalFireworks" class="goal-fireworks hidden" aria-hidden="true"></div></div></div><aside class="panel side">
 <div class="dice dice-interaction">
- <div id="die" class="die" role="button" tabindex="0" aria-label="Tocar para lanzar el dado" aria-disabled="false"><img class="die-art" src="dado-gongonia.webp" alt="Dado de marfil con bordes dorados y gemas rojas"><svg id="die-pips" class="die-pips" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="die-top-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5e8c8"/><stop offset="1" stop-color="#d9c397"/></linearGradient><radialGradient id="die-gem-fill" cx="30%" cy="25%" r="75%"><stop offset="0" stop-color="#ff8b68"/><stop offset=".35" stop-color="#d52b26"/><stop offset="1" stop-color="#620a0b"/></radialGradient></defs><polygon points="50,7 81,20 50,37 19,20" fill="url(#die-top-fill)" stroke="#b99a60" stroke-width=".65"/><g id="die-pip-group"></g></svg><span id="die-result" class="die-result hidden" aria-hidden="true">—</span></div>
+ <div id="die" class="die" role="button" tabindex="0" aria-label="Tocar para lanzar el dado" aria-disabled="false"><img class="die-art" src="dado-gongonia-ornamentado.svg" alt="Dado tridimensional de marfil con bordes dorados"><svg id="die-pips" class="die-pips" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="die-gem-fill" cx="30%" cy="25%" r="75%"><stop offset="0" stop-color="#ffaaa0"/><stop offset=".32" stop-color="#d9272b"/><stop offset="1" stop-color="#650b12"/></radialGradient><filter id="pip-shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation=".55" result="blur"/><feOffset dy=".55" result="offset"/><feComponentTransfer><feFuncA type="linear" slope=".5"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g id="die-pip-group"></g></svg><span id="die-result" class="die-result hidden" aria-hidden="true">—</span></div>
  <div class="dice-turn-wrap"><div class="label">JUGADOR ACTUAL</div><div id="turn" class="turn die-turn"></div></div>
  <button id="roll" class="primary" type="button">Lanzar dado</button>
 </div>
@@ -1925,19 +1925,62 @@ function playTurnSound(){
  });
 }
 /* Dados rodando: pequeños golpecitos irregulares y un traqueteo corto. */
+/* Dado convencional: 1↔6, 2↔5 y 3↔4.
+   Cada orientación muestra tres caras físicamente adyacentes; ninguna cara lateral se fija artificialmente. */
 function updateDieFace(value){
  const group=$('die-pip-group');
  if(!group)return;
+ const number=Number(value);
+ if(!Number.isInteger(number)||number<1||number>6){group.innerHTML='';return;}
  const patterns={
-  1:[[50,20]],
-  2:[[40,15],[60,25]],
-  3:[[40,15],[50,20],[60,25]],
-  4:[[40,15],[60,15],[40,25],[60,25]],
-  5:[[40,15],[60,15],[50,20],[40,25],[60,25]],
-  6:[[40,14],[60,14],[40,20],[60,20],[40,26],[60,26]]
+  1:[[.5,.5]],
+  2:[[.3,.3],[.7,.7]],
+  3:[[.3,.3],[.5,.5],[.7,.7]],
+  4:[[.3,.3],[.7,.3],[.3,.7],[.7,.7]],
+  5:[[.3,.3],[.7,.3],[.5,.5],[.3,.7],[.7,.7]],
+  6:[[.3,.22],[.7,.22],[.3,.5],[.7,.5],[.3,.78],[.7,.78]]
  };
- const dots=patterns[Number(value)]||[];
- group.innerHTML=dots.map(([x,y])=>'<g><circle cx="'+x+'" cy="'+y+'" r="4.1" fill="url(#die-gem-fill)" stroke="#74120d" stroke-width=".9"/><ellipse cx="'+(x-1.05)+'" cy="'+(y-1.35)+'" rx="1.25" ry=".8" fill="#ffd0a5" opacity=".82"/></g>').join('');
+ const directions={
+  px:[1,0,0],nx:[-1,0,0],
+  py:[0,1,0],ny:[0,-1,0],
+  pz:[0,0,1],nz:[0,0,-1]
+ };
+ const faceValues={px:3,nx:4,py:1,ny:6,pz:2,nz:5};
+ const keyForValue=Object.keys(faceValues).find(key=>faceValues[key]===number);
+ const topDir=directions[keyForValue];
+ const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+ const cross=(a,b)=>[
+  a[1]*b[2]-a[2]*b[1],
+  a[2]*b[0]-a[0]*b[2],
+  a[0]*b[1]-a[1]*b[0]
+ ];
+ const keyForDirection=vector=>Object.keys(directions).find(key=>
+  directions[key][0]===vector[0]&&directions[key][1]===vector[1]&&directions[key][2]===vector[2]
+ );
+ /* La cara superior es el resultado. Elegimos uniformemente una de las cuatro orientaciones laterales válidas. */
+ const sideOptions=Object.keys(directions).filter(key=>dot(directions[key],topDir)===0);
+ const rightKey=sideOptions[Math.floor(Math.random()*sideOptions.length)];
+ const leftKey=keyForDirection(cross(directions[rightKey],topDir));
+ const faceList=[
+  {name:'top',value:number},
+  {name:'left',value:faceValues[leftKey]},
+  {name:'right',value:faceValues[rightKey]}
+ ];
+ const project={
+  top:([u,v])=>[50+(u-v)*39,7.1+(u+v)*17.8],
+  left:([u,v])=>[8+39*u,28+22*u+42*v],
+  right:([u,v])=>[92-39*u,28+22*u+42*v]
+ };
+ const dots=faceList.map(face=>{
+  const radius=face.name==='top'?2.65:2.5;
+  return '<g class="die-face-pips die-face-'+face.name+'">'+patterns[face.value].map(([u,v])=>{
+   const [x,y]=project[face.name]([u,v]);
+   return '<g filter="url(#pip-shadow)"><ellipse cx="'+x.toFixed(2)+'" cy="'+y.toFixed(2)+'" rx="'+radius+'" ry="'+(radius*.68).toFixed(2)+'" fill="url(#die-gem-fill)" stroke="#6e1014" stroke-width=".48"/><ellipse cx="'+(x-radius*.32).toFixed(2)+'" cy="'+(y-radius*.28).toFixed(2)+'" rx="'+(radius*.34).toFixed(2)+'" ry="'+(radius*.2).toFixed(2)+'" fill="#ffe0d2" opacity=".84"/></g>';
+  }).join('')+'</g>';
+ }).join('');
+ group.innerHTML=dots;
+ const result=$('die-result');
+ if(result)result.textContent=String(number);
 }
 function playDiceSound(){
  if(!effectsEnabled)return;
