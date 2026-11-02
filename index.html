@@ -1564,7 +1564,7 @@
 </section>
 <section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"><div id="goalFireworks" class="goal-fireworks hidden" aria-hidden="true"></div></div></div><aside class="panel side">
 <div class="dice dice-interaction">
- <div id="die" class="die" role="button" tabindex="0" aria-label="Tocar para lanzar el dado" aria-disabled="false"><img class="die-art" src="dado-gongonia-ornamentado.svg" alt="Dado tridimensional de marfil con bordes dorados"><svg id="die-pips" class="die-pips" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="die-gem-fill" cx="30%" cy="25%" r="75%"><stop offset="0" stop-color="#ffaaa0"/><stop offset=".32" stop-color="#d9272b"/><stop offset="1" stop-color="#650b12"/></radialGradient><filter id="pip-shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation=".55" result="blur"/><feOffset dy=".55" result="offset"/><feComponentTransfer><feFuncA type="linear" slope=".5"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g id="die-pip-group"></g></svg><span id="die-result" class="die-result hidden" aria-hidden="true">—</span></div>
+ <div id="die" class="die" role="button" tabindex="0" aria-label="Tocar para lanzar el dado" aria-disabled="false"><img class="die-art" src="dado-gongonia-ornamentado.svg" alt="Dado tridimensional de marfil con bordes dorados"><svg id="die-pips" class="die-pips" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="die-gem-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a91625"/><stop offset=".48" stop-color="#8f101d"/><stop offset="1" stop-color="#650b15"/></linearGradient></defs><g id="die-pip-group"></g></svg><span id="die-result" class="die-result hidden" aria-hidden="true">—</span></div>
  <div class="dice-turn-wrap"><div class="label">JUGADOR ACTUAL</div><div id="turn" class="turn die-turn"></div></div>
  <button id="roll" class="primary" type="button">Lanzar dado</button>
 </div>
@@ -1976,7 +1976,7 @@ function updateDieFace(value){
   const radius=face.name==='top'?3.6:3.45;
   return '<g class="die-face-pips die-face-'+face.name+'">'+patterns[face.value].map(([u,v])=>{
    const [x,y]=project[face.name]([u,v]);
-   return '<g filter="url(#pip-shadow)"><circle cx="'+x.toFixed(2)+'" cy="'+y.toFixed(2)+'" r="'+radius+'" fill="url(#die-gem-fill)" stroke="#650b12" stroke-width=".62"/><circle cx="'+(x-radius*.3).toFixed(2)+'" cy="'+(y-radius*.34).toFixed(2)+'" r="'+(radius*.22).toFixed(2)+'" fill="#ffe9e2" opacity=".88"/><circle cx="'+(x+radius*.34).toFixed(2)+'" cy="'+(y+radius*.38).toFixed(2)+'" r="'+(radius*.1).toFixed(2)+'" fill="#7b1019" opacity=".55"/></g>';
+   return '<g><circle cx="'+x.toFixed(2)+'" cy="'+y.toFixed(2)+'" r="'+(radius+0.28).toFixed(2)+'" fill="#3f1015" opacity=".82"/><circle cx="'+x.toFixed(2)+'" cy="'+y.toFixed(2)+'" r="'+radius+'" fill="url(#die-gem-fill)" stroke="#b75a55" stroke-width=".28"/><path d="M '+(x-radius*.48).toFixed(2)+' '+(y-radius*.32).toFixed(2)+' Q '+x.toFixed(2)+' '+(y-radius*.62).toFixed(2)+' '+(x+radius*.34).toFixed(2)+' '+(y-radius*.34).toFixed(2)+'" fill="none" stroke="#f2b1a1" stroke-width=".28" opacity=".52" stroke-linecap="round"/></g>';
   }).join('')+'</g>';
  }).join('');
  group.innerHTML=dots;
