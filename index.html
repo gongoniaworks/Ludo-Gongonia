@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.11.0</title>
+<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.11.1</title>
 <style>
 :root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;overflow:visible;filter:drop-shadow(0 3px 4px #0006)}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}
@@ -604,7 +604,6 @@
 .draw-back{min-height:36px;padding:6px 12px;border:1px solid #b98d45;border-radius:999px;background:#10233d;color:#ffe5a8;font:600 13px Georgia,serif}
 .draw-emblem{margin:8px 0 0;color:#e8c16d;font:28px Georgia,serif}
 .draw-panel h2{margin:3px 0 8px;color:#f9dfa0;font:700 clamp(23px,5vw,34px) Georgia,serif}
-.draw-round-title{margin:0 0 16px;color:#d6c7a9;font:14px Georgia,serif;line-height:1.45}
 .draw-current{
  min-height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
  margin:0 auto 8px;padding:10px;border:1px solid #b88e49;border-radius:12px;background:#071528;
@@ -616,7 +615,6 @@
 .draw-die.rolling .draw-die-vector{transform:rotate(12deg) scale(.94)}
 @keyframes drawDiceRoll{0%{transform:rotate(0) translateY(0)}25%{transform:rotate(95deg) translateY(-5px)}50%{transform:rotate(190deg) translateY(3px)}75%{transform:rotate(285deg) translateY(-4px)}100%{transform:rotate(360deg) translateY(0)}}
 .draw-die.rolling{animation:drawDiceRoll .7s ease-in-out}
-.draw-instruction{min-height:38px;margin:6px 0 12px;color:#eadcbf;font:14px/1.45 Georgia,serif}
 .draw-results{display:grid;gap:8px;margin:0 auto 16px;text-align:left}
 .draw-result-round{padding:9px 11px;border:1px solid #55452d;border-radius:10px;background:#0a1729}
 .draw-result-round>strong{display:block;margin-bottom:6px;color:#e6c477;font:700 12px Georgia,serif;letter-spacing:.08em;text-transform:uppercase}
@@ -1590,7 +1588,6 @@
     </div>
     <div class="draw-emblem">✦</div>
     <h2>EL SORTEO DE SALIDA</h2>
-    <p id="drawRoundTitle" class="draw-round-title">Todos los reinos participantes lanzan un dado.</p>
     <div id="drawCurrent" class="draw-current" aria-live="polite"></div>
     <div id="drawDie" class="draw-die" aria-label="Dado del sorteo">
       <svg class="draw-die-vector" viewBox="0 0 100 100" role="img" aria-label="Dado tridimensional de marfil y oro con puntos rojo rubí"><defs>
@@ -1659,7 +1656,6 @@
  <path d="M92 33 Q92 30 90 29" stroke="#fff" stroke-opacity=".35" stroke-width=".9" fill="none"/>
 </g><g id="draw-die-pip-group"></g></svg>
     </div>
-    <p id="drawInstruction" class="draw-instruction">Cada reino participante tendrá su lanzamiento.</p>
     <div id="drawResults" class="draw-results"></div>
     <button id="drawRoll" type="button" class="draw-action">LANZAR DADO</button>
     <button id="drawContinue" type="button" class="draw-action hidden">COMENZAR PARTIDA</button>
@@ -2605,7 +2601,7 @@ function beginDraw(){
  const teams=ORDER.filter(team=>chosen().includes(team));
  if(teams.length<2){count();return;}
  drawState={
-  round:1,roundTeams:[...teams],index:0,history:[],results:{},winner:null,busy:false,notice:'',
+  round:1,roundTeams:[...teams],index:0,history:[],results:{},winner:null,busy:false,
   participants:teams.map(team=>({team,name:getPlayerName(team),mode:getPlayerMode(team)}))
  };
  $('setup').classList.remove('hidden');
@@ -2618,10 +2614,6 @@ function beginDraw(){
 function renderDraw(){
  if(!drawState)return;
  const state=drawState;
- const tiedNames=state.roundTeams.map(team=>REALM_NAMES[team]).join(', ');
- $('drawRoundTitle').textContent=state.round===1
-  ?'Todos los reinos participantes lanzan un dado. El resultado más alto comienza.'
-  :'Hay empate en el valor más alto. Repiten únicamente: '+tiedNames+'.';
  const historyRounds=[...new Set(state.history.map(item=>item.round))];
  $('drawResults').innerHTML=historyRounds.map(round=>{
   const entries=state.history.filter(item=>item.round===round);
@@ -2633,7 +2625,6 @@ function renderDraw(){
  if(state.winner){
   const winner=state.participants.find(p=>p.team===state.winner);
   $('drawCurrent').innerHTML='<strong>🏆 '+REALM_NAMES[state.winner]+'</strong><span>'+escapeHTML(winner.name)+' obtiene el primer turno.</span>';
-  $('drawInstruction').textContent='¡Sorteo terminado! El orden normal continuará después del primer turno.';
   $('drawRoll').classList.add('hidden');
   $('drawContinue').classList.remove('hidden');
   $('drawContinue').disabled=false;
@@ -2643,7 +2634,6 @@ function renderDraw(){
  const team=state.roundTeams[state.index];
  const player=state.participants.find(p=>p.team===team);
  $('drawCurrent').innerHTML='<strong>'+T[team].icon+' '+REALM_NAMES[team]+'</strong><span>Turno de lanzamiento: '+escapeHTML(player.name)+' · '+(player.mode==='human'?'Persona':player.mode==='bot'?'Bot básico':'Bot avanzado')+'</span>';
- $('drawInstruction').textContent=state.notice||'Pulsa «Lanzar dado» para obtener el resultado de este reino.';
  $('drawRoll').classList.remove('hidden');
  $('drawRoll').disabled=state.busy;
  $('drawRoll').textContent='LANZAR DADO';
@@ -2655,7 +2645,6 @@ async function rollDrawDie(){
  const team=state.roundTeams[state.index];
  if(!team)return;
  state.busy=true;$('drawRoll').disabled=true;
- $('drawInstruction').textContent='El dado está girando...';
  $('drawDie').classList.add('rolling');
  playDiceSound();
  const timer=setInterval(()=>{
@@ -2677,13 +2666,11 @@ async function rollDrawDie(){
   const leaders=state.roundTeams.filter(candidate=>state.results[candidate]===highest);
   if(leaders.length===1){
    state.winner=leaders[0];
-   state.notice='El resultado más alto fue '+highest+'.';
   }else{
    state.round++;
    state.roundTeams=leaders;
    state.index=0;
    state.results={};
-   state.notice='Empate con '+highest+'. Solo los reinos empatados vuelven a lanzar.';
   }
  }
  state.busy=false;
