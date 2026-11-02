@@ -94,6 +94,7 @@
 /* Arte exacto aprobado por el usuario. Los controles transparentes se alinean sobre la imagen original. */
 .home-image-shell{display:block;position:relative;width:100%;max-width:780px;aspect-ratio:2/3;margin:0 auto;overflow:hidden}
 .home-image-shell>img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+#homeVersionLabel{position:absolute;z-index:5;left:54.8%;top:89.1%;width:10.8%;height:4.2%;display:flex;align-items:center;justify-content:center;background:rgba(25,23,28,.96);color:#e9dfd0;font:clamp(9px,1.65vw,18px) Georgia,serif;white-space:nowrap;pointer-events:none}
 .home-hotspot{position:absolute;z-index:3;display:block;min-width:0!important;min-height:0!important;padding:0!important;margin:0;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:transparent!important;touch-action:manipulation;cursor:pointer}
 .home-hotspot:focus-visible{outline:3px solid #fff0a2!important;outline-offset:1px;background:#ffffff12!important}
 .home-image-language-label{position:absolute;z-index:4;left:75.4%;top:2.0%;width:14.5%;height:3.4%;align-items:center;justify-content:center;text-align:center;overflow:hidden;border:1px solid #b78935;border-radius:2px;background:rgba(5,22,45,.97);color:#fff0cc;font:600 clamp(8px,1.7vw,16px) Georgia,serif;pointer-events:none}
@@ -1165,6 +1166,7 @@
 <section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
   <div id="homeImageShell" class="home-image-shell" aria-label="Ilustración principal de Ludo de Gongonia">
     <img id="homeExactArt" src="254B8872-2807-4A38-8683-F09BDD31B2BA.png" alt="Pantalla de inicio original de LUDO: El Camino de la Concordia" />
+    <span id="homeVersionLabel" aria-label="Versión 0.11.0">v0.11.0</span>
     <button id="homeExactGngPlus" class="home-hotspot" style="left:26.5%;top:1.5%;width:8.5%;height:5.5%" aria-label="Información sobre el saldo GNG"></button>
     <button id="homeExactLanguageHeader" class="home-hotspot" style="left:68.5%;top:1.1%;width:29%;height:5.2%" aria-label="Abrir selector de idiomas" aria-expanded="false"></button>
     <span id="homeImageLanguageLabel" class="home-image-language-label" hidden>Español</span>
