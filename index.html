@@ -4,7 +4,7 @@
 <meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.11.0</title>
 <style>
 :root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #0006)}.die-pips{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;overflow:visible;filter:drop-shadow(0 3px 4px #0006)}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}
 /* El resultado se lee en los puntos del dado: quitamos el contador circular redundante. */
 .die-result{display:none!important}
 .status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
@@ -611,12 +611,9 @@
 }
 .draw-current strong{color:#ffe6a5;font:700 20px Georgia,serif}
 .draw-current span{color:#cfc3aa;font-size:13px}
-.draw-die{display:grid;place-items:center;width:clamp(100px,24vw,132px);height:clamp(100px,24vw,132px);margin:10px auto 8px}
-.draw-die-face{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 6px 7px #0008)}
-.draw-die-face rect{fill:url(#draw-die-face-fill);stroke:#b88b3d;stroke-width:3}
-.draw-die-face circle{fill:#9e1719;stroke:#651012;stroke-width:1.3}
-.draw-die-face .pip-glint{fill:#ffd7b0;stroke:none;opacity:.8}
-.draw-die.rolling .draw-die-face{transform:rotate(12deg) scale(.94)}
+.draw-die{display:grid;place-items:center;width:clamp(148px,34vw,180px);height:clamp(148px,34vw,180px);margin:10px auto 8px}
+.draw-die-vector{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 3px 4px #0006)}
+.draw-die.rolling .draw-die-vector{transform:rotate(12deg) scale(.94)}
 @keyframes drawDiceRoll{0%{transform:rotate(0) translateY(0)}25%{transform:rotate(95deg) translateY(-5px)}50%{transform:rotate(190deg) translateY(3px)}75%{transform:rotate(285deg) translateY(-4px)}100%{transform:rotate(360deg) translateY(0)}}
 .draw-die.rolling{animation:drawDiceRoll .7s ease-in-out}
 .draw-instruction{min-height:38px;margin:6px 0 12px;color:#eadcbf;font:14px/1.45 Georgia,serif}
@@ -1596,11 +1593,71 @@
     <p id="drawRoundTitle" class="draw-round-title">Todos los reinos participantes lanzan un dado.</p>
     <div id="drawCurrent" class="draw-current" aria-live="polite"></div>
     <div id="drawDie" class="draw-die" aria-label="Dado del sorteo">
-      <svg class="draw-die-face" viewBox="0 0 100 100" role="img" aria-label="Cara del dado">
-        <defs><linearGradient id="draw-die-face-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff8e7"/><stop offset="1" stop-color="#e4d0a5"/></linearGradient></defs>
-        <rect x="3" y="3" width="94" height="94" rx="17"/>
-        <g id="draw-die-pip-group"></g>
-      </svg>
+      <svg class="draw-die-vector" viewBox="0 0 100 100" role="img" aria-label="Dado tridimensional de marfil y oro con puntos rojo rubí"><defs>
+ <linearGradient id="draw-die-top" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#fff7df"/>
+  <stop offset=".46" stop-color="#f2dfb8"/>
+  <stop offset="1" stop-color="#d9bd89"/>
+ </linearGradient>
+ <linearGradient id="draw-die-left" x1="0" y1="0" x2=".2" y2="1">
+  <stop offset="0" stop-color="#e9d3a6"/>
+  <stop offset=".55" stop-color="#d3b47d"/>
+  <stop offset="1" stop-color="#a9824d"/>
+ </linearGradient>
+ <linearGradient id="draw-die-right" x1="1" y1="0" x2=".25" y2="1">
+  <stop offset="0" stop-color="#fff0cf"/>
+  <stop offset=".5" stop-color="#e6cc9a"/>
+  <stop offset="1" stop-color="#bd9862"/>
+ </linearGradient>
+ <linearGradient id="draw-die-gold" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#fff0ad"/>
+  <stop offset=".28" stop-color="#e8b94e"/>
+  <stop offset=".62" stop-color="#9e641d"/>
+  <stop offset="1" stop-color="#f7d77e"/>
+ </linearGradient>
+ <linearGradient id="draw-die-goldLight" x1="0" y1="0" x2="0" y2="1">
+  <stop stop-color="#fff2bc"/><stop offset="1" stop-color="#b77a29"/>
+ </linearGradient>
+ <filter id="draw-die-shadow" x="-20%" y="-20%" width="140%" height="150%">
+  <feDropShadow dx="0" dy="2.2" stdDeviation="1.8" flood-color="#000" flood-opacity=".34"/>
+ </filter>
+<linearGradient id="draw-die-ruby" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ad2430"/><stop offset=".48" stop-color="#82131f"/><stop offset="1" stop-color="#4d0c15"/></linearGradient></defs><g filter="url(#draw-die-shadow)">
+ <!-- Caras laterales -->
+ <path d="M4.5 24.2 L47.2 46.1 Q50 47.5 50 51.1 V91.2 Q50 98 44.4 95.1 L8.1 76.2 Q3 73.5 3 68.2 V29.1 Q3 25.8 4.5 24.2Z"
+       fill="url(#draw-die-left)" stroke="url(#draw-die-gold)" stroke-width="2.3" stroke-linejoin="round"/>
+ <path d="M95.5 24.2 L52.8 46.1 Q50 47.5 50 51.1 V91.2 Q50 98 55.6 95.1 L91.9 76.2 Q97 73.5 97 68.2 V29.1 Q97 25.8 95.5 24.2Z"
+       fill="url(#draw-die-right)" stroke="url(#draw-die-gold)" stroke-width="2.3" stroke-linejoin="round"/>
+ <!-- Cara superior -->
+ <path d="M50 3.2 Q52.2 3.2 55 4.6 L93.9 21.1 Q98 22.9 94.1 26.4 L53.1 46.8 Q50 48.4 46.9 46.8 L5.9 26.4 Q2 22.9 6.1 21.1 L45 4.6 Q47.8 3.2 50 3.2Z"
+       fill="url(#draw-die-top)" stroke="url(#draw-die-gold)" stroke-width="2.5" stroke-linejoin="round"/>
+ <!-- Biseles interiores -->
+ <path d="M50 7.1 L89.3 23.1 L50 42.7 L10.7 23.1Z" fill="none" stroke="#fff1c8" stroke-opacity=".78" stroke-width=".7"/>
+ <path d="M7.2 29 L46.8 49.1 V90.8 L7.2 70.2Z" fill="none" stroke="#f8e2b1" stroke-opacity=".48" stroke-width=".65"/>
+ <path d="M92.8 29 L53.2 49.1 V90.8 L92.8 70.2Z" fill="none" stroke="#fff0cb" stroke-opacity=".56" stroke-width=".65"/>
+ <!-- Aristas principales doradas -->
+ <path d="M5.8 25.1 L47 46.8 Q50 48.5 53 46.8 L94.2 25.1" fill="none" stroke="#fff0ad" stroke-width=".85" stroke-opacity=".9"/>
+ <path d="M50 48.2 V94.8" fill="none" stroke="#91601f" stroke-width="1.2" stroke-opacity=".65"/>
+ <path d="M50 48.2 V94.8" fill="none" stroke="#ffe7a0" stroke-width=".55" stroke-opacity=".8"/>
+ <!-- Ornamentos de filigrana en las esquinas -->
+ <g fill="none" stroke="url(#draw-die-goldLight)" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round" opacity=".92">
+  <path d="M50 6.5 Q47.5 10.5 43.8 10.3 Q45.7 14.3 50 15.1 Q54.3 14.3 56.2 10.3 Q52.5 10.5 50 6.5Z"/>
+  <path d="M12.1 24.1 Q16.2 22.3 18.6 25.6 Q19.3 28.5 15.8 29.5 Q14.2 27.4 12.1 24.1Z"/>
+  <path d="M87.9 24.1 Q83.8 22.3 81.4 25.6 Q80.7 28.5 84.2 29.5 Q85.8 27.4 87.9 24.1Z"/>
+  <path d="M7 69 Q12 66 15.4 70.4 Q16.4 74.5 11.8 75.2"/>
+  <path d="M93 69 Q88 66 84.6 70.4 Q83.6 74.5 88.2 75.2"/>
+  <path d="M45.8 91.8 Q47.2 88.8 50 88 Q52.8 88.8 54.2 91.8"/>
+ </g>
+ <g fill="url(#draw-die-gold)" stroke="#80511d" stroke-width=".35">
+  <circle cx="50" cy="12.3" r="1.15"/>
+  <circle cx="12.5" cy="25.2" r=".85"/><circle cx="87.5" cy="25.2" r=".85"/>
+  <circle cx="8" cy="69.5" r=".8"/><circle cx="92" cy="69.5" r=".8"/>
+  <circle cx="50" cy="93.5" r="1"/>
+ </g>
+ <!-- Reflejos de esmalte -->
+ <path d="M13 19.7 L43.3 7.1" stroke="#fff" stroke-opacity=".43" stroke-width="1" stroke-linecap="round"/>
+ <path d="M8 33 Q8 30 10 29" stroke="#fff8df" stroke-opacity=".38" stroke-width=".9" fill="none"/>
+ <path d="M92 33 Q92 30 90 29" stroke="#fff" stroke-opacity=".35" stroke-width=".9" fill="none"/>
+</g><g id="draw-die-pip-group"></g></svg>
     </div>
     <p id="drawInstruction" class="draw-instruction">Cada reino participante tendrá su lanzamiento.</p>
     <div id="drawResults" class="draw-results"></div>
@@ -1610,7 +1667,71 @@
 </section>
 <section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"><div id="goalFireworks" class="goal-fireworks hidden" aria-hidden="true"></div></div></div><aside class="panel side">
 <div class="dice dice-interaction">
- <div id="die" class="die" role="button" tabindex="0" aria-label="Tocar para lanzar el dado" aria-disabled="false"><img class="die-art" src="dado-gongonia-ornamentado.svg" alt="Dado tridimensional de marfil con bordes dorados"><svg id="die-pips" class="die-pips" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="die-gem-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a91625"/><stop offset=".48" stop-color="#8f101d"/><stop offset="1" stop-color="#650b15"/></linearGradient></defs><g id="die-pip-group"></g></svg><span id="die-result" class="die-result hidden" aria-hidden="true">—</span></div>
+ <div id="die" class="die" role="button" tabindex="0" aria-label="Tocar para lanzar el dado" aria-disabled="false"><svg class="die-art" viewBox="0 0 100 100" role="img" aria-label="Dado tridimensional de marfil y oro con puntos rojo rubí"><defs>
+ <linearGradient id="game-die-top" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#fff7df"/>
+  <stop offset=".46" stop-color="#f2dfb8"/>
+  <stop offset="1" stop-color="#d9bd89"/>
+ </linearGradient>
+ <linearGradient id="game-die-left" x1="0" y1="0" x2=".2" y2="1">
+  <stop offset="0" stop-color="#e9d3a6"/>
+  <stop offset=".55" stop-color="#d3b47d"/>
+  <stop offset="1" stop-color="#a9824d"/>
+ </linearGradient>
+ <linearGradient id="game-die-right" x1="1" y1="0" x2=".25" y2="1">
+  <stop offset="0" stop-color="#fff0cf"/>
+  <stop offset=".5" stop-color="#e6cc9a"/>
+  <stop offset="1" stop-color="#bd9862"/>
+ </linearGradient>
+ <linearGradient id="game-die-gold" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#fff0ad"/>
+  <stop offset=".28" stop-color="#e8b94e"/>
+  <stop offset=".62" stop-color="#9e641d"/>
+  <stop offset="1" stop-color="#f7d77e"/>
+ </linearGradient>
+ <linearGradient id="game-die-goldLight" x1="0" y1="0" x2="0" y2="1">
+  <stop stop-color="#fff2bc"/><stop offset="1" stop-color="#b77a29"/>
+ </linearGradient>
+ <filter id="game-die-shadow" x="-20%" y="-20%" width="140%" height="150%">
+  <feDropShadow dx="0" dy="2.2" stdDeviation="1.8" flood-color="#000" flood-opacity=".34"/>
+ </filter>
+<linearGradient id="game-die-ruby" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ad2430"/><stop offset=".48" stop-color="#82131f"/><stop offset="1" stop-color="#4d0c15"/></linearGradient></defs><g filter="url(#game-die-shadow)">
+ <!-- Caras laterales -->
+ <path d="M4.5 24.2 L47.2 46.1 Q50 47.5 50 51.1 V91.2 Q50 98 44.4 95.1 L8.1 76.2 Q3 73.5 3 68.2 V29.1 Q3 25.8 4.5 24.2Z"
+       fill="url(#game-die-left)" stroke="url(#game-die-gold)" stroke-width="2.3" stroke-linejoin="round"/>
+ <path d="M95.5 24.2 L52.8 46.1 Q50 47.5 50 51.1 V91.2 Q50 98 55.6 95.1 L91.9 76.2 Q97 73.5 97 68.2 V29.1 Q97 25.8 95.5 24.2Z"
+       fill="url(#game-die-right)" stroke="url(#game-die-gold)" stroke-width="2.3" stroke-linejoin="round"/>
+ <!-- Cara superior -->
+ <path d="M50 3.2 Q52.2 3.2 55 4.6 L93.9 21.1 Q98 22.9 94.1 26.4 L53.1 46.8 Q50 48.4 46.9 46.8 L5.9 26.4 Q2 22.9 6.1 21.1 L45 4.6 Q47.8 3.2 50 3.2Z"
+       fill="url(#game-die-top)" stroke="url(#game-die-gold)" stroke-width="2.5" stroke-linejoin="round"/>
+ <!-- Biseles interiores -->
+ <path d="M50 7.1 L89.3 23.1 L50 42.7 L10.7 23.1Z" fill="none" stroke="#fff1c8" stroke-opacity=".78" stroke-width=".7"/>
+ <path d="M7.2 29 L46.8 49.1 V90.8 L7.2 70.2Z" fill="none" stroke="#f8e2b1" stroke-opacity=".48" stroke-width=".65"/>
+ <path d="M92.8 29 L53.2 49.1 V90.8 L92.8 70.2Z" fill="none" stroke="#fff0cb" stroke-opacity=".56" stroke-width=".65"/>
+ <!-- Aristas principales doradas -->
+ <path d="M5.8 25.1 L47 46.8 Q50 48.5 53 46.8 L94.2 25.1" fill="none" stroke="#fff0ad" stroke-width=".85" stroke-opacity=".9"/>
+ <path d="M50 48.2 V94.8" fill="none" stroke="#91601f" stroke-width="1.2" stroke-opacity=".65"/>
+ <path d="M50 48.2 V94.8" fill="none" stroke="#ffe7a0" stroke-width=".55" stroke-opacity=".8"/>
+ <!-- Ornamentos de filigrana en las esquinas -->
+ <g fill="none" stroke="url(#game-die-goldLight)" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round" opacity=".92">
+  <path d="M50 6.5 Q47.5 10.5 43.8 10.3 Q45.7 14.3 50 15.1 Q54.3 14.3 56.2 10.3 Q52.5 10.5 50 6.5Z"/>
+  <path d="M12.1 24.1 Q16.2 22.3 18.6 25.6 Q19.3 28.5 15.8 29.5 Q14.2 27.4 12.1 24.1Z"/>
+  <path d="M87.9 24.1 Q83.8 22.3 81.4 25.6 Q80.7 28.5 84.2 29.5 Q85.8 27.4 87.9 24.1Z"/>
+  <path d="M7 69 Q12 66 15.4 70.4 Q16.4 74.5 11.8 75.2"/>
+  <path d="M93 69 Q88 66 84.6 70.4 Q83.6 74.5 88.2 75.2"/>
+  <path d="M45.8 91.8 Q47.2 88.8 50 88 Q52.8 88.8 54.2 91.8"/>
+ </g>
+ <g fill="url(#game-die-gold)" stroke="#80511d" stroke-width=".35">
+  <circle cx="50" cy="12.3" r="1.15"/>
+  <circle cx="12.5" cy="25.2" r=".85"/><circle cx="87.5" cy="25.2" r=".85"/>
+  <circle cx="8" cy="69.5" r=".8"/><circle cx="92" cy="69.5" r=".8"/>
+  <circle cx="50" cy="93.5" r="1"/>
+ </g>
+ <!-- Reflejos de esmalte -->
+ <path d="M13 19.7 L43.3 7.1" stroke="#fff" stroke-opacity=".43" stroke-width="1" stroke-linecap="round"/>
+ <path d="M8 33 Q8 30 10 29" stroke="#fff8df" stroke-opacity=".38" stroke-width=".9" fill="none"/>
+ <path d="M92 33 Q92 30 90 29" stroke="#fff" stroke-opacity=".35" stroke-width=".9" fill="none"/>
+</g><g id="die-pip-group"></g></svg><span id="die-result" class="die-result hidden" aria-hidden="true">—</span></div>
  <div class="dice-turn-wrap"><div class="label">JUGADOR ACTUAL</div><div id="turn" class="turn die-turn"></div></div>
  <button id="roll" class="primary" type="button">Lanzar dado</button>
 </div>
@@ -2434,19 +2555,50 @@ document.querySelectorAll('.setup-mode-group').forEach(group=>{
 count();
 
 const REALM_NAMES={red:'Gongonia',blue:'Kelta',green:'Brunia',yellow:'Routa'};
-function updateDrawDieFace(value){
- const group=$('draw-die-pip-group');
+/* Un solo generador para ambos dados: caras vecinas válidas y puntos proyectados con la geometría del cubo. */
+function renderProjectedDie(value,groupId,rubyId){
+ const group=$(groupId);
  if(!group)return;
+ const number=Number(value);
+ if(!Number.isInteger(number)||number<1||number>6){group.innerHTML='';return;}
  const patterns={
-  1:[[50,50]],
-  2:[[28,28],[72,72]],
-  3:[[28,28],[50,50],[72,72]],
-  4:[[28,28],[72,28],[28,72],[72,72]],
-  5:[[28,28],[72,28],[50,50],[28,72],[72,72]],
-  6:[[28,25],[72,25],[28,50],[72,50],[28,75],[72,75]]
+  1:[[.5,.5]],
+  2:[[.3,.3],[.7,.7]],
+  3:[[.3,.3],[.5,.5],[.7,.7]],
+  4:[[.3,.3],[.7,.3],[.3,.7],[.7,.7]],
+  5:[[.3,.3],[.7,.3],[.5,.5],[.3,.7],[.7,.7]],
+  6:[[.3,.22],[.7,.22],[.3,.5],[.7,.5],[.3,.78],[.7,.78]]
  };
- const dots=patterns[Number(value)]||[];
- group.innerHTML=dots.map(([x,y])=>'<circle cx="'+x+'" cy="'+y+'" r="7.2"/>').join('');
+ const directions={px:[1,0,0],nx:[-1,0,0],py:[0,1,0],ny:[0,-1,0],pz:[0,0,1],nz:[0,0,-1]};
+ const faceValues={px:3,nx:4,py:1,ny:6,pz:2,nz:5};
+ const keyForValue=Object.keys(faceValues).find(key=>faceValues[key]===number);
+ const topDir=directions[keyForValue];
+ const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+ const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+ const keyForDirection=vector=>Object.keys(directions).find(key=>directions[key].every((v,i)=>v===vector[i]));
+ const sideOptions=Object.keys(directions).filter(key=>dot(directions[key],topDir)===0);
+ const rightKey=sideOptions[Math.floor(Math.random()*sideOptions.length)];
+ const leftKey=keyForDirection(cross(directions[rightKey],topDir));
+ const faces=[
+  {name:'top',value:number,matrix:'matrix(39 17.8 -39 17.8 50 7.1)'},
+  {name:'left',value:faceValues[leftKey],matrix:'matrix(39 22 0 42 8 28)'},
+  {name:'right',value:faceValues[rightKey],matrix:'matrix(-39 22 0 42 92 28)'}
+ ];
+ const pipRadius=.105;
+ group.innerHTML=faces.map(face=>{
+  const pips=patterns[face.value].map(([u,v])=>
+   '<g><ellipse cx="'+u+'" cy="'+v+'" rx="'+(pipRadius+.012)+'" ry="'+(pipRadius+.012)+'" fill="#4c1018" opacity=".88"/><ellipse cx="'+u+'" cy="'+v+'" rx="'+pipRadius+'" ry="'+pipRadius+'" fill="url(#'+rubyId+')" stroke="#5c0c15" stroke-width=".012"/><path d="M '+(u-pipRadius*.46)+' '+(v-pipRadius*.28)+' Q '+u+' '+(v-pipRadius*.55)+' '+(u+pipRadius*.28)+' '+(v-pipRadius*.3)+'" fill="none" stroke="#e7a2a0" stroke-width=".009" stroke-linecap="round" opacity=".58"/></g>'
+  ).join('');
+  return '<g class="die-face-pips die-face-'+face.name+'" transform="'+face.matrix+'">'+pips+'</g>';
+ }).join('');
+}
+function updateDieFace(value){
+ renderProjectedDie(value,'die-pip-group','game-die-ruby');
+ const result=$('die-result');
+ if(result)result.textContent=String(value);
+}
+function updateDrawDieFace(value){
+ renderProjectedDie(value,'draw-die-pip-group','draw-die-ruby');
  $('drawDie').setAttribute('aria-label','Dado: '+value);
 }
 function beginDraw(){
