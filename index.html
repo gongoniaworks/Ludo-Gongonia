@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.10.18</title>
+<meta name="theme-color" content="#171b2a"><title>LUDO · Los Juegos de Gongonia · v0.10.19</title>
 <style>
 :root{--gold:#d8b76d;--ink:#f8f0dd;--red:#c44b50;--green:#32815c;--yellow:#e0b83c;--blue:#427cbd}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#34314a,#171b2a 65%,#10131c);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}.app{max-width:900px;margin:auto;padding:16px 10px 30px}h1{text-align:center;font:clamp(2rem,6vw,3.2rem) Georgia,serif;margin:8px 0}.sub{text-align:center;color:#d4c7a9}.panel{background:#252d42;border:1px solid #d8b76d66;border-radius:14px;padding:14px;margin-bottom:12px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.choice{padding:10px;border:1px solid #ffffff30;border-radius:9px;display:flex;flex-direction:column;gap:9px;min-width:0}.choice label{display:flex;align-items:center;gap:6px;font-size:.9rem}.choice input[type="checkbox"]{accent-color:var(--gold);flex:none}.choice .player-name{width:100%;min-width:0;padding:8px;border:1px solid #ffffff30;border-radius:7px;background:#171b2a;color:var(--ink);font:inherit;font-size:.85rem}.choice .player-name::placeholder{color:#aaa99f}button{font:inherit;cursor:pointer;touch-action:manipulation}.primary,.secondary{border:0;border-radius:9px;padding:11px 14px;font-weight:800;min-height:44px}.primary{background:linear-gradient(#f3d994,#c49b4b);color:#241b0d}.secondary{background:#ffffff15;color:var(--ink);border:1px solid #ffffff25}.primary:disabled{opacity:.4}.hidden{display:none!important}.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}.board{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));aspect-ratio:1;border:3px solid #ae8c4c;border-radius:7px;overflow:hidden;background:#d8c8a7}.cell{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;border:1px solid #6e624d38;background:#eee4cd}.home-red{background:#e8b8b6}.home-green{background:#b9d9c4}.home-yellow{background:#f0df9c}.home-blue{background:#b9cee7}.path{background:#f5eddd}.safe{background:#f0d28a}.lane-red{background:var(--red)}.lane-green{background:var(--green)}.lane-yellow{background:var(--yellow)}.lane-blue{background:var(--blue)}.center{background:radial-gradient(circle,#ffe6a1,#a67d32);font-size:clamp(13px,3vw,25px);color:#513b15}.pieces{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:1px}.piece{width:88%;height:88%;max-width:30px;max-height:30px;padding:0;border-radius:50%;border:2px solid #fff0b5;background:var(--team);color:white;font-size:clamp(7px,1.6vw,14px);font-weight:900}.piece.yellow{color:#392906}.piece.legal{outline:3px solid #fff4a3;box-shadow:0 0 7px #fff4a3}.piece:disabled{cursor:default}.side{display:flex;flex-direction:column;gap:12px}.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#c7bda8}.turn{font:1.3rem Georgia,serif;margin:5px 0}.dice{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px}.die{position:relative;width:52px;height:52px;display:block;aspect-ratio:1;background:transparent;border:0;border-radius:0;overflow:visible;flex:none}.die-art{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #0006)}.die-pips{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.die-result{position:absolute;right:-2px;bottom:-1px;display:grid;place-items:center;width:21px;height:21px;border:2px solid #f3d994;border-radius:50%;background:linear-gradient(#3b2b1b,#171b2a);color:#fff0bd;font-size:15px;font-weight:900;line-height:1;box-shadow:0 1px 4px #0008;text-shadow:0 1px 2px #000}.status{line-height:1.45;min-height:55px;color:#e5dbc8;font-size:.88rem}.players{display:grid;gap:6px}.player{display:flex;align-items:center;gap:7px;padding:7px;border-radius:8px;background:#ffffff0b;font-size:.8rem}.player.current{outline:1px solid var(--gold)}.dot{width:10px;height:10px;border-radius:50%}.right{margin-left:auto;color:#c8bea9;font-size:.72rem}.note,.credits{text-align:center;color:#aaa99f;font-size:.76rem;line-height:1.5;margin-top:12px}@media(max-width:650px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side .wide{grid-column:1/-1}}@media(max-width:360px){.side{grid-template-columns:1fr}.side .wide{grid-column:auto}}
@@ -1072,6 +1072,20 @@
 
 
 
+
+/* v0.10.19 — barras de volumen integradas en la ilustración original */
+.home-volume-bar{
+ position:absolute;z-index:8;display:block;padding:0;margin:0;
+ border:0;border-radius:1px;background:#1685df;
+ opacity:.98;cursor:pointer;box-shadow:0 0 4px rgba(0,100,255,.2);
+ appearance:none;-webkit-appearance:none;
+}
+.home-volume-bar.is-active{
+ background:linear-gradient(180deg,#fff0b0 0%,#f4cf70 48%,#c58b32 100%);
+ box-shadow:0 0 5px rgba(255,208,103,.48);
+}
+.home-volume-bar:focus-visible{outline:2px solid #ffe4a1;outline-offset:2px}
+
 </style></head><body><main class="app">
 
 <section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
@@ -1091,7 +1105,10 @@
     <button id="homeExactPurchases" class="home-hotspot" style="left:5.6%;top:69.9%;width:28%;height:7.1%" aria-label="Compras"></button>
     <button id="homeExactStats" class="home-hotspot" style="left:36%;top:69.9%;width:28%;height:7.1%" aria-label="Estadísticas"></button>
     <button id="homeExactSettings" class="home-hotspot" style="left:66%;top:69.9%;width:28.5%;height:7.1%" aria-label="Ajustes"></button>
-    <button id="homeExactMusicToggle" class="home-hotspot" style="left:84.5%;top:77.7%;width:9%;height:4%" aria-label="Activar o silenciar música"></button>
+    <button id="homeVolumeBar1" class="home-volume-bar" style="left:91.9%;top:79.3%;width:1.7%;height:5.3%" aria-label="Volumen 33 por ciento" data-level="0.33"></button>
+    <button id="homeVolumeBar2" class="home-volume-bar" style="left:93.7%;top:77.8%;width:1.7%;height:6.8%" aria-label="Volumen 66 por ciento" data-level="0.66"></button>
+    <button id="homeVolumeBar3" class="home-volume-bar" style="left:95.5%;top:76.1%;width:1.7%;height:8.5%" aria-label="Volumen 100 por ciento" data-level="1"></button>
+    <button id="homeExactMusicToggle" class="home-hotspot" style="left:91.7%;top:76%;width:5.8%;height:9%;opacity:0" aria-label="Silenciar o reactivar música"></button>
     <button id="homeExactStory" class="home-hotspot" style="left:30%;top:90.8%;width:40%;height:3.6%" aria-label="El origen de los Juegos"></button>
   </div>
   
@@ -1358,7 +1375,21 @@ const GOAL=pct(627,544), $=id=>document.getElementById(id);
 let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=false,effectsEnabled=true,botTimer=null,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set(),gameStartedAt=0,gameStats={},finishOrder=[],drawState=null,lastStartingTeam=null;
 updateDieFace(1);
 const introMusic=$('introMusic'),gameMusic=$('gameMusic');
-/* Mezcla de audio: bajar música para dejar espacio a los efectos del juego. */
+/* Volumen maestro: conserva la mezcla relativa de inicio y partida. */
+let musicVolume=1;
+function applyMusicVolume(){
+ introMusic.volume=0.56*musicVolume;
+ gameMusic.volume=0.48*musicVolume;
+ document.querySelectorAll('.home-volume-bar').forEach((bar)=>{
+  const level=Number(bar.dataset.level);
+  bar.classList.toggle('is-active',musicEnabled&&musicVolume>=level);
+  bar.setAttribute('aria-pressed',String(musicEnabled&&musicVolume>=level));
+ });
+ const state=musicEnabled?Math.round(musicVolume*100):0;
+ $('homeVolumeBar1')?.setAttribute('aria-label','Volumen 33 por ciento. Volumen actual '+state+' por ciento');
+ $('homeVolumeBar2')?.setAttribute('aria-label','Volumen 66 por ciento. Volumen actual '+state+' por ciento');
+ $('homeVolumeBar3')?.setAttribute('aria-label','Volumen 100 por ciento. Volumen actual '+state+' por ciento');
+}
 introMusic.volume=0.56;gameMusic.volume=0.48;
 function updateMusicButtons(){
  const label=musicError?'⚠️ Reintentar música':musicEnabled?'🔊 Silenciar música':'🔇 Activar música';
@@ -1368,6 +1399,7 @@ function updateMusicButtons(){
  $('gameMusicToggle').title=musicError||'Música de la partida';
  $('musicStatus').textContent=musicError;
  $('homeExactMusicToggle').setAttribute('aria-label',musicError?'No se pudo iniciar la música. Toca para reintentar.':musicEnabled?'Silenciar música':'Activar música');
+ applyMusicVolume();
 }
 let musicError='';
 async function playMusicFor(screen){
@@ -1377,7 +1409,7 @@ async function playMusicFor(screen){
  other.pause();other.currentTime=0;
  try{
   target.muted=false;
-  target.volume=screen==='game'?0.48:0.56;
+  target.volume=(screen==='game'?0.48:0.56)*musicVolume;
   await target.play();
   musicError='';
   updateMusicButtons();
@@ -1438,6 +1470,24 @@ $('homeExactSettings').addEventListener('click',()=>showHomeInfo('Ajustes','El s
 
 function enableHomeMusic(){enableMusic();}
 $('homeExactMusicToggle').addEventListener('click',enableHomeMusic);
+function setHomeMusicVolume(level){
+ const sameLevel=musicEnabled&&Math.abs(musicVolume-level)<0.02;
+ if(sameLevel){
+  musicEnabled=false;musicVolume=0;musicError='';
+  introMusic.pause();gameMusic.pause();
+  updateMusicButtons();
+  return;
+ }
+ musicVolume=level;musicEnabled=true;musicError='';
+ applyMusicVolume();updateMusicButtons();
+ const activeScreen=$('game').classList.contains('hidden')?'setup':'game';
+ const activeAudio=activeScreen==='game'?gameMusic:introMusic;
+ if(activeAudio.paused)playMusicFor(activeScreen);
+}
+$('homeVolumeBar1').addEventListener('click',()=>setHomeMusicVolume(0.33));
+$('homeVolumeBar2').addEventListener('click',()=>setHomeMusicVolume(0.66));
+$('homeVolumeBar3').addEventListener('click',()=>setHomeMusicVolume(1));
+
 
 function showHomeInfo(title,body){$('homeInfoTitle').textContent=title;$('homeInfoText').textContent=body;$('homeInfoModal').classList.remove('hidden');$('homeModalOk').focus();}
 function closeHomeInfo(){$('homeInfoModal').classList.add('hidden');}
