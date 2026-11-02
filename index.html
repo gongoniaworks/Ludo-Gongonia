@@ -1160,6 +1160,74 @@
  .home-stats-footnote{margin-top:8px}
 }
 
+
+/* Celebración breve al completar un reino: la capa no bloquea el tablero ni los controles. */
+.victory-overlay{
+ position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;
+ padding:18px;overflow:hidden;pointer-events:none!important;
+ background:rgba(4,11,25,.76);
+ animation:victory-backdrop 4s ease both;
+}
+.victory-overlay *{pointer-events:none!important}
+.victory-card{
+ position:relative;z-index:2;width:min(92vw,560px);padding:clamp(23px,5vw,38px) 22px;
+ text-align:center;border:3px solid var(--winner-color,#d8b76d);border-radius:18px;
+ background:
+  radial-gradient(ellipse at 50% -12%,rgba(239,203,119,.24),transparent 55%),
+  linear-gradient(145deg,#173451 0%,#0a2039 58%,#07152a 100%);
+ box-shadow:0 0 0 5px rgba(216,183,109,.15),inset 0 1px rgba(255,255,255,.13),0 18px 55px #000b;
+ animation:victory-card-pop 4s ease both;
+}
+.victory-card:before,.victory-card:after{
+ content:"";position:absolute;left:18px;right:18px;height:1px;
+ background:linear-gradient(90deg,transparent,#e8c477,transparent);
+}
+.victory-card:before{top:12px}.victory-card:after{bottom:12px}
+.victory-crest{
+ display:grid;place-items:center;width:clamp(58px,13vw,78px);height:clamp(58px,13vw,78px);
+ margin:0 auto 10px;border:2px solid #f6dfa5;border-radius:50%;
+ background:radial-gradient(circle at 35% 25%,#fff0bd,#d4a64f 58%,#76501e);
+ color:#18263b;font:clamp(31px,7vw,44px) Georgia,serif;
+ box-shadow:0 0 0 5px rgba(224,187,103,.14),0 4px 14px #0008;
+}
+.victory-kicker{color:#e8cf96;font:600 clamp(.65rem,2vw,.82rem) Georgia,serif;letter-spacing:.22em}
+.victory-title{
+ margin:8px 0 7px;color:#ffe7a9;font:700 clamp(2rem,8vw,3.5rem) Georgia,serif;
+ line-height:1.02;text-shadow:0 3px 0 #60451f,0 5px 14px #000b;
+}
+.victory-kingdom{
+ margin:8px 0 5px;color:#fff1ce;font:700 clamp(1.2rem,5vw,2rem) Georgia,serif;
+ letter-spacing:.08em;text-shadow:0 2px 7px #0009;
+}
+.victory-player{margin:8px 0 0;color:#e5d7b8;font:clamp(.9rem,3.2vw,1.1rem) Georgia,serif}
+.victory-confetti{position:absolute;inset:0;z-index:1;overflow:hidden}
+.victory-confetti-piece{
+ position:absolute;top:-12vh;width:clamp(5px,1.3vw,9px);height:clamp(10px,2.3vw,17px);
+ border-radius:1px;opacity:0;transform-origin:center;
+ animation:victory-confetti-fall var(--duration,3.4s) cubic-bezier(.16,.62,.34,1) var(--delay,0s) forwards;
+}
+@keyframes victory-backdrop{
+ 0%{background:rgba(4,11,25,0)}
+ 8%,88%{background:rgba(4,11,25,.76)}
+ 100%{background:rgba(4,11,25,0)}
+}
+@keyframes victory-card-pop{
+ 0%{opacity:0;transform:translateY(18px) scale(.72)}
+ 9%{opacity:1;transform:translateY(0) scale(1.03)}
+ 16%,84%{opacity:1;transform:translateY(0) scale(1)}
+ 100%{opacity:0;transform:translateY(-8px) scale(.94)}
+}
+@keyframes victory-confetti-fall{
+ 0%{opacity:0;transform:translate3d(0,-8vh,0) rotate(0deg)}
+ 10%{opacity:.98}
+ 85%{opacity:.95}
+ 100%{opacity:0;transform:translate3d(var(--drift,0px),112vh,0) rotate(var(--spin,650deg))}
+}
+@media(max-width:380px){
+ .victory-card{padding:22px 14px}
+ .victory-kicker{letter-spacing:.15em}
+}
+
 </style></head><body><main class="app">
 
 <section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
@@ -1388,8 +1456,22 @@
  </div>
 </section>
 </main>
+
+<div id="victoryOverlay" class="victory-overlay hidden" aria-hidden="true" aria-live="polite">
+ <div id="victoryConfetti" class="victory-confetti" aria-hidden="true"></div>
+ <div class="victory-card" role="status">
+  <div id="victoryCrest" class="victory-crest">🏆</div>
+  <div class="victory-kicker">LOS JUEGOS DE GONGONIA</div>
+  <h2 class="victory-title">¡VICTORIA!</h2>
+  <div id="victoryKingdom" class="victory-kingdom">GONGONIA</div>
+  <p id="victoryPlayer" class="victory-player"></p>
+ </div>
+</div>
+
 <audio id="introMusic" src="The%20Kelta%20Mountains.mp3" preload="none" loop></audio>
 <audio id="gameMusic" src="The%20Routa%20Plains%20of%20A%CC%81nganor%20(Take%202).mp3" preload="none" loop></audio>
+<audio id="victoryTrumpets" src="https://sfxmint.com/dl/trumpet-fanfare-04.mp3" preload="auto"></audio>
+<audio id="victoryCrowd" src="https://sfxmint.com/dl/crowd-cheer-44.mp3" preload="auto"></audio>
 <script>
 (()=>{
 const T={
@@ -1479,7 +1561,7 @@ const HOME_POINTS={
  blue:[[16.799,66.077],[28.761,66.137],[16.707,77.463],[28.644,77.334]]
 };
 const GOAL=pct(627,544), $=id=>document.getElementById(id);
-let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=true,effectsEnabled=true,botTimer=null,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set(),gameStartedAt=0,gameStats={},finishOrder=[],drawState=null,lastStartingTeam=null,matchStatsRecorded=false;
+let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=true,effectsEnabled=true,botTimer=null,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set(),gameStartedAt=0,gameStats={},finishOrder=[],drawState=null,lastStartingTeam=null,matchStatsRecorded=false,victoryQueue=[],victoryTimer=null,victoryCheerTimer=null,victoryActive=false;
 updateDieFace(1);
 const introMusic=$('introMusic'),gameMusic=$('gameMusic');
 /* Volumen maestro: 33 %, 66 % o 100 % de la mezcla original. */
@@ -1828,6 +1910,85 @@ function playCaptureSound(){
  chime.connect(chimeGain);chimeGain.connect(ctx.destination);
  chime.start(now+.025);chime.stop(now+.33);
 }
+
+/* Celebración de 4 segundos: el tablero sigue recibiendo acciones durante la animación. */
+function stopVictoryAudio(){
+ if(victoryCheerTimer!==null){clearTimeout(victoryCheerTimer);victoryCheerTimer=null;}
+ ['victoryTrumpets','victoryCrowd'].forEach(id=>{
+  const audio=$(id);if(!audio)return;
+  audio.pause();try{audio.currentTime=0;}catch(e){}
+ });
+}
+function playVictoryAudio(){
+ if(!effectsEnabled)return;
+ const trumpet=$('victoryTrumpets'),crowd=$('victoryCrowd');
+ if(!trumpet||!crowd)return;
+ stopVictoryAudio();
+ trumpet.volume=.88;crowd.volume=.68;
+ const fanfare=trumpet.play();
+ if(fanfare&&typeof fanfare.catch==='function')fanfare.catch(()=>{});
+ /* Los vítores entran un instante después de las trompetas para que se distingan. */
+ victoryCheerTimer=window.setTimeout(()=>{
+  victoryCheerTimer=null;
+  if(!victoryActive||!effectsEnabled)return;
+  try{crowd.currentTime=0;}catch(e){}
+  const cheer=crowd.play();
+  if(cheer&&typeof cheer.catch==='function')cheer.catch(()=>{});
+ },260);
+}
+function buildVictoryConfetti(){
+ const host=$('victoryConfetti');
+ if(!host)return;
+ const colors=['#f2d28b','#fff0c1','#c84a50','#32815c','#e0b83c','#427cbd','#d8b76d'];
+ host.innerHTML=Array.from({length:52},()=>{
+  const left=(Math.random()*100).toFixed(2);
+  const delay=(Math.random()*.58).toFixed(2);
+  const duration=(3.05+Math.random()*.7).toFixed(2);
+  const drift=Math.round((Math.random()-.5)*220);
+  const spin=Math.round(360+Math.random()*900);
+  const color=colors[Math.floor(Math.random()*colors.length)];
+  const width=Math.round(5+Math.random()*5),height=Math.round(9+Math.random()*9);
+  return '<i class="victory-confetti-piece" style="left:'+left+'%;--delay:'+delay+'s;--duration:'+duration+'s;--drift:'+drift+'px;--spin:'+spin+'deg;background:'+color+';width:'+width+'px;height:'+height+'px"></i>';
+ }).join('');
+}
+function showNextVictoryCelebration(){
+ if(victoryActive||!victoryQueue.length)return;
+ const winner=victoryQueue.shift();
+ const overlay=$('victoryOverlay');
+ if(!overlay)return;
+ const kingdom=REALM_NAMES[winner.team]||'Reino';
+ const team=T[winner.team]||{};
+ victoryActive=true;
+ overlay.style.setProperty('--winner-color',team.color||'#d8b76d');
+ $('victoryCrest').textContent=team.icon||'🏆';
+ $('victoryKingdom').textContent=kingdom.toUpperCase();
+ $('victoryPlayer').textContent=winner.playerName;
+ buildVictoryConfetti();
+ overlay.classList.remove('hidden');
+ overlay.setAttribute('aria-hidden','false');
+ playVictoryAudio();
+ victoryTimer=window.setTimeout(()=>{
+  overlay.classList.add('hidden');
+  overlay.setAttribute('aria-hidden','true');
+  victoryActive=false;
+  victoryTimer=null;
+  showNextVictoryCelebration();
+ },4000);
+}
+function enqueueVictoryCelebration(player){
+ if(!player||!player.team)return;
+ victoryQueue.push({team:player.team,playerName:player.playerName||'Jugador'});
+ showNextVictoryCelebration();
+}
+function resetVictoryCelebration(){
+ if(victoryTimer!==null){clearTimeout(victoryTimer);victoryTimer=null;}
+ victoryQueue=[];
+ victoryActive=false;
+ stopVictoryAudio();
+ const overlay=$('victoryOverlay');
+ if(overlay){overlay.classList.add('hidden');overlay.setAttribute('aria-hidden','true');}
+}
+
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function chosen(){return [...document.querySelectorAll('.choice input[type="checkbox"]:checked')].map(x=>x.value)}
 function getPlayerMode(team){const select=document.querySelector('.player-mode[data-team="'+team+'"]');return select?select.value:'human'}
@@ -2064,7 +2225,7 @@ $('drawBack').addEventListener('click',()=>{
  window.scrollTo(0,0);
 });
 
-function start(firstTeam=null){let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,playerName:getPlayerName(team),botMode:getPlayerMode(team),isBot:getPlayerMode(team)!=='human',finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=firstTeam?players.findIndex(p=>p.team===firstTeam):0;if(current<0)current=0;lastStartingTeam=players[current]?players[current].team:null;drawState=null;$('drawScreen').classList.add('hidden');roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;gameStartedAt=Date.now();matchStatsRecorded=false;gameStats={};finishOrder=[];teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});$('results').classList.add('hidden');$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado; necesitas un 6 para sacar una ficha.');render();playTurnSound();scheduleBotTurn()}
+function start(firstTeam=null){resetVictoryCelebration();let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,playerName:getPlayerName(team),botMode:getPlayerMode(team),isBot:getPlayerMode(team)!=='human',finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=firstTeam?players.findIndex(p=>p.team===firstTeam):0;if(current<0)current=0;lastStartingTeam=players[current]?players[current].team:null;drawState=null;$('drawScreen').classList.add('hidden');roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;gameStartedAt=Date.now();matchStatsRecorded=false;gameStats={};finishOrder=[];teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});$('results').classList.add('hidden');$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado; necesitas un 6 para sacar una ficha.');render();playTurnSound();scheduleBotTurn()}
 $('start').addEventListener('click',beginDraw);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start(lastStartingTeam)});$('newGame').addEventListener('click',()=>{$('results').classList.add('hidden');$('setup').classList.remove('hidden');beginDraw()});$('resultMenu').addEventListener('click',()=>{$('results').classList.add('hidden');$('game').classList.add('hidden');$('setup').classList.add('hidden');$('homeScreen').classList.remove('hidden');playMusicFor('setup')});
 function position(team,p){
  if(p.progress<0)return HOME_POINTS[team][p.slot];
@@ -2134,6 +2295,8 @@ function render(){
  $('players').innerHTML=players.map((p,i)=>'<div class="player '+(i===current&&!over?'current':'')+'"><span class="dot" style="background:'+T[p.team].color+'"></span><b>'+escapeHTML(p.playerName)+(p.isBot?' · '+botModeLabel(p):'')+' — Reino '+T[p.team].name+'</b><span class="right">'+p.pieces.filter(x=>x.progress===56).length+'/4 en meta</span></div>').join('');
 }
 function showFinalStats(winnerTeam){
+ /* Al terminar la partida no se encolan más celebraciones individuales. */
+ victoryQueue=[];
  const seconds=Math.max(0,Math.floor((Date.now()-gameStartedAt)/1000));
  saveCompletedMatch(winnerTeam,seconds);
  const mm=String(Math.floor(seconds/60)).padStart(2,'0'),ss=String(seconds%60).padStart(2,'0');
@@ -2228,7 +2391,7 @@ async function move(pl,p){
    if(players.filter(x=>!x.finished).length<=1){
      over=true;msg('Partida terminada. ¡Gracias por probar Ludo de Gongonia!');render();showFinalStats(finishOrder[0]||pl.team);return;
    }
-   next();msg('¡'+pl.playerName+' — Reino '+T[pl.team].name+' completó sus fichas! Puesto de llegada: '+finishOrder.length+'.');render();return;
+   next();msg('¡'+pl.playerName+' — Reino '+T[pl.team].name+' completó sus fichas! Puesto de llegada: '+finishOrder.length+'.');render();enqueueVictoryCelebration(pl);return;
  }
  /* Sacar 1/6, capturar o llegar a la meta concede una tirada adicional.
     Si ocurren varias cosas en el mismo movimiento, la tirada extra no se acumula. */
