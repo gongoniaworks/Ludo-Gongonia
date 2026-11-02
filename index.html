@@ -81,6 +81,43 @@
 .token-stack.captured-return{animation:capturedReturnEffect .48s ease-out}
 @media(prefers-reduced-motion:reduce){.token-stack.captured-return{animation-duration:.01ms}}
 
+/* Captura: la ficha atacante salta, crece y cae sobre la ficha rival. */
+.token-stack .piece.stomping{z-index:20!important;overflow:visible!important}
+.token-stack .piece.stomping .guardian-token{z-index:20;animation:guardianStompEffect .76s cubic-bezier(.2,.75,.25,1) both;transform-origin:50% 85%}
+.token-stack .piece.stomped{z-index:1}
+.token-stack .piece.stomped .guardian-token{animation:guardianCrushedEffect .76s ease-in both;transform-origin:50% 90%}
+@keyframes guardianStompEffect{
+  0%{transform:translate(-50%,-62%) scale(1);filter:drop-shadow(0 1px 1px #0009)}
+  30%{transform:translate(-50%,-91%) scale(1.32);filter:drop-shadow(0 8px 5px #0008) brightness(1.12)}
+  55%{transform:translate(-50%,-48%) scale(1.48,.78);filter:drop-shadow(0 1px 2px #000b) brightness(1.5)}
+  72%{transform:translate(-50%,-54%) scale(1.22,.9);filter:drop-shadow(0 2px 2px #0009) brightness(1.2)}
+  100%{transform:translate(-50%,-62%) scale(1);filter:drop-shadow(0 1px 1px #0009)}
+}
+@keyframes guardianCrushedEffect{
+  0%,28%{transform:translate(-50%,-62%) scale(1);opacity:1;filter:brightness(1)}
+  55%{transform:translate(-50%,-45%) scale(.72,.38) rotate(-10deg);opacity:.72;filter:brightness(1.7)}
+  100%{transform:translate(-50%,-48%) scale(.58,.3) rotate(8deg);opacity:.42;filter:brightness(1.3)}
+}
+@media(prefers-reduced-motion:reduce){
+ .token-stack .piece.stomping .guardian-token,.token-stack .piece.stomped .guardian-token{animation-duration:.01ms}
+}
+
+/* Fuegos artificiales sobre la meta al llegar una ficha. */
+.goal-fireworks{position:absolute;z-index:25;width:0;height:0;pointer-events:none;overflow:visible}
+.firework-burst{position:absolute;left:var(--burst-x);top:var(--burst-y);width:0;height:0}
+.firework-spark{position:absolute;left:0;top:0;width:4px;height:10px;border-radius:50%;background:var(--spark-color);box-shadow:0 0 7px 2px var(--spark-color);transform:rotate(var(--angle)) translateY(0) scale(.25);opacity:0;animation:goalFireworkBurst .92s cubic-bezier(.12,.65,.2,1) var(--delay) forwards}
+.firework-core{position:absolute;left:0;top:0;width:11px;height:11px;border-radius:50%;background:#fff7d4;box-shadow:0 0 10px 5px #ffe8a0,0 0 23px 9px #e7ae48;transform:translate(-50%,-50%) scale(.2);animation:goalFireworkCore .42s ease-out var(--delay) both}
+@keyframes goalFireworkBurst{
+  0%{transform:rotate(var(--angle)) translateY(0) scale(.2);opacity:0}
+  14%{opacity:1}
+  100%{transform:rotate(var(--angle)) translateY(calc(var(--distance) * -1)) scale(.55);opacity:0}
+}
+@keyframes goalFireworkCore{
+  0%{transform:translate(-50%,-50%) scale(.15);opacity:0}
+  30%{transform:translate(-50%,-50%) scale(1.25);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(.2);opacity:0}
+}
+
 /* v0.7.3: guardianes ilustrados como fichas del juego */
 .token-stack .piece{position:relative;overflow:visible;border:0!important;background:transparent!important;color:transparent!important;outline:0;box-shadow:none;padding:0;}
 .token-stack .piece.legal{outline:0;box-shadow:none;}
@@ -1439,7 +1476,7 @@
     <button id="drawContinue" type="button" class="draw-action hidden">COMENZAR PARTIDA</button>
   </div>
 </section>
-<section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"></div></div><aside class="panel side">
+<section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"><div id="goalFireworks" class="goal-fireworks hidden" aria-hidden="true"></div></div></div><aside class="panel side">
 <div class="wide"><div class="label">Turno actual</div><div id="turn" class="turn"></div></div>
 <div class="dice"><div id="die" class="die" aria-label="Dado sin lanzar"><img class="die-art" src="dado-gongonia.webp" alt="Dado de marfil con bordes dorados y gemas rojas"><svg id="die-pips" class="die-pips" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="die-top-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5e8c8"/><stop offset="1" stop-color="#d9c397"/></linearGradient><radialGradient id="die-gem-fill" cx="30%" cy="25%" r="75%"><stop offset="0" stop-color="#ff8b68"/><stop offset=".35" stop-color="#d52b26"/><stop offset="1" stop-color="#620a0b"/></radialGradient></defs><polygon points="50,7 81,20 50,37 19,20" fill="url(#die-top-fill)" stroke="#b99a60" stroke-width=".65"/><g id="die-pip-group"></g></svg><span id="die-result" class="die-result">—</span></div><button id="roll" class="primary">Lanzar dado</button></div>
 <div id="status" class="status wide">Lanza el dado para comenzar.</div><div class="wide"><div class="label">Jugadores</div><div id="players" class="players"></div></div>
@@ -1561,7 +1598,7 @@ const HOME_POINTS={
  blue:[[16.799,66.077],[28.761,66.137],[16.707,77.463],[28.644,77.334]]
 };
 const GOAL=pct(627,544), $=id=>document.getElementById(id);
-let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=true,effectsEnabled=true,botTimer=null,animating=false,animatingPieceId=null,audioContext=null,capturedPieceIds=new Set(),gameStartedAt=0,gameStats={},finishOrder=[],drawState=null,lastStartingTeam=null,matchStatsRecorded=false,victoryQueue=[],victoryTimer=null,victoryCheerTimer=null,victoryActive=false;
+let players=[],current=0,roll=null,waiting=false,over=false,idseq=0,musicEnabled=true,effectsEnabled=true,botTimer=null,animating=false,animatingPieceId=null,stompingPieceId=null,stompedPieceIds=new Set(),audioContext=null,capturedPieceIds=new Set(),goalFireworksTimer=null,gameStartedAt=0,gameStats={},finishOrder=[],drawState=null,lastStartingTeam=null,matchStatsRecorded=false,victoryQueue=[],victoryTimer=null,victoryCheerTimer=null,victoryActive=false;
 updateDieFace(1);
 const introMusic=$('introMusic'),gameMusic=$('gameMusic');
 /* Volumen maestro: 33 %, 66 % o 100 % de la mezcla original. */
@@ -1878,6 +1915,46 @@ function playPieceCheer(){
  gain.gain.exponentialRampToValueAtTime(.0001,now+.29);
  source.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
  source.start(now);source.stop(now+.31);
+}
+/* Golpe mágico breve al capturar: caída tonal, impacto grave y destello. */
+function showGoalFireworks(){
+ const host=$('goalFireworks');
+ if(!host)return;
+ if(goalFireworksTimer!==null){clearTimeout(goalFireworksTimer);goalFireworksTimer=null;}
+ host.innerHTML='';
+ host.style.left=GOAL[0]+'%';
+ host.style.top=GOAL[1]+'%';
+ const colors=['#ffe28a','#fff6d2','#f4b942','#e96b62','#6fd5e6','#9c8cff','#76d49a'];
+ const offsets=[[-2,0],[-20,-17],[19,-15]];
+ offsets.forEach(([dx,dy],burstIndex)=>{
+  const burst=document.createElement('span');
+  burst.className='firework-burst';
+  burst.style.setProperty('--burst-x',dx+'px');
+  burst.style.setProperty('--burst-y',dy+'px');
+  const delay=(burstIndex*.24).toFixed(2)+'s';
+  const core=document.createElement('span');
+  core.className='firework-core';
+  core.style.setProperty('--delay',delay);
+  burst.append(core);
+  for(let i=0;i<18;i++){
+   const spark=document.createElement('span');
+   spark.className='firework-spark';
+   spark.style.setProperty('--angle',(i*20+burstIndex*9)+'deg');
+   spark.style.setProperty('--distance',(34+Math.random()*22).toFixed(0)+'px');
+   spark.style.setProperty('--delay',(burstIndex*.24+Math.random()*.07).toFixed(2)+'s');
+   spark.style.setProperty('--spark-color',colors[Math.floor(Math.random()*colors.length)]);
+   burst.append(spark);
+  }
+  host.append(burst);
+ });
+ host.classList.remove('hidden');
+ host.setAttribute('aria-hidden','false');
+ goalFireworksTimer=window.setTimeout(()=>{
+  host.classList.add('hidden');
+  host.setAttribute('aria-hidden','true');
+  host.innerHTML='';
+  goalFireworksTimer=null;
+ },1650);
 }
 /* Golpe mágico breve al capturar: caída tonal, impacto grave y destello. */
 function playCaptureSound(){
@@ -2279,7 +2356,7 @@ function render(){
    stack.setAttribute('aria-label',n+' ficha(s) en esta casilla');
    items.forEach(({pl,p})=>{
      const b=document.createElement('button');
-     b.className='piece '+pl.team+(waiting&&pl===players[current]&&legal(p)?' legal':'');
+     b.className='piece '+pl.team+(waiting&&pl===players[current]&&legal(p)?' legal':'')+(p.id===stompingPieceId?' stomping':'')+(stompedPieceIds.has(p.id)?' stomped':'');
      b.style.setProperty('--team',T[pl.team].color);
      const img=document.createElement('img');
      img.className='guardian-token';
@@ -2376,24 +2453,35 @@ async function move(pl,p){
  animatingPieceId=null;animating=false;
  let capturedCount=0;
  const capturedByTeam={};
- /* Las capturas se resuelven al terminar el movimiento animado. */
+ const capturedPieces=[];
+ /* Las fichas rivales permanecen en la casilla mientras ocurre el pisotón. */
  if(p.progress<=50){
    const landing=(T[pl.team].start+p.progress)%52;
    if(!SAFE.has(landing)){
      players.filter(x=>x!==pl).forEach(op=>op.pieces.forEach(e=>{
        if(e.progress>=0&&e.progress<=50&&(T[op.team].start+e.progress)%52===landing){
-         e.progress=-1;capturedCount++;capturedPieceIds.add(e.id);gameStats[pl.team].captures[op.team]++;capturedByTeam[op.team]=(capturedByTeam[op.team]||0)+1;
+         capturedCount++;capturedPieces.push(e);gameStats[pl.team].captures[op.team]++;capturedByTeam[op.team]=(capturedByTeam[op.team]||0)+1;
        }
      }));
    }
  }
- if(capturedCount>0){playCaptureSound();}
- render();
  if(capturedCount>0){
+   stompingPieceId=p.id;
+   capturedPieces.forEach(e=>stompedPieceIds.add(e.id));
+   playCaptureSound();
+   render();
+   await pause(760);
+   capturedPieces.forEach(e=>{e.progress=-1;capturedPieceIds.add(e.id);});
+   stompingPieceId=null;
+   stompedPieceIds.clear();
+   render();
    await pause(520);
    capturedPieceIds.clear();
    render();
+ }else{
+   render();
  }
+ if(reachedGoal)showGoalFireworks();
  if(pl.pieces.every(x=>x.progress===56)){
    pl.finished=true;
    if(!finishOrder.includes(pl.team))finishOrder.push(pl.team);
