@@ -1296,6 +1296,53 @@
  .dice-interaction .die{width:96px;height:96px}
  .dice-interaction .die-turn{font-size:1.38rem}
 }
+
+/* v0.11.1 — correcciones específicas para iPad en horizontal */
+@media screen and (orientation:landscape) and (min-width:700px){
+  /* El mantel deja de recortarse por arriba: sus esquinas coinciden con el marco. */
+  #game{
+    background-size:100% 100%!important;
+    background-position:center center!important;
+  }
+  /* Anula las antiguas reglas de 46–64 px que reducían el dado. */
+  #game .side>.dice.dice-interaction{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:7px!important;
+    width:100%!important;
+    padding:9px 6px 11px!important;
+    border-top:1px solid #d8b76d44;
+    border-bottom:1px solid #d8b76d44;
+  }
+  #game .side>.dice.dice-interaction .die{
+    display:block!important;
+    width:112px!important;
+    height:112px!important;
+    min-width:112px!important;
+    min-height:112px!important;
+    max-width:112px!important;
+    max-height:112px!important;
+    flex:none!important;
+    cursor:pointer;
+  }
+  #game .side>.dice.dice-interaction .die-turn-wrap{
+    display:block!important;
+    width:100%!important;
+    text-align:center!important;
+    padding:2px 4px 0!important;
+  }
+  #game .side>.dice.dice-interaction .die-turn{
+    font-size:clamp(1.16rem,1.65vw,1.38rem)!important;
+    line-height:1.2!important;
+    margin:4px auto 0!important;
+    color:#f4d99b!important;
+    text-align:center!important;
+    overflow-wrap:anywhere;
+  }
+  #game .side>.dice.dice-interaction #roll{display:none!important}
+}
 </style></head><body><main class="app">
 
 <section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
