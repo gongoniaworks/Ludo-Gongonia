@@ -1972,10 +1972,11 @@ function updateDieFace(value){
   right:([u,v])=>[92-39*u,28+22*u+42*v]
  };
  const dots=faceList.map(face=>{
-  const radius=face.name==='top'?2.65:2.5;
+  /* Puntos ampliados para que destaquen en iPad y móvil. */
+  const radius=face.name==='top'?4.25:4.0;
   return '<g class="die-face-pips die-face-'+face.name+'">'+patterns[face.value].map(([u,v])=>{
    const [x,y]=project[face.name]([u,v]);
-   return '<g filter="url(#pip-shadow)"><ellipse cx="'+x.toFixed(2)+'" cy="'+y.toFixed(2)+'" rx="'+radius+'" ry="'+(radius*.68).toFixed(2)+'" fill="url(#die-gem-fill)" stroke="#6e1014" stroke-width=".48"/><ellipse cx="'+(x-radius*.32).toFixed(2)+'" cy="'+(y-radius*.28).toFixed(2)+'" rx="'+(radius*.34).toFixed(2)+'" ry="'+(radius*.2).toFixed(2)+'" fill="#ffe0d2" opacity=".84"/></g>';
+   return '<g filter="url(#pip-shadow)"><ellipse cx="'+x.toFixed(2)+'" cy="'+y.toFixed(2)+'" rx="'+radius+'" ry="'+(radius*.68).toFixed(2)+'" fill="url(#die-gem-fill)" stroke="#6e1014" stroke-width=".62"/><ellipse cx="'+(x-radius*.32).toFixed(2)+'" cy="'+(y-radius*.28).toFixed(2)+'" rx="'+(radius*.38).toFixed(2)+'" ry="'+(radius*.23).toFixed(2)+'" fill="#ffe0d2" opacity=".9"/></g>';
   }).join('')+'</g>';
  }).join('');
  group.innerHTML=dots;
