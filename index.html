@@ -1957,7 +1957,7 @@ function updateDieFace(value){
  const keyForDirection=vector=>Object.keys(directions).find(key=>
   directions[key][0]===vector[0]&&directions[key][1]===vector[1]&&directions[key][2]===vector[2]
  );
- /* La cara superior es el resultado. Elegimos uniformemente una de las cuatro orientaciones laterales válidas. */
+ /* El resultado superior conserva seis probabilidades iguales; la orientación lateral es una de cuatro válidas. */
  const sideOptions=Object.keys(directions).filter(key=>dot(directions[key],topDir)===0);
  const rightKey=sideOptions[Math.floor(Math.random()*sideOptions.length)];
  const leftKey=keyForDirection(cross(directions[rightKey],topDir));
@@ -1966,18 +1966,18 @@ function updateDieFace(value){
   {name:'left',value:faceValues[leftKey]},
   {name:'right',value:faceValues[rightKey]}
  ];
- const project={
-  top:([u,v])=>[50+(u-v)*39,7.1+(u+v)*17.8],
-  left:([u,v])=>[8+39*u,28+22*u+42*v],
-  right:([u,v])=>[92-39*u,28+22*u+42*v]
+ /* Proyección de cada cara: los puntos se transforman junto con el plano, no se dibujan como círculos frontales. */
+ const faceTransforms={
+  top:'matrix(39 17.8 -39 17.8 50 7.1)',
+  left:'matrix(39 22 0 42 8 28)',
+  right:'matrix(-39 22 0 42 92 28)'
  };
+ const pipRadius=.105;
  const dots=faceList.map(face=>{
-  /* Puntos redondos tipo rubí, no cápsulas ovaladas. Conservan un área visual similar. */
-  const radius=face.name==='top'?3.6:3.45;
-  return '<g class="die-face-pips die-face-'+face.name+'">'+patterns[face.value].map(([u,v])=>{
-   const [x,y]=project[face.name]([u,v]);
-   return '<g><circle cx="'+x.toFixed(2)+'" cy="'+y.toFixed(2)+'" r="'+(radius+0.28).toFixed(2)+'" fill="#3f1015" opacity=".82"/><circle cx="'+x.toFixed(2)+'" cy="'+y.toFixed(2)+'" r="'+radius+'" fill="url(#die-gem-fill)" stroke="#b75a55" stroke-width=".28"/><path d="M '+(x-radius*.48).toFixed(2)+' '+(y-radius*.32).toFixed(2)+' Q '+x.toFixed(2)+' '+(y-radius*.62).toFixed(2)+' '+(x+radius*.34).toFixed(2)+' '+(y-radius*.34).toFixed(2)+'" fill="none" stroke="#f2b1a1" stroke-width=".28" opacity=".52" stroke-linecap="round"/></g>';
-  }).join('')+'</g>';
+  const pips=patterns[face.value].map(([u,v])=>{
+   return '<g><ellipse cx="'+u+'" cy="'+v+'" rx="'+(pipRadius+.012)+'" ry="'+(pipRadius+.012)+'" fill="#4c1018" opacity=".9"/><ellipse cx="'+u+'" cy="'+v+'" rx="'+pipRadius+'" ry="'+pipRadius+'" fill="url(#die-gem-fill)" stroke="#5c0c15" stroke-width=".012"/><path d="M '+(u-pipRadius*.46)+' '+(v-pipRadius*.28)+' Q '+u+' '+(v-pipRadius*.55)+' '+(u+pipRadius*.28)+' '+(v-pipRadius*.3)+'" fill="none" stroke="#e7a2a0" stroke-width=".009" stroke-linecap="round" opacity=".6"/></g>';
+  }).join('');
+  return '<g class="die-face-pips die-face-'+face.name+'" transform="'+faceTransforms[face.name]+'">'+pips+'</g>';
  }).join('');
  group.innerHTML=dots;
  const result=$('die-result');
