@@ -1972,11 +1972,11 @@ function updateDieFace(value){
   right:([u,v])=>[92-39*u,28+22*u+42*v]
  };
  const dots=faceList.map(face=>{
-  /* Puntos ampliados para que destaquen en iPad y móvil. */
-  const radius=face.name==='top'?4.25:4.0;
+  /* Puntos redondos tipo rubí, no cápsulas ovaladas. Conservan un área visual similar. */
+  const radius=face.name==='top'?3.6:3.45;
   return '<g class="die-face-pips die-face-'+face.name+'">'+patterns[face.value].map(([u,v])=>{
    const [x,y]=project[face.name]([u,v]);
-   return '<g filter="url(#pip-shadow)"><ellipse cx="'+x.toFixed(2)+'" cy="'+y.toFixed(2)+'" rx="'+radius+'" ry="'+(radius*.68).toFixed(2)+'" fill="url(#die-gem-fill)" stroke="#6e1014" stroke-width=".62"/><ellipse cx="'+(x-radius*.32).toFixed(2)+'" cy="'+(y-radius*.28).toFixed(2)+'" rx="'+(radius*.38).toFixed(2)+'" ry="'+(radius*.23).toFixed(2)+'" fill="#ffe0d2" opacity=".9"/></g>';
+   return '<g filter="url(#pip-shadow)"><circle cx="'+x.toFixed(2)+'" cy="'+y.toFixed(2)+'" r="'+radius+'" fill="url(#die-gem-fill)" stroke="#650b12" stroke-width=".62"/><circle cx="'+(x-radius*.3).toFixed(2)+'" cy="'+(y-radius*.34).toFixed(2)+'" r="'+(radius*.22).toFixed(2)+'" fill="#ffe9e2" opacity=".88"/><circle cx="'+(x+radius*.34).toFixed(2)+'" cy="'+(y+radius*.38).toFixed(2)+'" r="'+(radius*.1).toFixed(2)+'" fill="#7b1019" opacity=".55"/></g>';
   }).join('')+'</g>';
  }).join('');
  group.innerHTML=dots;
