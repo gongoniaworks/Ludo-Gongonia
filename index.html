@@ -1394,33 +1394,210 @@
   flex:0 0 160px!important;
  }
 }
+
+
+/* v0.11.3 — pantalla horizontal: recortes exactos de la ilustración original.
+   El tablero y el arte principal se muestran desde la imagen aprobada; los controles
+   inferiores se recortan del mismo archivo para evitar redibujarlos o duplicarlos. */
+@media (orientation: landscape) and (min-aspect-ratio: 1.15/1) {
+  #homeScreen.home-screen{
+    position:fixed!important;inset:0!important;z-index:100!important;
+    display:block!important;width:100vw!important;height:100dvh!important;
+    max-width:none!important;margin:0!important;padding:0!important;
+    overflow:hidden!important;border:0!important;border-radius:0!important;
+    background:radial-gradient(ellipse at 25% 45%,#263c52 0%,#111c2b 62%,#090f19 100%)!important;
+  }
+  #homeScreen .home-image-shell{
+    position:relative!important;display:grid!important;
+    grid-template-columns:minmax(0,min(65vw,calc(90dvh * 1.067))) minmax(0,1fr)!important;
+    align-items:center!important;gap:clamp(8px,1.2vw,16px)!important;
+    width:100vw!important;height:100dvh!important;max-width:none!important;
+    aspect-ratio:auto!important;margin:0!important;
+    padding:max(8px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important;
+    overflow:hidden!important;
+  }
+  #homeLandscapeArt.home-landscape-art{
+    position:relative!important;display:block!important;
+    width:100%!important;max-width:100%!important;max-height:90dvh!important;
+    aspect-ratio:1.067/1!important;align-self:center!important;
+    overflow:hidden!important;border-radius:5px!important;
+    box-shadow:0 7px 24px #0008,0 0 0 1px #d1ad6a55!important;
+  }
+  #homeLandscapeArt #homeExactArt{
+    position:absolute!important;inset:0!important;display:block!important;
+    width:100%!important;height:100%!important;max-width:none!important;
+    object-fit:cover!important;object-position:center top!important;
+    user-select:none!important;-webkit-user-drag:none!important;
+  }
+  #homeLandscapeArt #homeExactGngPlus{
+    left:26.5%!important;top:2.4%!important;width:8.5%!important;height:8.8%!important;
+    background:transparent!important;opacity:1!important;
+  }
+  #homeLandscapeArt #homeExactLanguageHeader{
+    left:68.5%!important;top:1.76%!important;width:29%!important;height:8.32%!important;
+    background:transparent!important;opacity:1!important;
+  }
+  #homeLandscapeArt .home-image-language-label{
+    left:75.4%!important;top:3.2%!important;width:14.5%!important;height:5.44%!important;
+    font-size:clamp(9px,1.35vw,16px)!important;
+  }
+  #homeLandscapeArt .home-language-menu{
+    left:70%!important;top:9.92%!important;width:27.5%!important;
+    max-height:70%!important;overflow:auto!important;
+  }
+  #homeLandscapeControls.home-landscape-controls{
+    grid-column:2!important;grid-row:1!important;
+    display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto auto auto auto auto!important;
+    align-content:center!important;align-items:center!important;justify-items:stretch!important;
+    gap:clamp(5px,.8vh,10px)!important;
+    width:100%!important;min-width:0!important;max-width:none!important;
+    max-height:94dvh!important;overflow:hidden!important;
+  }
+  #homeLandscapeControls .home-landscape-actions{
+    display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:clamp(3px,.55vw,7px)!important;width:100%!important;min-width:0!important;
+  }
+  #homeLandscapeControls .home-hotspot{
+    position:relative!important;inset:auto!important;
+    display:block!important;min-width:0!important;min-height:0!important;
+    width:100%!important;height:auto!important;margin:0!important;padding:0!important;
+    border:0!important;border-radius:0!important;opacity:1!important;
+    box-shadow:none!important;overflow:hidden!important;
+    background-repeat:no-repeat!important;background-color:transparent!important;
+    cursor:pointer!important;touch-action:manipulation!important;
+  }
+  #homeLandscapeControls #homeExactPlay{
+    aspect-ratio:5.802/1!important;
+    background-image:url("254B8872-2807-4A38-8683-F09BDD31B2BA.png")!important;
+    background-size:166.5% auto!important;background-position:48.9% 67.27%!important;
+  }
+  #homeLandscapeControls #homeExactPurchases{
+    aspect-ratio:2.543/1!important;
+    background-image:url("254B8872-2807-4A38-8683-F09BDD31B2BA.png")!important;
+    background-size:347.12% auto!important;background-position:8.23% 75.56%!important;
+  }
+  #homeLandscapeControls #homeExactStats{
+    aspect-ratio:2.612/1!important;
+    background-image:url("254B8872-2807-4A38-8683-F09BDD31B2BA.png")!important;
+    background-size:337.95% auto!important;background-position:49.93% 75.56%!important;
+  }
+  #homeLandscapeControls #homeExactSettings{
+    aspect-ratio:2.603/1!important;
+    background-image:url("254B8872-2807-4A38-8683-F09BDD31B2BA.png")!important;
+    background-size:339.07% auto!important;background-position:91.41% 75.56%!important;
+  }
+  #homeLandscapeControls .home-landscape-music{
+    position:relative!important;display:block!important;width:100%!important;
+    aspect-ratio:9.783/1!important;overflow:hidden!important;
+    background-image:url("254B8872-2807-4A38-8683-F09BDD31B2BA.png")!important;
+    background-repeat:no-repeat!important;background-size:113.78% auto!important;
+    background-position:50% 82.20%!important;
+  }
+  #homeLandscapeControls .home-volume-fill{
+    position:absolute!important;display:block!important;z-index:10!important;
+    pointer-events:none!important;border:0!important;border-radius:0!important;
+  }
+  #homeLandscapeControls .home-volume-fill[data-step="1"]{
+    left:90.6%!important;top:89.6%!important;width:1.6%!important;height:15.6%!important;
+  }
+  #homeLandscapeControls .home-volume-fill[data-step="2"]{
+    left:92.5%!important;top:75.4%!important;width:1.6%!important;height:30.4%!important;
+  }
+  #homeLandscapeControls .home-volume-fill[data-step="3"]{
+    left:94.5%!important;top:55.8%!important;width:1.6%!important;height:49.3%!important;
+  }
+  #homeLandscapeControls .home-volume-hit{
+    position:absolute!important;left:90.4%!important;top:45.1%!important;
+    width:6.3%!important;height:64.6%!important;z-index:14!important;
+    opacity:.001!important;background:transparent!important;cursor:pointer!important;
+  }
+  #homeLandscapeControls .home-landscape-ad{
+    display:block!important;width:100%!important;aspect-ratio:7.5/1!important;
+    background-image:url("254B8872-2807-4A38-8683-F09BDD31B2BA.png")!important;
+    background-repeat:no-repeat!important;background-size:113.78% auto!important;
+    background-position:50% 89.83%!important;
+  }
+  #homeLandscapeControls #homeExactStory{
+    aspect-ratio:8.848/1!important;
+    background-image:url("254B8872-2807-4A38-8683-F09BDD31B2BA.png")!important;
+    background-size:175.34% auto!important;background-position:50% 94.56%!important;
+  }
+  #homeLandscapeControls .home-landscape-version{
+    display:block!important;text-align:center!important;justify-self:center!important;
+    color:#e7d3a7!important;font:clamp(10px,1.15vw,15px) Georgia,serif!important;
+    letter-spacing:.05em!important;text-shadow:0 1px 3px #000!important;
+    line-height:1.2!important;padding:2px 0!important;
+  }
+  #homeLandscapeControls .home-landscape-version span{padding:0 .45em!important;color:#d2ad6c!important}
+}
+
+/* En vertical se conserva el menú original, con la misma imagen y las mismas zonas táctiles. */
+@media (orientation: portrait), (max-aspect-ratio: 1.149/1) {
+  #homeLandscapeArt.home-landscape-art,
+  #homeLandscapeControls.home-landscape-controls,
+  #homeLandscapeControls .home-landscape-actions,
+  #homeLandscapeControls .home-landscape-music{
+    display:contents!important;
+  }
+  #homeLandscapeArt #homeExactArt{
+    position:static!important;display:block!important;width:100%!important;height:100%!important;
+    object-fit:contain!important;object-position:center!important;
+  }
+  #homeLandscapeControls .home-landscape-ad,
+  #homeLandscapeControls .home-landscape-version{display:none!important}
+  #homeLandscapeControls #homeExactPlay,
+  #homeLandscapeControls #homeExactPurchases,
+  #homeLandscapeControls #homeExactStats,
+  #homeLandscapeControls #homeExactSettings,
+  #homeLandscapeControls #homeExactStory{
+    position:absolute!important;display:block!important;
+    background:transparent!important;background-image:none!important;
+    box-shadow:none!important;opacity:1!important;
+  }
+  #homeLandscapeControls .home-volume-fill{
+    position:absolute!important;background:transparent!important;
+  }
+  #homeLandscapeControls .home-volume-hit{
+    position:absolute!important;background:transparent!important;opacity:.001!important;
+  }
+}
+
 </style></head><body><main class="app">
 
 <section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
-  <div id="homeImageShell" class="home-image-shell" aria-label="Ilustración principal de Ludo de Gongonia">
-    <img id="homeExactArt" src="254B8872-2807-4A38-8683-F09BDD31B2BA.png" alt="Pantalla de inicio original de LUDO: El Camino de la Concordia" />
-    <button id="homeExactGngPlus" class="home-hotspot" style="left:26.5%;top:1.5%;width:8.5%;height:5.5%" aria-label="Información sobre el saldo GNG"></button>
-    <button id="homeExactLanguageHeader" class="home-hotspot" style="left:68.5%;top:1.1%;width:29%;height:5.2%" aria-label="Abrir selector de idiomas" aria-expanded="false"></button>
-    <span id="homeImageLanguageLabel" class="home-image-language-label" hidden>Español</span>
-    <div id="homeLanguageMenu" class="home-language-menu" hidden role="menu" aria-label="Seleccionar idioma">
-      <button class="home-language-option" data-language="es" data-label="Español" role="menuitem">🇻🇪 <span>Español</span></button>
-      <button class="home-language-option" data-language="it" data-label="Italiano" role="menuitem">🇮🇹 <span>Italiano</span></button>
-      <button class="home-language-option" data-language="en" data-label="Inglés" role="menuitem">🇺🇸 <span>Inglés</span></button>
-      <button class="home-language-option" data-language="de" data-label="Alemán" role="menuitem">🇩🇪 <span>Alemán</span></button>
-      <button class="home-language-option" data-language="fr" data-label="Francés" role="menuitem">🇨🇵 <span>Francés</span></button>
+  <div id="homeImageShell" class="home-image-shell" aria-label="Ilustración principal y controles de Ludo de Gongonia">
+    <div id="homeLandscapeArt" class="home-landscape-art">
+      <img id="homeExactArt" src="254B8872-2807-4A38-8683-F09BDD31B2BA.png" alt="Pantalla de inicio original de LUDO: El Camino de la Concordia" />
+      <button id="homeExactGngPlus" class="home-hotspot" style="left:26.5%;top:1.5%;width:8.5%;height:5.5%" aria-label="Información sobre el saldo GNG"></button>
+      <button id="homeExactLanguageHeader" class="home-hotspot" style="left:68.5%;top:1.1%;width:29%;height:5.2%" aria-label="Abrir selector de idiomas" aria-expanded="false"></button>
+      <span id="homeImageLanguageLabel" class="home-image-language-label" hidden>Español</span>
+      <div id="homeLanguageMenu" class="home-language-menu" hidden role="menu" aria-label="Seleccionar idioma">
+        <button class="home-language-option" data-language="es" data-label="Español" role="menuitem">🇻🇪 <span>Español</span></button>
+        <button class="home-language-option" data-language="it" data-label="Italiano" role="menuitem">🇮🇹 <span>Italiano</span></button>
+        <button class="home-language-option" data-language="en" data-label="Inglés" role="menuitem">🇺🇸 <span>Inglés</span></button>
+        <button class="home-language-option" data-language="de" data-label="Alemán" role="menuitem">🇩🇪 <span>Alemán</span></button>
+        <button class="home-language-option" data-language="fr" data-label="Francés" role="menuitem">🇨🇵 <span>Francés</span></button>
+      </div>
     </div>
-    <button id="homeExactPlay" class="home-hotspot" style="left:21.5%;top:62.7%;width:57%;height:6.9%" aria-label="Jugar"></button>
-    <button id="homeExactPurchases" class="home-hotspot" style="left:5.6%;top:69.9%;width:28%;height:7.1%" aria-label="Compras"></button>
-    <button id="homeExactStats" class="home-hotspot" style="left:36%;top:69.9%;width:28%;height:7.1%" aria-label="Estadísticas"></button>
-    <button id="homeExactSettings" class="home-hotspot" style="left:66%;top:69.9%;width:28.5%;height:7.1%" aria-label="Ajustes"></button>
-    <!-- Capas de color alineadas sobre las tres barras que ya trae la ilustración. -->
-    <span class="home-volume-fill" data-step="1" style="left:85.42%;top:82.26%;width:1.39%;height:.83%" aria-hidden="true"></span>
-    <span class="home-volume-fill" data-step="2" style="left:87.08%;top:81.50%;width:1.39%;height:1.62%" aria-hidden="true"></span>
-    <span class="home-volume-fill" data-step="3" style="left:88.83%;top:80.45%;width:1.34%;height:2.63%" aria-hidden="true"></span>
-    <button id="homeVolumeHitArea" class="home-hotspot home-volume-hit" aria-label="Volumen de música. Toca una de las tres barras para seleccionar 33, 66 o 100 por ciento."></button>
-    <button id="homeExactStory" class="home-hotspot" style="left:30%;top:90.8%;width:40%;height:3.6%" aria-label="El origen de los Juegos"></button>
+    <div id="homeLandscapeControls" class="home-landscape-controls" aria-label="Controles principales">
+      <button id="homeExactPlay" class="home-hotspot" style="left:21.5%;top:62.7%;width:57%;height:6.9%" aria-label="Jugar"></button>
+      <div class="home-landscape-actions">
+        <button id="homeExactPurchases" class="home-hotspot" style="left:5.6%;top:69.9%;width:28%;height:7.1%" aria-label="Compras"></button>
+        <button id="homeExactStats" class="home-hotspot" style="left:36%;top:69.9%;width:28%;height:7.1%" aria-label="Estadísticas"></button>
+        <button id="homeExactSettings" class="home-hotspot" style="left:66%;top:69.9%;width:28.5%;height:7.1%" aria-label="Ajustes"></button>
+      </div>
+      <div class="home-landscape-music" aria-label="Música y volumen">
+        <span class="home-volume-fill" data-step="1" aria-hidden="true"></span>
+        <span class="home-volume-fill" data-step="2" aria-hidden="true"></span>
+        <span class="home-volume-fill" data-step="3" aria-hidden="true"></span>
+        <button id="homeVolumeHitArea" class="home-hotspot home-volume-hit" aria-label="Volumen de música. Toca una de las tres barras para seleccionar 33, 66 o 100 por ciento."></button>
+      </div>
+      <div class="home-landscape-ad" aria-label="Espacio publicitario opcional"></div>
+      <button id="homeExactStory" class="home-hotspot" style="left:30%;top:90.8%;width:40%;height:3.6%" aria-label="El origen de los Juegos"></button>
+      <div class="home-landscape-version">Gongonia Works <span aria-hidden="true">•</span> v0.11.3</div>
+    </div>
   </div>
-  
   <div id="homeInfoModal" class="home-modal hidden" role="dialog" aria-modal="true" aria-labelledby="homeInfoTitle">
     <div class="home-modal-card">
       <button id="homeModalClose" class="home-modal-close" type="button" aria-label="Cerrar">×</button>
