@@ -1415,7 +1415,7 @@ body:has(#homeScreen:not(.hidden)) .app{
 
 @media (orientation:landscape){
   #homeScreen.home-landscape-layout:not(.hidden){
-    display:grid;grid-template-columns:minmax(0,58%) minmax(0,42%);
+    display:grid;grid-template-columns:minmax(0,58fr) minmax(0,42fr);
     grid-template-rows:minmax(0,1fr);align-items:center;justify-items:stretch;
     gap:clamp(6px,1.2vw,16px);padding:clamp(6px,1.2vw,16px);
   }
@@ -1546,7 +1546,7 @@ body:has(#homeScreen:not(.hidden)) .app{
   }
 }
 @media (orientation:landscape) and (max-width:699px){
-  #homeScreen.home-landscape-layout:not(.hidden){grid-template-columns:minmax(0,56%) minmax(220px,44%)}
+  #homeScreen.home-landscape-layout:not(.hidden){grid-template-columns:minmax(0,56fr) minmax(220px,44fr)}
 }
 @media (orientation:landscape) and (max-height:420px){
   #homeScreen.home-landscape-layout:not(.hidden){padding:4px;gap:5px}
