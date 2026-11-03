@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "Ludo de Gongonia",
+  "short_name": "Ludo Gongonia",
+  "description": "El Camino de la Concordia — Los Juegos de Gongonia",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#171b2a",
+  "theme_color": "#171b2a",
+  "icons": [
+    {
+      "src": "icono-ludo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
