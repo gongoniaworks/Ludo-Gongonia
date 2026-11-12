@@ -2139,21 +2139,24 @@ document.addEventListener('pointerdown',e=>{
  homeMusicStartedByGesture=true;
  playMusicFor('setup');
 },{passive:true});
-$('homeVolumeHitArea').addEventListener('click',e=>{
- const rect=e.currentTarget.getBoundingClientRect();
- const ratio=Math.max(0,Math.min(.999,(e.clientX-rect.left)/rect.width));
- const level=ratio<1/3?0.33:ratio<2/3?0.66:1;
- setHomeMusicVolume(level);
+/* Un solo toque recorre el volumen en una secuencia continua:
+   66 -> silencio -> 33 -> 66 -> 100 -> 66 -> 33 -> silencio -> ... */
+const homeVolumeSequence=[0.66,0,0.33,0.66,1,0.66,0.33,0];
+let homeVolumeSequenceIndex=0;
+$('homeVolumeHitArea').addEventListener('click',()=>{
+ homeMusicStartedByGesture=true;
+ homeVolumeSequenceIndex=homeVolumeSequenceIndex===7?2:homeVolumeSequenceIndex+1;
+ setHomeMusicVolume(homeVolumeSequence[homeVolumeSequenceIndex]);
 });
 function setHomeMusicVolume(level){
- homeMusicStartedByGesture=true;
- if(musicEnabled&&Math.abs(musicVolume-level)<0.001){
-  musicEnabled=false;musicError='';
+ musicError='';
+ if(level===0){
+  musicEnabled=false;
   introMusic.pause();gameMusic.pause();
   updateMusicButtons();
   return;
  }
- musicVolume=level;musicEnabled=true;musicError='';
+ musicVolume=level;musicEnabled=true;
  updateMusicButtons();
  const screen=$('game').classList.contains('hidden')?'setup':'game';
  const active=screen==='game'?gameMusic:introMusic;
