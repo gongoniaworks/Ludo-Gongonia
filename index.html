@@ -1112,11 +1112,11 @@
 
 /* v0.10.20 — el dorado colorea las tres barras originales, sin crear barras nuevas */
 .home-volume-fill{
- position:absolute;z-index:10;display:block;pointer-events:none;
+ position:absolute;z-index:30;display:block;pointer-events:none;
  background:transparent;border:0;border-radius:0;opacity:1;
 }
 .home-volume-fill.is-active{
- background:linear-gradient(180deg,#ffe9a8 0%,#f6d47e 28%,#e8b657 68%,#bd812f 100%);
+ background:linear-gradient(180deg,#ffe9a8 0%,#f6d47e 28%,#e8b657 68%,#bd812f 100%)!important;
  box-shadow:inset 0 0 0 1px rgba(255,238,183,.52),0 0 2px rgba(222,170,78,.32);
 }
 .home-volume-hit{
@@ -1495,24 +1495,16 @@
     background-position:50.75% 83.62%!important;
   }
   #homeLandscapeControls .home-volume-fill{
-    position:absolute!important;display:block!important;z-index:10!important;
+    position:absolute!important;display:block!important;z-index:30!important;
     pointer-events:none!important;border:0!important;border-radius:0!important;
   }
-  #homeLandscapeControls .home-volume-fill[data-step="1"]{left:94.6%!important;top:55.4%!important;width:1.1%!important;height:27.7%!important}
-  #homeLandscapeControls .home-volume-fill[data-step="2"]{left:96.2%!important;top:44.6%!important;width:1.1%!important;height:38.6%!important}
-  #homeLandscapeControls .home-volume-fill[data-step="3"]{left:98%!important;top:30.1%!important;width:1.1%!important;height:53%!important}
-  #homeLandscapeControls .home-volume-fill[data-step="1"]{
-    left:90.6%!important;top:89.6%!important;width:1.6%!important;height:15.6%!important;
-  }
-  #homeLandscapeControls .home-volume-fill[data-step="2"]{
-    left:92.5%!important;top:75.4%!important;width:1.6%!important;height:30.4%!important;
-  }
-  #homeLandscapeControls .home-volume-fill[data-step="3"]{
-    left:94.5%!important;top:55.8%!important;width:1.6%!important;height:49.3%!important;
-  }
+  /* Los tres indicadores coinciden con las barras azules del recorte horizontal. */
+  #homeLandscapeControls .home-volume-fill[data-step="1"]{left:90.6%!important;top:50%!important;width:1.4%!important;height:31%!important}
+  #homeLandscapeControls .home-volume-fill[data-step="2"]{left:92.7%!important;top:37%!important;width:1.4%!important;height:46%!important}
+  #homeLandscapeControls .home-volume-fill[data-step="3"]{left:94.7%!important;top:28%!important;width:1.4%!important;height:55%!important}
   #homeLandscapeControls .home-volume-hit{
-    position:absolute!important;left:93.8%!important;top:25%!important;
-    width:6%!important;height:70%!important;z-index:14!important;
+    position:absolute!important;left:89.8%!important;top:23%!important;
+    width:7.2%!important;height:68%!important;z-index:35!important;
     opacity:.001!important;background:transparent!important;cursor:pointer!important;
   }
   #homeLandscapeControls .home-landscape-ad{
@@ -1559,7 +1551,7 @@
     box-shadow:none!important;opacity:1!important;
   }
   #homeLandscapeControls .home-volume-fill{
-    position:absolute!important;background:transparent!important;
+    position:absolute!important;z-index:30!important;pointer-events:none!important;
   }
   #homeLandscapeControls .home-volume-hit{
     position:absolute!important;background:transparent!important;opacity:.001!important;
@@ -1591,9 +1583,9 @@
         <button id="homeExactSettings" class="home-hotspot" style="left:66%;top:69.9%;width:28.5%;height:7.1%" aria-label="Ajustes"></button>
       </div>
       <div class="home-landscape-music" aria-label="Música y volumen">
-        <span class="home-volume-fill" data-step="1" style="left:85.42%;top:82.26%;width:1.39%;height:.83%" aria-hidden="true"></span>
-        <span class="home-volume-fill" data-step="2" style="left:87.08%;top:81.50%;width:1.39%;height:1.62%" aria-hidden="true"></span>
-        <span class="home-volume-fill" data-step="3" style="left:88.83%;top:80.45%;width:1.34%;height:2.63%" aria-hidden="true"></span>
+        <span class="home-volume-fill" data-step="1" style="left:85.64%;top:82.29%;width:1.08%;height:.91%" aria-hidden="true"></span>
+        <span class="home-volume-fill" data-step="2" style="left:87.30%;top:81.38%;width:.98%;height:1.82%" aria-hidden="true"></span>
+        <span class="home-volume-fill" data-step="3" style="left:88.96%;top:80.60%;width:.98%;height:2.60%" aria-hidden="true"></span>
         <button id="homeVolumeHitArea" class="home-hotspot home-volume-hit" aria-label="Volumen de música. Toca una de las tres barras para seleccionar 33, 66 o 100 por ciento."></button>
       </div>
       <div class="home-landscape-ad" aria-label="Espacio publicitario opcional"></div>
