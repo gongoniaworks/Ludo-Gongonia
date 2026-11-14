@@ -2752,8 +2752,16 @@ async function rollDrawDie(){
  renderDraw();
 }
 $('drawRoll').addEventListener('click',rollDrawDie);
-$('drawContinue').addEventListener('click',()=>{
- if(drawState&&drawState.winner)start(drawState.winner);
+$('drawContinue').addEventListener('click',event=>{
+ event.preventDefault();
+ event.stopPropagation();
+ const firstTeam=drawState&&drawState.winner;
+ if(!firstTeam)return;
+ if(chosen().length<2){
+  $('drawInstruction').textContent='No hay dos reinos seleccionados. Vuelve a la selección y elige al menos dos.';
+  return;
+ }
+ start(firstTeam);
 });
 $('drawBack').addEventListener('click',()=>{
  drawState=null;
@@ -2762,7 +2770,41 @@ $('drawBack').addEventListener('click',()=>{
  window.scrollTo(0,0);
 });
 
-function start(firstTeam=null){resetVictoryCelebration();let teams=ORDER.filter(x=>chosen().includes(x));if(teams.length<2)return;players=teams.map(team=>({team,playerName:getPlayerName(team),botMode:getPlayerMode(team),isBot:getPlayerMode(team)!=='human',finished:false,pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))}));current=firstTeam?players.findIndex(p=>p.team===firstTeam):0;if(current<0)current=0;lastStartingTeam=players[current]?players[current].team:null;drawState=null;$('drawScreen').classList.add('hidden');roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;gameStartedAt=Date.now();matchStatsRecorded=false;gameStats={};finishOrder=[];teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});$('results').classList.add('hidden');$('setup').classList.add('hidden');$('game').classList.remove('hidden');playMusicFor('game');msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado; necesitas un 6 para sacar una ficha.');render();playTurnSound();scheduleBotTurn()}
+function start(firstTeam=null){
+ resetVictoryCelebration();
+ const teams=ORDER.filter(team=>chosen().includes(team));
+ if(teams.length<2){
+  $('drawInstruction').textContent='Selecciona al menos dos reinos para comenzar la partida.';
+  return;
+ }
+ players=teams.map(team=>({
+  team,
+  playerName:getPlayerName(team),
+  botMode:getPlayerMode(team),
+  isBot:getPlayerMode(team)!=='human',
+  finished:false,
+  pieces:[0,1,2,3].map(slot=>({id:++idseq,slot,progress:-1}))
+ }));
+ current=firstTeam?players.findIndex(player=>player.team===firstTeam):0;
+ if(current<0)current=0;
+ lastStartingTeam=players[current]?players[current].team:null;
+ drawState=null;
+ roll=null;waiting=false;over=false;animating=false;animatingPieceId=null;
+ gameStartedAt=Date.now();matchStatsRecorded=false;gameStats={};finishOrder=[];
+ teams.forEach(team=>gameStats[team]={rolls:0,moves:0,captures:{red:0,green:0,yellow:0,blue:0}});
+ /* Cambio de pantalla explícito: no depender de la pantalla desde la que se llegó aquí. */
+ ['homeScreen','storyScreen','setup','drawScreen','results'].forEach(id=>{
+  const screen=$(id);
+  if(screen)screen.classList.add('hidden');
+ });
+ $('game').classList.remove('hidden');
+ window.scrollTo(0,0);
+ playMusicFor('game');
+ msg('Turno de '+players[current].playerName+' — Reino '+T[players[current].team].name+'. Lanza el dado; necesitas un 6 para sacar una ficha.');
+ render();
+ playTurnSound();
+ scheduleBotTurn();
+}
 $('start').addEventListener('click',beginDraw);$('back').addEventListener('click',()=>{$('game').classList.add('hidden');$('setup').classList.remove('hidden');playMusicFor('setup')});$('restart').addEventListener('click',()=>{if(confirm('¿Reiniciar partida?'))start(lastStartingTeam)});$('newGame').addEventListener('click',()=>{$('results').classList.add('hidden');$('setup').classList.remove('hidden');beginDraw()});$('resultMenu').addEventListener('click',()=>{$('results').classList.add('hidden');$('game').classList.add('hidden');$('setup').classList.add('hidden');$('homeScreen').classList.remove('hidden');playMusicFor('setup')});
 function position(team,p){
  if(p.progress<0)return HOME_POINTS[team][p.slot];
