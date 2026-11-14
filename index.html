@@ -611,9 +611,10 @@
 }
 .draw-current strong{color:#ffe6a5;font:700 20px Georgia,serif}
 .draw-current span{color:#cfc3aa;font-size:13px}
-.draw-die{display:grid;place-items:center;width:clamp(148px,34vw,180px);height:clamp(148px,34vw,180px);margin:10px auto 8px}
-.draw-die-vector{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 3px 4px #0006)}
-.draw-die.rolling .draw-die-vector{transform:rotate(12deg) scale(.94)}
+.draw-die{position:relative;display:grid;place-items:center;width:clamp(148px,34vw,180px);height:clamp(148px,34vw,180px);margin:10px auto 8px}
+.draw-die .die-art{display:block;width:100%;height:100%;object-fit:contain;overflow:visible;filter:drop-shadow(0 3px 4px #0006)}
+.die-pips{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none;overflow:visible}
+.draw-die.rolling .die-art{transform:rotate(12deg) scale(.94)}
 @keyframes drawDiceRoll{0%{transform:rotate(0) translateY(0)}25%{transform:rotate(95deg) translateY(-5px)}50%{transform:rotate(190deg) translateY(3px)}75%{transform:rotate(285deg) translateY(-4px)}100%{transform:rotate(360deg) translateY(0)}}
 .draw-die.rolling{animation:drawDiceRoll .7s ease-in-out}
 .draw-instruction{min-height:38px;margin:6px 0 12px;color:#eadcbf;font:14px/1.45 Georgia,serif}
@@ -1771,71 +1772,10 @@
     <p id="drawRoundTitle" class="draw-round-title">Todos los reinos participantes lanzan un dado.</p>
     <div id="drawCurrent" class="draw-current" aria-live="polite"></div>
     <div id="drawDie" class="draw-die" aria-label="Dado del sorteo">
-      <svg class="draw-die-vector" viewBox="0 0 100 100" role="img" aria-label="Dado tridimensional de marfil y oro con puntos rojo rubí"><defs>
- <linearGradient id="draw-die-top" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="#fffefa"/>
-  <stop offset=".46" stop-color="#fff8e9"/>
-  <stop offset="1" stop-color="#f0dfc0"/>
- </linearGradient>
- <linearGradient id="draw-die-left" x1="0" y1="0" x2=".2" y2="1">
-  <stop offset="0" stop-color="#e9d3a6"/>
-  <stop offset=".55" stop-color="#d3b47d"/>
-  <stop offset="1" stop-color="#a9824d"/>
- </linearGradient>
- <linearGradient id="draw-die-right" x1="1" y1="0" x2=".25" y2="1">
-  <stop offset="0" stop-color="#fff0cf"/>
-  <stop offset=".5" stop-color="#e6cc9a"/>
-  <stop offset="1" stop-color="#bd9862"/>
- </linearGradient>
- <linearGradient id="draw-die-gold" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="#fff0ad"/>
-  <stop offset=".28" stop-color="#e8b94e"/>
-  <stop offset=".62" stop-color="#9e641d"/>
-  <stop offset="1" stop-color="#f7d77e"/>
- </linearGradient>
- <linearGradient id="draw-die-goldLight" x1="0" y1="0" x2="0" y2="1">
-  <stop stop-color="#fff2bc"/><stop offset="1" stop-color="#b77a29"/>
- </linearGradient>
- <filter id="draw-die-shadow" x="-20%" y="-20%" width="140%" height="150%">
-  <feDropShadow dx="0" dy="2.2" stdDeviation="1.8" flood-color="#000" flood-opacity=".34"/>
- </filter>
-<linearGradient id="draw-die-ruby" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ad2430"/><stop offset=".48" stop-color="#82131f"/><stop offset="1" stop-color="#4d0c15"/></linearGradient></defs><g filter="url(#draw-die-shadow)">
- <!-- Caras laterales -->
- <path d="M4.5 24.2 L47.2 46.1 Q50 47.5 50 51.1 V91.2 Q50 98 44.4 95.1 L8.1 76.2 Q3 73.5 3 68.2 V29.1 Q3 25.8 4.5 24.2Z"
-       fill="url(#draw-die-left)" stroke="url(#draw-die-gold)" stroke-width="2.3" stroke-linejoin="round"/>
- <path d="M95.5 24.2 L52.8 46.1 Q50 47.5 50 51.1 V91.2 Q50 98 55.6 95.1 L91.9 76.2 Q97 73.5 97 68.2 V29.1 Q97 25.8 95.5 24.2Z"
-       fill="url(#draw-die-right)" stroke="url(#draw-die-gold)" stroke-width="2.3" stroke-linejoin="round"/>
- <!-- Cara superior -->
- <path d="M50 3.2 Q52.2 3.2 55 4.6 L93.9 21.1 Q98 22.9 94.1 26.4 L53.1 46.8 Q50 48.4 46.9 46.8 L5.9 26.4 Q2 22.9 6.1 21.1 L45 4.6 Q47.8 3.2 50 3.2Z"
-       fill="url(#draw-die-top)" stroke="url(#draw-die-gold)" stroke-width="2.5" stroke-linejoin="round"/>
- <!-- Biseles interiores -->
- <path d="M50 7.1 L89.3 23.1 L50 42.7 L10.7 23.1Z" fill="none" stroke="#fff1c8" stroke-opacity=".78" stroke-width=".7"/>
- <path d="M7.2 29 L46.8 49.1 V90.8 L7.2 70.2Z" fill="none" stroke="#f8e2b1" stroke-opacity=".48" stroke-width=".65"/>
- <path d="M92.8 29 L53.2 49.1 V90.8 L92.8 70.2Z" fill="none" stroke="#fff0cb" stroke-opacity=".56" stroke-width=".65"/>
- <!-- Aristas principales doradas -->
- <path d="M5.8 25.1 L47 46.8 Q50 48.5 53 46.8 L94.2 25.1" fill="none" stroke="#fff0ad" stroke-width=".85" stroke-opacity=".9"/>
- <path d="M50 48.2 V94.8" fill="none" stroke="#91601f" stroke-width="1.2" stroke-opacity=".65"/>
- <path d="M50 48.2 V94.8" fill="none" stroke="#ffe7a0" stroke-width=".55" stroke-opacity=".8"/>
- <!-- Ornamentos de filigrana en las esquinas -->
- <g fill="none" stroke="url(#draw-die-goldLight)" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round" opacity=".92">
-  <path d="M50 6.5 Q47.5 10.5 43.8 10.3 Q45.7 14.3 50 15.1 Q54.3 14.3 56.2 10.3 Q52.5 10.5 50 6.5Z"/>
-  <path d="M12.1 24.1 Q16.2 22.3 18.6 25.6 Q19.3 28.5 15.8 29.5 Q14.2 27.4 12.1 24.1Z"/>
-  <path d="M87.9 24.1 Q83.8 22.3 81.4 25.6 Q80.7 28.5 84.2 29.5 Q85.8 27.4 87.9 24.1Z"/>
-  <path d="M7 69 Q12 66 15.4 70.4 Q16.4 74.5 11.8 75.2"/>
-  <path d="M93 69 Q88 66 84.6 70.4 Q83.6 74.5 88.2 75.2"/>
-  <path d="M45.8 91.8 Q47.2 88.8 50 88 Q52.8 88.8 54.2 91.8"/>
- </g>
- <g fill="url(#draw-die-gold)" stroke="#80511d" stroke-width=".35">
-  <circle cx="50" cy="12.3" r="1.15"/>
-  <circle cx="12.5" cy="25.2" r=".85"/><circle cx="87.5" cy="25.2" r=".85"/>
-  <circle cx="8" cy="69.5" r=".8"/><circle cx="92" cy="69.5" r=".8"/>
-  <circle cx="50" cy="93.5" r="1"/>
- </g>
- <!-- Reflejos de esmalte -->
- <path d="M13 19.7 L43.3 7.1" stroke="#fff" stroke-opacity=".43" stroke-width="1" stroke-linecap="round"/>
- <path d="M8 33 Q8 30 10 29" stroke="#fff8df" stroke-opacity=".38" stroke-width=".9" fill="none"/>
- <path d="M92 33 Q92 30 90 29" stroke="#fff" stroke-opacity=".35" stroke-width=".9" fill="none"/>
-</g><g id="draw-die-pip-group"></g></svg>
+      <img class="die-art" src="dado-gongonia-ornamentado.svg?v=0.11.5-unified" alt="Dado tridimensional de marfil con bordes dorados y puntos rojos"/>
+      <svg class="die-pips" viewBox="0 0 100 100" aria-hidden="true"><defs>
+       <linearGradient id="draw-die-ruby" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ad2430"/><stop offset=".48" stop-color="#82131f"/><stop offset="1" stop-color="#4d0c15"/></linearGradient>
+      </defs><g id="draw-die-pip-group"></g></svg>
     </div>
     <p id="drawInstruction" class="draw-instruction">Cada reino participante tendrá su lanzamiento.</p>
     <div id="drawResults" class="draw-results"></div>
@@ -1845,71 +1785,10 @@
 </section>
 <section id="game" class="hidden"><div class="layout"><div class="panel"><div id="board" class="board" aria-label="Tablero de prueba"><div id="goalFireworks" class="goal-fireworks hidden" aria-hidden="true"></div></div></div><aside class="panel side">
 <div class="dice dice-interaction">
- <div id="die" class="die" role="button" tabindex="0" aria-label="Tocar para lanzar el dado" aria-disabled="false"><svg class="die-art" viewBox="0 0 100 100" role="img" aria-label="Dado tridimensional de marfil y oro con puntos rojo rubí"><defs>
- <linearGradient id="game-die-top" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="#fffefa"/>
-  <stop offset=".46" stop-color="#fff8e9"/>
-  <stop offset="1" stop-color="#f0dfc0"/>
- </linearGradient>
- <linearGradient id="game-die-left" x1="0" y1="0" x2=".2" y2="1">
-  <stop offset="0" stop-color="#fff0d0"/>
-  <stop offset=".55" stop-color="#ead4a8"/>
-  <stop offset="1" stop-color="#c9a66e"/>
- </linearGradient>
- <linearGradient id="game-die-right" x1="1" y1="0" x2=".25" y2="1">
-  <stop offset="0" stop-color="#fff8e5"/>
-  <stop offset=".5" stop-color="#f0ddb8"/>
-  <stop offset="1" stop-color="#d2b17e"/>
- </linearGradient>
- <linearGradient id="game-die-gold" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="#fff0ad"/>
-  <stop offset=".28" stop-color="#e8b94e"/>
-  <stop offset=".62" stop-color="#9e641d"/>
-  <stop offset="1" stop-color="#f7d77e"/>
- </linearGradient>
- <linearGradient id="game-die-goldLight" x1="0" y1="0" x2="0" y2="1">
-  <stop stop-color="#fff2bc"/><stop offset="1" stop-color="#b77a29"/>
- </linearGradient>
- <filter id="game-die-shadow" x="-20%" y="-20%" width="140%" height="150%">
-  <feDropShadow dx="0" dy="2.2" stdDeviation="1.8" flood-color="#000" flood-opacity=".34"/>
- </filter>
-<linearGradient id="game-die-ruby" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ad2430"/><stop offset=".48" stop-color="#82131f"/><stop offset="1" stop-color="#4d0c15"/></linearGradient></defs><g filter="url(#game-die-shadow)">
- <!-- Caras laterales -->
- <path d="M4.5 24.2 L47.2 46.1 Q50 47.5 50 51.1 V91.2 Q50 98 44.4 95.1 L8.1 76.2 Q3 73.5 3 68.2 V29.1 Q3 25.8 4.5 24.2Z"
-       fill="url(#game-die-left)" stroke="url(#game-die-gold)" stroke-width="2.3" stroke-linejoin="round"/>
- <path d="M95.5 24.2 L52.8 46.1 Q50 47.5 50 51.1 V91.2 Q50 98 55.6 95.1 L91.9 76.2 Q97 73.5 97 68.2 V29.1 Q97 25.8 95.5 24.2Z"
-       fill="url(#game-die-right)" stroke="url(#game-die-gold)" stroke-width="2.3" stroke-linejoin="round"/>
- <!-- Cara superior -->
- <path d="M50 3.2 Q52.2 3.2 55 4.6 L93.9 21.1 Q98 22.9 94.1 26.4 L53.1 46.8 Q50 48.4 46.9 46.8 L5.9 26.4 Q2 22.9 6.1 21.1 L45 4.6 Q47.8 3.2 50 3.2Z"
-       fill="url(#game-die-top)" stroke="url(#game-die-gold)" stroke-width="2.5" stroke-linejoin="round"/>
- <!-- Biseles interiores -->
- <path d="M50 7.1 L89.3 23.1 L50 42.7 L10.7 23.1Z" fill="none" stroke="#fff1c8" stroke-opacity=".78" stroke-width=".7"/>
- <path d="M7.2 29 L46.8 49.1 V90.8 L7.2 70.2Z" fill="none" stroke="#f8e2b1" stroke-opacity=".48" stroke-width=".65"/>
- <path d="M92.8 29 L53.2 49.1 V90.8 L92.8 70.2Z" fill="none" stroke="#fff0cb" stroke-opacity=".56" stroke-width=".65"/>
- <!-- Aristas principales doradas -->
- <path d="M5.8 25.1 L47 46.8 Q50 48.5 53 46.8 L94.2 25.1" fill="none" stroke="#fff0ad" stroke-width=".85" stroke-opacity=".9"/>
- <path d="M50 48.2 V94.8" fill="none" stroke="#91601f" stroke-width="1.2" stroke-opacity=".65"/>
- <path d="M50 48.2 V94.8" fill="none" stroke="#ffe7a0" stroke-width=".55" stroke-opacity=".8"/>
- <!-- Ornamentos de filigrana en las esquinas -->
- <g fill="none" stroke="url(#game-die-goldLight)" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round" opacity=".92">
-  <path d="M50 6.5 Q47.5 10.5 43.8 10.3 Q45.7 14.3 50 15.1 Q54.3 14.3 56.2 10.3 Q52.5 10.5 50 6.5Z"/>
-  <path d="M12.1 24.1 Q16.2 22.3 18.6 25.6 Q19.3 28.5 15.8 29.5 Q14.2 27.4 12.1 24.1Z"/>
-  <path d="M87.9 24.1 Q83.8 22.3 81.4 25.6 Q80.7 28.5 84.2 29.5 Q85.8 27.4 87.9 24.1Z"/>
-  <path d="M7 69 Q12 66 15.4 70.4 Q16.4 74.5 11.8 75.2"/>
-  <path d="M93 69 Q88 66 84.6 70.4 Q83.6 74.5 88.2 75.2"/>
-  <path d="M45.8 91.8 Q47.2 88.8 50 88 Q52.8 88.8 54.2 91.8"/>
- </g>
- <g fill="url(#game-die-gold)" stroke="#80511d" stroke-width=".35">
-  <circle cx="50" cy="12.3" r="1.15"/>
-  <circle cx="12.5" cy="25.2" r=".85"/><circle cx="87.5" cy="25.2" r=".85"/>
-  <circle cx="8" cy="69.5" r=".8"/><circle cx="92" cy="69.5" r=".8"/>
-  <circle cx="50" cy="93.5" r="1"/>
- </g>
- <!-- Reflejos de esmalte -->
- <path d="M13 19.7 L43.3 7.1" stroke="#fff" stroke-opacity=".43" stroke-width="1" stroke-linecap="round"/>
- <path d="M8 33 Q8 30 10 29" stroke="#fff8df" stroke-opacity=".38" stroke-width=".9" fill="none"/>
- <path d="M92 33 Q92 30 90 29" stroke="#fff" stroke-opacity=".35" stroke-width=".9" fill="none"/>
-</g><g id="die-pip-group"></g></svg><span id="die-result" class="die-result hidden" aria-hidden="true">—</span></div>
+ <div id="die" class="die" role="button" tabindex="0" aria-label="Tocar para lanzar el dado" aria-disabled="false"><img class="die-art" src="dado-gongonia-ornamentado.svg?v=0.11.5-unified" alt="Dado tridimensional de marfil con bordes dorados y puntos rojos"/>
+  <svg id="die-pips" class="die-pips" viewBox="0 0 100 100" aria-hidden="true"><defs>
+   <linearGradient id="game-die-ruby" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ad2430"/><stop offset=".48" stop-color="#82131f"/><stop offset="1" stop-color="#4d0c15"/></linearGradient>
+  </defs><g id="die-pip-group"></g></svg><span id="die-result" class="die-result hidden" aria-hidden="true">—</span></div>
  <div class="dice-turn-wrap"><div class="label">JUGADOR ACTUAL</div><div id="turn" class="turn die-turn"></div></div>
  <button id="roll" class="primary" type="button">Lanzar dado</button>
 </div>
