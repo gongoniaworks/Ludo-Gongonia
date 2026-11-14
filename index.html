@@ -62,7 +62,7 @@
   70%{transform:rotate(285deg) scale(1.1) translateY(-2px)}
   100%{transform:rotate(360deg) scale(1)}
 }
-.die.rolling{animation:diceRollEffect .65s ease-in-out}
+.die.rolling{animation:drawDiceRoll .7s ease-in-out}
 @keyframes tokenHopEffect{
   0%{transform:translate(-50%,-62%) scale(1)}
   45%{transform:translate(-50%,-78%) scale(1.12)}
@@ -614,7 +614,7 @@
 .draw-die{position:relative;display:grid;place-items:center;width:clamp(148px,34vw,180px);height:clamp(148px,34vw,180px);margin:10px auto 8px}
 .draw-die .die-art{display:block;width:100%;height:100%;object-fit:contain;overflow:visible;filter:drop-shadow(0 3px 4px #0006)}
 .die-pips{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none;overflow:visible}
-.draw-die.rolling .die-art{transform:rotate(12deg) scale(.94)}
+.draw-die.rolling .die-art,.die.rolling .die-art{transform:rotate(12deg) scale(.94)}
 @keyframes drawDiceRoll{0%{transform:rotate(0) translateY(0)}25%{transform:rotate(95deg) translateY(-5px)}50%{transform:rotate(190deg) translateY(3px)}75%{transform:rotate(285deg) translateY(-4px)}100%{transform:rotate(360deg) translateY(0)}}
 .draw-die.rolling{animation:drawDiceRoll .7s ease-in-out}
 .draw-instruction{min-height:38px;margin:6px 0 12px;color:#eadcbf;font:14px/1.45 Georgia,serif}
@@ -2661,6 +2661,17 @@ function updateDrawDieFace(value){
  renderProjectedDie(value,'draw-die-pip-group','draw-die-ruby');
  $('drawDie').setAttribute('aria-label','Dado: '+value);
 }
+async function animateSharedDie(container,updateFace){
+ container.classList.add('rolling');
+ updateFace(1);
+ const timer=setInterval(()=>updateFace(1+Math.floor(Math.random()*6)),65);
+ await pause(760);
+ clearInterval(timer);
+ const value=1+Math.floor(Math.random()*6);
+ container.classList.remove('rolling');
+ updateFace(value);
+ return value;
+}
 function beginDraw(){
  const teams=ORDER.filter(team=>chosen().includes(team));
  if(teams.length<2){count();return;}
@@ -2716,17 +2727,8 @@ async function rollDrawDie(){
  if(!team)return;
  state.busy=true;$('drawRoll').disabled=true;
  $('drawInstruction').textContent='El dado está girando...';
- $('drawDie').classList.add('rolling');
  playDiceSound();
- const timer=setInterval(()=>{
-  const face=1+Math.floor(Math.random()*6);
-  updateDrawDieFace(face);
- },65);
- await pause(760);
- clearInterval(timer);
- const value=1+Math.floor(Math.random()*6);
- $('drawDie').classList.remove('rolling');
- updateDrawDieFace(value);
+ const value=await animateSharedDie($('drawDie'),updateDrawDieFace);
  const participant=state.participants.find(p=>p.team===team);
  state.history.push({round:state.round,team,name:participant.name,value});
  state.results[team]=value;
@@ -2861,19 +2863,10 @@ $('roll').onclick=async()=>{
  if(waiting||over||animating)return;
  animating=true;
  $('roll').disabled=true;
- const faces=[1,2,3,4,5,6];
  gameStats[players[current].team].rolls++;
- const finalRoll=1+Math.floor(Math.random()*6);
  playDiceSound();
- let faceIndex=0;
- $('die').classList.add('rolling');
- $('die-result').textContent='1';updateDieFace(1);
- const faceTimer=setInterval(()=>{const face=faces[faceIndex++%faces.length];$('die-result').textContent=face;updateDieFace(face)},75);
- await pause(650);
- clearInterval(faceTimer);
- roll=finalRoll;
- $('die').classList.remove('rolling');
- $('die-result').textContent=roll;updateDieFace(roll); $('die').setAttribute('aria-label','Resultado del dado: '+roll);
+ roll=await animateSharedDie($('die'),updateDieFace);
+ $('die').setAttribute('aria-label','Resultado del dado: '+roll);
  animating=false;
  if(!players[current].pieces.some(legal)){
   let extra=roll===1||roll===6;
