@@ -1565,6 +1565,10 @@
   }
 }
 
+/* La pantalla inicial debe respetar .hidden incluso en horizontal.
+   Evita que #homeScreen.home-screen fuerce display:block sobre el juego activo. */
+.home-screen#homeScreen.hidden{display:none!important}
+
 </style></head><body><main class="app">
 
 <section id="homeScreen" class="home-screen" aria-label="Pantalla de inicio de LUDO">
